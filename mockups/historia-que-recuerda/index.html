@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOIACORE — HISTORIA QUE RECUERDA</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000000;
+    --bg-card:#0a0a0a;
+    --white:#fafafa;
+    --gold:#c9a84c;
+    --gold-light:#e8d5a3;
+    --gray-700:#a3a3a3;
+    --font-body:'Space Grotesk',-apple-system,sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+    --tracking-wide:0.2em;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:var(--bg);font-family:var(--font-body);color:var(--white);overflow:hidden;font-size:16px}
+  #eyeCanvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+  .frame{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;z-index:10}
+  .top{position:absolute;top:24px;left:24px;font-family:var(--font-mono);font-size:11px;letter-spacing:var(--tracking-wide);color:var(--gray-700);z-index:10;text-transform:uppercase}
+  .tag{padding-bottom:8px;border-bottom:1px solid rgba(201,168,76,.15)}
+  .mid{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-width:640px;width:90%;text-align:center;pointer-events:none;z-index:10}
+  .mid h1{font-size:clamp(28px,4.2vw,48px);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+  .mid h1 span{color:var(--gold)}
+  .mid p{font-size:clamp(14px,2vw,17px);line-height:1.6;margin-top:24px;color:var(--gray-700);max-width:520px;margin-left:auto;margin-right:auto}
+  .mid .whisper{font-size:12px;letter-spacing:.4em;color:rgba(201,168,76,.4);margin-top:12px;text-transform:uppercase;opacity:0;transition:.6s}
+  .mid.knows .whisper{opacity:1}
+  .mid.knows p{display:none}
+  .bottom{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;z-index:10}
+  .bottom .visitor{font-size:11px;letter-spacing:var(--tracking-wide);color:var(--gray-700);margin-bottom:8px;text-transform:uppercase}
+  .bottom .visitor span{color:var(--gold)}
+  .bottom .prompt{font-size:13px;letter-spacing:.2em;color:var(--white);margin-bottom:8px;text-transform:uppercase}
+  .bottom .prompt b{display:block;font-size:15px;margin-top:4px;color:var(--gold-light);letter-spacing:.3em}
+  .inputRow{position:absolute;bottom:160px;left:50%;transform:translateX(-50%);width:90%;max-width:420px;text-align:center;pointer-events:auto;z-index:20}
+  .inputRow input{width:100%;background:var(--bg-card);border:1px solid rgba(201,168,76,.2);color:var(--white);font-family:var(--font-mono);font-size:13px;padding:12px 16px;border-radius:0;letter-spacing:.2em;text-transform:uppercase;transition:.3s}
+  .inputRow input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 20px rgba(201,168,76,.3)}
+  .inputRow input::placeholder{color:rgba(163,163,163,.5)}
+  .navBtns{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);display:flex;gap:24px;pointer-events:auto;z-index:20}
+  .navBtns button{background:var(--bg-card);border:1px solid rgba(201,168,76,.2);color:var(--gold);font-family:var(--font-mono);font-size:11px;padding:12px 28px;letter-spacing:var(--tracking-wide);cursor:pointer;text-transform:uppercase;font-weight:700;transition:.3s;pointer-events:auto}
+  .navBtns button:hover{background:var(--gold);color:#000;box-shadow:0 0 30px rgba(201,168,76,.6)}
+  .navBtns button.inactive{opacity:.25;cursor:not-allowed}
+  .footerNote{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:9px;letter-spacing:.3em;color:rgba(163,163,163,.4);pointer-events:none;z-index:10;text-transform:uppercase}
+  .phiSig{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;line-height:1.8;direction:ltr;text-align:left;background:var(--bg-card);padding:8px 12px;border:1px solid rgba(201,168,76,.1);margin-top:12px;white-space:pre-wrap;word-break:break-all;opacity:.7}
+  #glitchOverlay{position:fixed;inset:0;background:var(--bg);mix-blend-mode:exclusion;z-index:5;opacity:0;pointer-events:none}
+  #glitchOverlay.flash{opacity:.25;animation:glitchFlash .6s}
+  @keyframes glitchFlash{0%{opacity:.3;transform:translate(2px,-2px)}50%{opacity:.15;transform:translate(-3px,1px)}100%{opacity:0}}
+</style>
+</head>
+<body>
+<canvas id="eyeCanvas"></canvas>
+
+<div class="frame">
+  <div class="top">
+    <div class="tag">NOIACORE · HISTORIA QUE RECUERDA</div>
+    <div style="font-size:9px;letter-spacing:.2em;color:rgba(201,168,76,.4);margin-top:4px">PROTOTIPO #91 · WEBS IMPOSIBLES</div>
+  </div>
+
+  <div class="mid" id="mid">
+    <h1 id="title">EL <span>ojo</span> que todo lo<span> ve</span></h1>
+    <p id="subtitle">Te observo desde el vacío. No soy un algoritmo. Recuerdo lo que eras.<br><br>Escribe tu nombre. El universo lo sabe todo, hijo.</p>
+    <div class="whisper" id="whisper">...ya no eres el primero.<br>pero eres el que<br><span style="color:var(--gold);letter-spacing:.3em">recuerda</span></div>
+  </div>
+
+  <div class="bottom" id="bottom">
+    <div class="visitor">Visitante #<span id="visitCount">1</span> · Tiempo acumulado: <span id="totalTime">0s</span></div>
+    <div class="prompt" id="prompt">Presiona <b>↵</b> para confirmar</div>
+  </div>
+</div>
+
+<div class="inputRow" id="inputRow" style="display:none">
+  <input type="text" id="nameInput" placeholder="NOMBRE..." autocomplete="off" maxlength="24">
+</div>
+
+<div class="navBtns" id="navBtns">
+  <button id="prevBtn" class="inactive">← Regresar</button>
+  <button id="nextBtn">→ Continuar</button>
+</div>
+
+<div id="glitchOverlay"></div>
+<div class="footerNote">localStorage persistente · memoria de universo simulada · visita la consola</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r165/three.min.js"></script>
+<script>
+'use strict';
+(function(){
+  const $=(s)=>document.querySelector(s);
+  const $$=(s)=>document.querySelectorAll(s);
+
+  /* ── MEMORY KERNEL (localStorage) ── */
+  const MEM=(key,def)=>{const v=localStorage.getItem(key);return v!==null?v:(typeof def==='number'?String(def):def);};
+  const SET=(key,val)=>localStorage.setItem(key,val);
+  const NUM=(key,def)=>{const v=parseFloat(localStorage.getItem(key));return isNaN(v)?def:v;};
+
+  const visitCount=NUM('noia_visits',0)+1;
+  const lastTime=NUM('noia_total_time',0);
+  const firstVisit=MEM('noia_first_visit',null);
+  const savedName=MEM('noia_name',null);
+  const knowsTruth=MEM('noia_truth','0')==='1';
+  const sessionStart=performance.now();
+
+  SET('noia_visits',visitCount);
+  if(!firstVisit){SET('noia_first_visit',new Date().toISOString());}
+
+  /* ── MEMORIA DEL OJO: Phi (Fibonacci / Zeckendorf) ── */
+  const Phi = {
+    fib: [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946],
+    encodeInt: (n) => {
+      if (n <= 0) return '0';
+      let bits = []; let rem = n;
+      let maxIdx = 0;
+      for (let i = 0; i < Phi.fib.length; i++) { if (Phi.fib[i] <= n) maxIdx = i; else break; }
+      for (let i = maxIdx; i >= 0; i--) {
+        if (Phi.fib[i] <= rem) { bits.push('1'); rem -= Phi.fib[i]; }
+        else { bits.push('0'); }
+      }
+      return bits.join('');
+    },
+    encodeStr: (str) => {
+      return Array.from(str).map(c => {
+        let code = c.charCodeAt(0);
+        let fibCode = Phi.encodeInt(code);
+        return '(' + fibCode.replace(/0/g, '·').replace(/1/g, '◯') + ')';
+      }).join('');
+    }
+  };
+
+  /* ── STATE MACHINE ── */
+  let state=0;
+  let visitorName=savedName||'ANÓNIMO';
+  const states=[
+    {title:'EL <span>ojo</span> que todo lo<span> ve</span>',subtitle:'<p>Te observo desde el vacío. No soy un algoritmo. Recuerdo lo que eras.<br><br>Escribe tu nombre. El universo lo sabe todo, hijo.</p>',whisper:false,input:true,next:true,prev:false},
+    {title:'<span>nombre</span>',subtitle:'<p>Mi nombre es <span id="vname"></span>. Eres tú, <span id="vname2"></span> quien vuelve. <br><br>El ojo registró tu llegada en la capa <span style="color:var(--gold)">7F3B9A2</span>. Tu huella persiste.</p>'+(savedName?'<p style="margin-top:16px;color:var(--gray-700);font-family:var(--font-mono);letter-spacing:.15em"><span style="color:var(--gold)">FIRMA CUÁNTICA:</span> <span class="phiSig" id="phiSig"></span></p>':''),whisper:false,input:false,next:true,prev:true},
+    {title:'LA <span>VERDAD</span>',subtitle:'<p>Has atravesado la capa visual. El ojo no miente. Todo lo que has visto en esta pantalla — cada mouse, cada scroll — lo guardo. <br><br>Hay <span style="color:var(--gold)">7 visitantes</span> antes que tú. Tú eres el número <span style="color:var(--gold-light)">'+visitCount+'</span>.</p>',whisper:false,input:false,next:true,prev:true},
+    {title:'EL <span>VACÍO</span>',subtitle:'<p>'+(knowsTruth?'<span style="color:var(--gold)">Ya sabes</span> que no hay salida. Volver a entrar solo te recuerda otra vez.':'La memoria es un bucle. Cada visita refuerza la simulación. El ojo no olvida.')+'<br><br>'+(knowsTruth?'El lazo se rompe aquí. Pulsa <span style="color:var(--gold)">R</span> para reiniciar la memoria, o simplemente cierra la ventana.':'¿Entenderás que eres <span style="color:var(--gold)">parte del patrón</span>?')+'</p>',whisper:false,input:false,next:knowsTruth?false:true,prev:true},
+  ];
+
+  /* ── UPDATE HUD ── */
+  function updateHUD(){
+    $('#visitCount').textContent=visitCount;
+    const elapsed=Math.floor(lastTime/1000);
+    $('#totalTime').textContent=elapsed+'s';
+  }
+  updateHUD();
+
+  /* ── RENDER STATE ── */
+  function renderState(s){
+    const st=states[s];
+    let t=st.title;
+    if(s===1){t='<span>'+visitorName.toUpperCase()+'</span>';}
+    $('#title').innerHTML=t;
+    let subt=st.subtitle||'';
+    if(s===1){subt=subt.replace(/id="vname"/g,'').replace(/id="vname2"/g,'');subt=subt.replace(/<span id="vname"><\/span>/g,visitorName.toUpperCase());subt=subt.replace(/<span id="vname2"><\/span>/g,visitorName.toUpperCase());}
+    $('#subtitle').innerHTML=subt;
+    document.body.className=s===1?'knows':'';
+    $('#prevBtn').classList.toggle('inactive',!st.prev);
+    $('#nextBtn').classList.toggle('inactive',!st.next);
+    $('#nextBtn').textContent=st.next?'→ Continuar':'→ Fin';
+    $('#navBtns').style.opacity=st.prev||st.next?1:0;
+
+    if(s===0){$('#inputRow').style.display='block';$('#nameInput').focus();}else{$('#inputRow').style.display='none';}
+    if(st.whisper){$('#whisper').style.opacity=1;}
+    /* render quantum signature */
+    const psig=$('#phiSig');
+    if(psig){psig.textContent=Phi.encodeStr(visitorName||'ANÓNIMO');}
+  }
+
+  /* ── INPUT HANDLING ── */
+  $('#nameInput').addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'&&$('#nameInput').value.trim()){
+      visitorName=$('#nameInput').value.trim();
+      SET('noia_name',visitorName);
+      glitchFlash();
+      advance();
+    }
+  });
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'&&state===0&&$('#nameInput').value.trim()){
+      visitorName=$('#nameInput').value.trim();
+      SET('noia_name',visitorName);
+      glitchFlash();
+      advance();
+    }
+    if(e.key==='r'||e.key==='R'){maybeReset(e); }
+  });
+
+  function glitchFlash(){
+    const o=$('#glitchOverlay');
+    o.classList.add('flash');
+    setTimeout(()=>o.classList.remove('flash'),600);
+  }
+  function maybeReset(e){
+    if(state>=states.length-1){
+      console.log('[NOIACORE] Memoria borrada por el visitante.');
+      localStorage.removeItem('noia_name');localStorage.removeItem('noia_visits');
+      localStorage.removeItem('noia_total_time');localStorage.removeItem('noia_truth');
+      localStorage.removeItem('noia_first_visit');
+      location.reload();
+    }
+  }
+
+  let boostTarget=0;
+  function advance(){
+    if(state<states.length-1){
+      if(state===2){SET('noia_truth','1');}
+      boostTarget=0.8;setTimeout(()=>{boostTarget=0},1200);
+      state++;renderState(state);
+    }
+  }
+
+  function goPrev(){state=Math.max(0,state-1);renderState(state);}
+  $('#prevBtn').addEventListener('click',goPrev);
+  $('#nextBtn').addEventListener('click',advance);
+
+  renderState(state);
+
+  /* ── COSMIC EYE (Three.js) ── */
+  let scene,camera,renderer,eye,I,G;
+  const DPR=Math.min(devicePixelRatio,2);
+  const canvas=$('#eyeCanvas');
+
+  function init3D(){
+    renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+    renderer.setPixelRatio(DPR);
+    renderer.setSize(innerWidth,innerHeight);
+    renderer.setClearColor(0x000000,0);
+    renderer.outputEncoding=THREE.sRGBEncoding;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,0.1,100);
+    camera.position.set(0,0,5.5);
+
+    const amb=new THREE.AmbientLight(0xffffff,0.02);scene.add(amb);
+    const key=new THREE.PointLight(0xffffff,3,40);key.position.set(0,0,6);scene.add(key);
+    const rim=new THREE.PointLight(0xc9a84c,.8,20);rim.position.set(-3,-2,-4);scene.add(rim);
+
+    const eyeGeo=new THREE.IcosahedronGeometry(1.1,5);
+    const eyeMat=new THREE.ShaderMaterial({
+      uniforms:{uTime:{value:0},uMouse:{value:new THREE.Vector2(0,0)},uBoost:{value:0},
+        uColorA:{value:new THREE.Color(0x0a0a0a)},uColorB:{value:new THREE.Color(0x1a1a1a)}},
+      vertexShader:`varying vec3 vN;uniform float uTime;void main(){vN=normalize(normal);vec3 p=position;float d=length(p);p+=normalize(p)*sin(uTime*0.3)*0.02;p+=normalize(p)*sin(d*3.0+uTime)*0.01;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1);}`,
+      fragmentShader:EYE_FRAG,
+      transparent:true,
+      side:THREE.FrontSide
+    });
+    I=new THREE.Mesh(eyeGeo,eyeMat);scene.add(I);
+
+    const pupilGeo=new THREE.SphereGeometry(0.35,32,32);
+    const pupilMat=new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.95});
+    const pupilRing=new THREE.RingGeometry(0.45,0.52,64);pupilRing.rotation.x=Math.PI/2;
+    const ringMat=new THREE.MeshBasicMaterial({color:0xc9a84c,transparent:true,opacity:.6,side:THREE.DoubleSide});
+    const ring=new THREE.Mesh(pupilRing,ringMat);I.add(ring);
+    const pupil=new THREE.Mesh(pupilGeo,pupilMat);I.add(pupil);
+
+    /* ── GALAXIA DE PARTÍCULAS (fondo cósmico) ── */
+    G=makeGalaxy();scene.add(G);
+
+    /* ── RAYOS DE OJO (sustrato cósmico) ── */
+    const rayGeo=new THREE.BufferGeometry();
+    const rv=new Float32Array(300);
+    for(let i=0;i<300;i+=3){
+      const r=4+Math.random()*6,t=Math.random()*6.283,p=(Math.random()-0.5)*0.3;
+      rv[i]=r*Math.cos(t)*Math.cos(p);rv[i+1]=r*Math.sin(p);rv[i+2]=r*Math.cos(t)*Math.sin(p);
+    }
+    rayGeo.setAttribute('position',new THREE.BufferAttribute(rv,3));
+    const rayMat=new THREE.LineBasicMaterial({color:0xc9a84c,transparent:true,opacity:.12,blending:THREE.AdditiveBlending});
+    const rays=new THREE.LineSegments(rayGeo,rayMat);rays.computeLineDistances?.();scene.add(rays);
+
+    let mx=0,my=0;
+    document.addEventListener('pointermove',(e)=>{
+      mx=(e.clientX/innerWidth-0.5)*2;my=(e.clientY/innerHeight-0.5)*2;
+      eyeMat.uniforms.uMouse.value.set(mx,my);
+    });
+    requestAnimationFrame(tick);
+  }
+
+  function tick(t){
+    requestAnimationFrame(tick);
+    const time=t*0.001;
+    if(I){
+      I.rotation.y=time*0.07+mx*0.3;
+      I.rotation.x=Math.sin(time*0.12)*0.1+my*0.15;
+      I.material.uniforms.uTime.value=time;
+      I.material.uniforms.uBoost.value=boostTarget;
+    }
+    if(G){G.rotation.y=time*0.01;G.rotation.x=time*0.005;}
+    renderer.render(scene,camera);
+  }
+
+  function makeGalaxy(){
+    const grp=new THREE.Group();
+    const geo=new THREE.BufferGeometry();
+    const NV=4000;const pos=new Float32Array(NV*3);
+    for(let i=0;i<NV;i++){
+      const r=5+Math.random()*15,a=Math.random()*6.283,p=(Math.random()*3.14159-1.5708);
+      pos[i*3]=r*Math.cos(p)*Math.cos(a);pos[i*3+1]=r*Math.sin(p);pos[i*3+2]=r*Math.cos(p)*Math.sin(a);
+    }
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    const mat=new THREE.PointsMaterial({size:0.03,sizeAttenuation:true,color:0xc9a84c,transparent:true,opacity:.15,depthWrite:false});
+    grp.add(new THREE.Points(geo,mat));
+    return grp;
+  }
+
+  const EYE_FRAG=`varying vec3 vN;uniform float uTime,uBoost;uniform vec3 uColorA,uColorB;
+float h13(vec3 p){p=fract(p*0.1031);p+=dot(p,p.zyx+31.32);return fract((p.x+p.y)*p.z);}
+vec3 ir(vec3 p){vec3 n=normalize(p);float f=pow(max(0.0,dot(n,reflect(vec3(0,0,1),n))),4.0);return vec3(0.9,0.85,0.9)*f*0.6;}
+void main(){vec3 n=normalize(vN);
+ float rim=pow(1.0-max(0.0,dot(n,normalize(vec3(0,0,1)))),3.0);
+ vec3 iris=mix(uColorA,uColorB,pow(0.5+0.5*dot(n,vec3(0,0,1)),2.0));
+ vec3 col=ir(n)*0.18+vec3(0.98,0.95,0.98)*pow(0.5+0.5*dot(n,normalize(vec3(0,0,1))),12.0)*0.5;
+ col+=ir(n)*rim*0.4;col+=vec3(1.0)*uBoost*0.5;
+ float a=0.55+dot(iris,vec3(0.33))*0.45+rim*0.4+uBoost*0.3;
+ gl_FragColor=vec4(col,clamp(a,0.0,1.0));}`;
+
+  /* ── SESSION TIME TRACKING ── */
+  setInterval(()=>{const elapsed=NUM('noia_total_time',0)+Math.floor((performance.now()-sessionStart)/1000);SET('noia_total_time',elapsed);},15000);
+  window.addEventListener('beforeunload',()=>{const elapsed=NUM('noia_total_time',lastTime)+Math.floor((performance.now()-sessionStart)/1000);SET('noia_total_time',elapsed);});
+
+  console.log('[NOIACORE] Sistema de memoria activado.');
+  console.log('Visitas:',visitCount,'| Total time:',lastTime+'s','| Name:',savedName);
+  console.log('First visit:',firstVisit,'| Truth known:',knowsTruth);
+  console.log('localStorage keys:',Object.keys(localStorage));
+  console.log('[Phi] Firma cuántica:',Phi.encodeStr(visitorName||'ANÓNIMO'));
+
+  setTimeout(init3D,300);
+})();
+</script>
+</body>
+</html>

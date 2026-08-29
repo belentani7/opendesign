@@ -1,0 +1,22 @@
+{
+  "generated": "$ts",
+  "sections": [
+    {
+      "id": "mockups",
+      "label": "Mockups",
+      "groups": [
+        {
+          "slug": "historia-que-recuerda",
+          "files": [
+            { "label": "index.html", "path": "mockups/historia-que-recuerda/index.html" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design-systems",
+      "label": "Design Systems",
+      "groups": []
+    }
+  ]
+}
