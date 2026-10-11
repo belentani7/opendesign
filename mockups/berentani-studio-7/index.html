@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo</title>
+<meta name="description" content="Berentani Studio 7: laboratorio creativo de precisión. Vidrio esmerilado y neón rojo. 100% offline, sin APIs, sin coste." />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#0a0507" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0507'/%3E%3Cpath d='M32 8l20 12v24L32 56 12 44V20z' fill='none' stroke='%23ff2d46' stroke-width='3'/%3E%3Ctext x='32' y='42' font-size='26' text-anchor='middle' fill='%23ff2d46' font-family='Arial'%3EB%3C/text%3E%3C/svg%3E" />
+<style>
+/* ════════════════════════════════════════════════════════════════════
+   BERENTANI STUDIO 7 — "Glass Rojo Neón"
+   Vidrio esmerilado + neón rojo. 100% offline: cero APIs, cero red.
+   Todos los tipos son pilas del sistema (sin webfonts) para que funcione
+   sin internet. El movimiento es lento y con peso, como líquido en vidrio.
+   ════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* familia de neón rojo: sangre / vivo / incandescente */
+  --neon-blood: #5a0f1c;
+  --neon-live: #ff2d46;
+  --neon-hot: #ffd7dd;
+
+  /* vidrio */
+  --glass: rgba(255, 236, 240, 0.045);
+  --glass-strong: rgba(255, 236, 240, 0.08);
+  --glass-border: rgba(255, 45, 70, 0.45);
+  --glass-border-soft: rgba(255, 45, 70, 0.22);
+
+  /* fondo negro profundo con tinte granate */
+  --ink: #0a0507;
+  --ink-2: #14070b;
+
+  /* texto */
+  --text: #f5f1ee;            /* blanco hueso */
+  --text-dim: #d99aa4;        /* gris rosado */
+  --data: #ff5a6e;            /* rojo medio, datos */
+  --off: #4a3f43;             /* gris grafito con tinte rosado */
+
+  --glow: 1;                  /* multiplicador de intensidad (configurable) */
+
+  --font-display: "Avenir Next Condensed", "Arial Narrow", "Roboto Condensed", "Helvetica Neue", system-ui, sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --fast: 300ms cubic-bezier(0.2, 0, 0.2, 1);
+  --slow: 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  --bounce: 900ms cubic-bezier(0.34, 1.4, 0.44, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+input { font: inherit; }
+:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--neon-live); border-radius: 6px; }
+::selection { background: rgba(255, 45, 70, 0.35); }
+
+.mono { font-family: var(--font-mono); }
+
+/* ── atmósfera: tubos verticales de fondo + partículas ───────────── */
+.atmo { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.tube {
+  position: absolute; top: -10%; bottom: -10%;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--neon-live), transparent);
+  opacity: calc(0.10 * var(--glow));
+  filter: blur(0.5px);
+  animation: tube-breathe 9s ease-in-out infinite;
+}
+.tube.flick { animation: tube-breathe 9s ease-in-out infinite, tube-flick 13s steps(1) infinite; }
+@keyframes tube-breathe { 0%,100% { opacity: calc(0.06*var(--glow)); } 50% { opacity: calc(0.18*var(--glow)); } }
+@keyframes tube-flick {
+  0%, 61%, 65%, 100% { filter: blur(0.5px); }
+  62%, 64% { filter: blur(2px) brightness(2); }
+}
+.mote {
+  position: absolute; bottom: -4px;
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--neon-hot);
+  opacity: 0;
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0% { transform: translateY(0); opacity: 0; }
+  8% { opacity: calc(0.5 * var(--glow)); }
+  92% { opacity: calc(0.25 * var(--glow)); }
+  100% { transform: translateY(-105vh); opacity: 0; }
+}
+
+/* ── vidrio: la lámina base ─────────────────────────────────────── */
+.glass {
+  position: relative;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border-soft);
+  border-radius: 14px;
+  box-shadow:
+    0 0 calc(18px * var(--glow)) rgba(255, 45, 70, 0.10),
+    0 14px 40px -18px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 236, 240, 0.06);
+}
+/* reflejo diagonal en la esquina superior, luz de techo */
+.glass::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,236,240,0.10), transparent 30%);
+}
+/* reflejo largo inferior, como líquido oscuro debajo */
+.glass::after {
+  content: ""; position: absolute; left: 8%; right: 8%; bottom: -14px; height: 14px;
+  background: radial-gradient(60% 100% at 50% 0, rgba(255,45,70,calc(0.18*var(--glow))), transparent 70%);
+  filter: blur(4px);
+  pointer-events: none;
+}
+.glass.hot { border-color: var(--glass-border); }
+
+/* onda de éxito que recorre el borde de izquierda a derecha */
+.wave { overflow: hidden; }
+.wave .waveline {
+  position: absolute; top: 0; bottom: 0; width: 34%;
+  background: linear-gradient(90deg, transparent, rgba(255,215,221,calc(0.5*var(--glow))), transparent);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.wave.done .waveline { animation: sweep 900ms cubic-bezier(0.4,0,0.2,1) 1; }
+@keyframes sweep { to { transform: translateX(400%); } }
+
+/* pulso radial rojo en el punto del clic */
+.pulse {
+  position: fixed; width: 12px; height: 12px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,215,221,0.9), rgba(255,45,70,0.4) 60%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none; z-index: 200;
+  animation: pulse 600ms cubic-bezier(0.2,0,0.2,1) forwards;
+}
+@keyframes pulse { to { transform: translate(-50%,-50%) scale(9); opacity: 0; } }
+
+/* carga: tubo que se llena de luz de abajo hacia arriba */
+.loadtube { width: 4px; height: 42px; border-radius: 99px; background: rgba(255,45,70,0.15); overflow: hidden; position: relative; }
+.loadtube i { position: absolute; left:0; right:0; bottom:0; height: 0%; background: linear-gradient(to top, var(--neon-blood), var(--neon-live), var(--neon-hot)); animation: fill 1.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes fill { to { height: 100%; } }
+
+/* tipografía de laboratorio */
+.h-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-weight: 600;
+}
+
+/* ════════════════ PORTADA ════════════════ */
+#cover {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-items: center;
+  background: radial-gradient(1200px 700px at 50% 40%, var(--ink-2), var(--ink) 70%);
+  transition: opacity 700ms cubic-bezier(0.4,0,0.2,1), visibility 0s 700ms;
+}
+body.in-lab #cover { opacity: 0; visibility: hidden; }
+.cover-inner { text-align: center; padding: 24px; max-width: 620px; }
+.logo-hex {
+  width: 118px; height: 128px; margin: 0 auto 26px;
+  display: grid; place-items: center;
+  position: relative;
+  filter: drop-shadow(0 0 calc(22px*var(--glow)) rgba(255,45,70,0.5));
+}
+.logo-hex svg { width: 100%; height: 100%; }
+.logo-hex .neon-b { animation: neon-flick 5s steps(1) infinite; }
+@keyframes neon-flick {
+  0%, 41%, 45%, 78%, 82%, 100% { opacity: 1; }
+  42%, 44% { opacity: 0.5; }
+  79%, 81% { opacity: 0.65; }
+}
+.cover-title {
+  font-size: clamp(26px, 5vw, 44px);
+  color: var(--text);
+  text-shadow: 0 0 calc(26px*var(--glow)) rgba(255,45,70,0.55);
+  letter-spacing: 0.3em;
+}
+.cover-sub {
+  margin-top: 12px; color: var(--text-dim); font-size: 14px; letter-spacing: 0.06em;
+}
+.cover-tag { margin-top: 6px; color: var(--data); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; }
+.cover-actions { margin-top: 34px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+.btn {
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  color: var(--text);
+  font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.18em; font-size: 13px;
+  transition: color var(--fast), box-shadow var(--fast), border-color var(--fast);
+}
+.btn .sheen { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,45,70,0.35), transparent); transform: translateX(-110%); }
+.btn:hover { color: var(--neon-hot); border-color: var(--neon-live); box-shadow: 0 0 calc(26px*var(--glow)) rgba(255,45,70,0.35), inset 0 0 calc(18px*var(--glow)) rgba(255,45,70,0.2); }
+.btn:hover .sheen { animation: sweep 700ms cubic-bezier(0.4,0,0.2,1) 1; }
+.btn.ghost { border-color: var(--glass-border-soft); color: var(--text-dim); }
+.btn.ghost:hover { color: var(--text); }
+.btn[disabled] { color: var(--off); border-color: rgba(255,45,70,0.1); cursor: not-allowed; box-shadow: none; }
+
+/* ════════════════ LABORATORIO ════════════════ */
+#lab {
+  position: fixed; inset: 0; z-index: 10;
+  display: grid;
+  grid-template-columns: 232px minmax(0,1fr) 320px;
+  grid-template-rows: 58px minmax(0,1fr);
+  grid-template-areas: "top top top" "rack bench console";
+  gap: 16px;
+  padding: 16px;
+  opacity: 0; visibility: hidden;
+  transition: opacity 700ms var(--bounce), visibility 0s 700ms;
+}
+body.in-lab #lab { opacity: 1; visibility: visible; transition-delay: 0s; }
+
+/* barra superior de estado */
+.topbar { grid-area: top; display: flex; align-items: center; gap: 16px; padding: 0 18px; }
+.session { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.session b { font-family: var(--font-display); letter-spacing: 0.14em; text-transform: uppercase; font-size: 14px; }
+.session span { font-family: var(--font-mono); font-size: 10.5px; color: var(--data); letter-spacing: 0.06em; }
+.reactor { display: flex; align-items: center; gap: 10px; margin: 0 auto; }
+.reactor .ring { position: relative; width: 30px; height: 30px; }
+.reactor .ring::before, .reactor .ring::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 1px solid var(--neon-live);
+}
+.reactor .ring::after { animation: heartbeat 2.4s ease-out infinite; }
+.reactor.live .ring::after { animation-duration: 1.1s; }
+@keyframes heartbeat { 0% { transform: scale(0.6); opacity: 0.9; } 70%,100% { transform: scale(1.6); opacity: 0; } }
+.reactor .core { position: absolute; inset: 9px; border-radius: 50%; background: var(--neon-live); box-shadow: 0 0 calc(14px*var(--glow)) var(--neon-live); animation: core 2.4s ease-in-out infinite; }
+.reactor.live .core { animation-duration: 1.1s; }
+@keyframes core { 0%,100% { transform: scale(0.8); } 50% { transform: scale(1.05); } }
+.reactor span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: var(--data); text-transform: uppercase; }
+.operator { display: flex; align-items: center; gap: 10px; }
+.operator .ava {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-size: 14px; letter-spacing: 0.05em;
+  border: 1px solid var(--neon-live);
+  box-shadow: 0 0 calc(14px*var(--glow)) rgba(255,45,70,0.4), inset 0 0 10px rgba(255,45,70,0.2);
+  color: var(--neon-hot);
+}
+.operator small { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; }
+
+/* rack de módulos */
+.rack { grid-area: rack; display: flex; flex-direction: column; gap: 10px; padding: 14px; overflow-y: auto; }
+.rack h2 { font-size: 10px; color: var(--text-dim); letter-spacing: 0.2em; text-transform: uppercase; padding: 2px 6px 8px; }
+.mod {
+  position: relative; text-align: left;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 12px 12px 16px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  transition: color var(--fast), border-color var(--fast), background var(--fast);
+  overflow: hidden;
+}
+.mod .bar { position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; background: var(--neon-live); box-shadow: 0 0 calc(10px*var(--glow)) var(--neon-live); opacity: 0; }
+.mod svg { width: 18px; height: 18px; color: var(--neon-live); flex-shrink: 0; }
+.mod .lbl { display: flex; flex-direction: column; gap: 1px; }
+.mod .lbl b { font-family: var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; font-size: 12.5px; font-weight: 500; }
+.mod .lbl span { font-family: var(--font-mono); font-size: 9.5px; color: var(--off); letter-spacing: 0.05em; }
+.mod .refl { position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,236,240,0.08) 50%, transparent 70%); transform: translateX(-120%); }
+.mod:hover { color: var(--text); }
+.mod:hover .refl { animation: sweep 900ms linear 1; }
+.mod.active { border-color: var(--glass-border); background: var(--glass-strong); color: var(--text); box-shadow: 0 0 calc(18px*var(--glow)) rgba(255,45,70,0.22), inset 0 0 14px rgba(255,45,70,0.1); }
+.mod.active .bar { opacity: 1; }
+.rack-foot { margin-top: auto; }
+
+/* mesa de trabajo */
+.bench { grid-area: bench; display: flex; flex-direction: column; padding: 18px; min-height: 0; overflow: hidden; }
+.bench-head { display: flex; align-items: baseline; gap: 14px; padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,45,70,0.15); }
+.bench-head h1 { font-size: 18px; letter-spacing: 0.2em; color: var(--text); text-shadow: 0 0 calc(16px*var(--glow)) rgba(255,45,70,0.5); }
+.bench-head .hint { font-family: var(--font-mono); font-size: 10.5px; color: var(--data); letter-spacing: 0.06em; }
+.bench-body { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; padding-right: 4px; }
+
+/* paneles de instrumento que caen con rebote */
+.inst { animation: drop var(--bounce) both; }
+@keyframes drop { from { transform: translateY(-26px); opacity: 0; } 60% { opacity: 1; } 80% { transform: translateY(4px); } to { transform: none; opacity: 1; } }
+
+.inst-grid { display: grid; grid-template-columns: auto 1fr; gap: 18px; }
+@media (max-width: 1180px) { .inst-grid { grid-template-columns: 1fr; } }
+
+/* medidores circulares con aguja */
+.gauges { display: flex; gap: 16px; align-items: center; }
+.gauge { text-align: center; }
+.gauge svg { width: 96px; height: 60px; overflow: visible; }
+.gauge .face { fill: none; stroke: rgba(255,45,70,0.25); stroke-width: 2; }
+.gauge .arc { fill: none; stroke: var(--neon-live); stroke-width: 2; filter: drop-shadow(0 0 calc(6px*var(--glow)) var(--neon-live)); }
+.gauge .needle { stroke: var(--neon-hot); stroke-width: 2; filter: drop-shadow(0 0 calc(6px*var(--glow)) var(--neon-live)); transform-origin: 48px 52px; transition: transform 200ms linear; }
+.gauge small { display: block; margin-top: 4px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; color: var(--data); text-transform: uppercase; }
+.gauge .val { font-family: var(--font-mono); font-size: 13px; color: var(--text); }
+
+/* osciloscopio */
+.scope-wrap { min-height: 180px; display: flex; flex-direction: column; }
+.scope-wrap .scope-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--data); text-transform: uppercase; margin-bottom: 8px; }
+#scope { flex: 1; min-height: 150px; width: 100%; border-radius: 10px; background:
+  linear-gradient(rgba(255,45,70,0.05) 1px, transparent 1px) 0 0/100% 22px,
+  linear-gradient(90deg, rgba(255,45,70,0.05) 1px, transparent 1px) 0 0/26px 100%,
+  rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,45,70,0.15);
+}
+
+/* faders verticales con estela */
+.faders { display: flex; gap: 22px; align-items: flex-end; padding: 6px 4px 2px; }
+.fader { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.fader .slot {
+  position: relative; width: 12px; height: 140px; border-radius: 99px;
+  background: linear-gradient(to top, rgba(255,45,70,0.25), rgba(255,45,70,0.05));
+  border: 1px solid rgba(255,45,70,0.2);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+  overflow: hidden;
+}
+.fader .fill { position: absolute; left:0; right:0; bottom:0; background: linear-gradient(to top, var(--neon-blood), var(--neon-live), var(--neon-hot)); box-shadow: 0 0 calc(12px*var(--glow)) rgba(255,45,70,0.5); transition: height 60ms linear; }
+.fader .trail { position: absolute; left:0; right:0; bottom:0; background: linear-gradient(to top, transparent, var(--neon-hot)); opacity: 0; transition: height 120ms linear, opacity 1000ms ease-out; }
+.fader input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: ns-resize; }
+.fader label { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; color: var(--data); text-transform: uppercase; }
+.fader .read { font-family: var(--font-mono); font-size: 11px; color: var(--text); }
+
+/* barra de transporte */
+.transport { display: flex; gap: 14px; align-items: center; padding: 14px 16px; }
+.tbtn {
+  position: relative; width: 52px; height: 52px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--glass-border-soft);
+  background: var(--glass);
+  color: var(--text-dim);
+  transition: color var(--fast), border-color var(--fast), box-shadow var(--fast);
+}
+.tbtn svg { width: 18px; height: 18px; }
+.tbtn:hover { color: var(--neon-hot); border-color: var(--neon-live); }
+.tbtn.on { color: var(--neon-hot); border-color: var(--neon-live); box-shadow: 0 0 calc(20px*var(--glow)) rgba(255,45,70,0.5), inset 0 0 12px rgba(255,45,70,0.25); }
+.tbtn.rec.on { border-color: var(--neon-live); animation: recpulse 1.1s ease-in-out infinite; }
+@keyframes recpulse { 0%,100% { box-shadow: 0 0 calc(10px*var(--glow)) rgba(255,45,70,0.4); } 50% { box-shadow: 0 0 calc(26px*var(--glow)) rgba(255,45,70,0.8); } }
+.transport .tstate { margin-left: auto; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--data); text-transform: uppercase; }
+
+/* consola de cristal (registro) */
+.console { grid-area: console; display: flex; flex-direction: column; min-height: 0; padding: 14px; }
+.console h2 { font-size: 10px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; padding: 2px 4px 10px; }
+.console .lines { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 7px; padding: 4px 4px 10px; font-family: var(--font-mono); font-size: 11px; line-height: 1.5; }
+.console .line { color: rgba(255,90,110,0.62); opacity: 0.7; animation: linein 300ms ease both; }
+.console .line time { color: var(--off); margin-right: 8px; }
+.console .line.fresh { color: var(--neon-hot); opacity: 1; text-shadow: 0 0 calc(10px*var(--glow)) rgba(255,45,70,0.5); }
+.console .line.warn { color: var(--data); }
+.console .line.err { color: #ff8090; }
+@keyframes linein { from { transform: translateY(4px); opacity: 0; } to { opacity: 0.7; } }
+.console.pulse { animation: consolepulse 700ms ease; }
+@keyframes consolepulse { 0% { box-shadow: 0 0 0 rgba(255,45,70,0); } 30% { box-shadow: 0 12px 40px rgba(255,45,70,0.35), inset 0 -18px 30px rgba(255,45,70,0.18); } 100% { box-shadow: 0 0 0 rgba(255,45,70,0); } }
+.console .foot { padding-top: 10px; border-top: 1px solid rgba(255,45,70,0.15); font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; color: var(--off); text-transform: uppercase; }
+
+/* archivo 7: fichas selladas */
+.seals { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.seal { padding: 12px; border-radius: 10px; border: 1px solid rgba(255,45,70,0.2); background: var(--glass); display: flex; flex-direction: column; gap: 4px; }
+.seal b { font-family: var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; font-size: 12px; color: var(--text); }
+.seal span { font-family: var(--font-mono); font-size: 9.5px; color: var(--data); }
+.empty { padding: 26px 18px; text-align: center; color: var(--text-dim); font-size: 13px; letter-spacing: 0.04em; border: 1px dashed rgba(255,45,70,0.25); border-radius: 10px; }
+
+/* configuración del sello */
+.cfg { display: grid; grid-template-columns: 1fr; gap: 18px; max-width: 460px; }
+.cfg .row { display: flex; flex-direction: column; gap: 8px; }
+.cfg .row header { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; color: var(--data); text-transform: uppercase; }
+.cfg input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 99px; background: linear-gradient(90deg, var(--neon-blood), var(--neon-live)); outline: none; }
+.cfg input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--neon-hot); box-shadow: 0 0 calc(12px*var(--glow)) var(--neon-live); cursor: pointer; }
+.cfg input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border: 0; border-radius: 50%; background: var(--neon-hot); cursor: pointer; }
+.switch { display: inline-flex; align-items: center; gap: 10px; }
+.switch .track { width: 40px; height: 20px; border-radius: 99px; border: 1px solid var(--glass-border); background: var(--glass); position: relative; transition: box-shadow var(--fast); }
+.switch .knob { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--off); transition: left var(--fast), background var(--fast); }
+.switch.on .knob { left: 22px; background: var(--neon-live); box-shadow: 0 0 calc(10px*var(--glow)) var(--neon-live); }
+
+/* toast de aviso */
+#toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 12px); z-index: 300; opacity: 0; pointer-events: none;
+  padding: 10px 18px; border-radius: 999px; border: 1px solid var(--glass-border); background: rgba(10,5,7,0.85); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  font-family: var(--font-mono); font-size: 12px; color: var(--neon-hot); letter-spacing: 0.04em; transition: opacity var(--fast), transform var(--fast); }
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── responsive ── */
+@media (max-width: 1024px) {
+  #lab { grid-template-columns: 200px minmax(0,1fr); grid-template-areas: "top top" "rack bench" "rack console"; grid-template-rows: 58px minmax(0,1fr) 220px; }
+  .console { border-radius: 14px; }
+}
+@media (max-width: 720px) {
+  body { overflow: auto; }
+  #lab { position: static; min-height: 100dvh; display: flex; flex-direction: column; padding-bottom: 84px; }
+  .topbar { order: 1; }
+  .bench { order: 2; }
+  .console { order: 3; }
+  .rack { order: 4; position: fixed; left: 0; right: 0; bottom: 0; flex-direction: row; gap: 6px; padding: 10px; background: rgba(10,5,7,0.9); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-top: 1px solid var(--glass-border-soft); border-radius: 0; z-index: 40; overflow-x: auto; }
+  .rack h2, .rack-foot, .mod .lbl { display: none; }
+  .mod { padding: 10px; }
+  .gauges { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+  <!-- iconos de línea fina -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-mix" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 4v16M12 4v16M18 4v16"/><circle cx="6" cy="14" r="2" fill="currentColor"/><circle cx="12" cy="8" r="2" fill="currentColor"/><circle cx="18" cy="16" r="2" fill="currentColor"/></symbol>
+      <symbol id="i-wave" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 12c2 0 2-6 4-6s2 12 4 12 2-12 4-12 2 12 4 12 2-6 4-6"/></symbol>
+      <symbol id="i-cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 11l5-3v8l-5-3"/></symbol>
+      <symbol id="i-arch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 8h16M4 8v10a2 2 0 002 2h12a2 2 0 002-2V8M4 8l2-4h12l2 4M10 12h4"/></symbol>
+      <symbol id="i-seal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l7 4v10l-7 4-7-4V7z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5l11 7-11 7z"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></symbol>
+      <symbol id="i-rec" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></symbol>
+      <symbol id="i-stamp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 4h6v6l2 3H7l2-3zM5 17h14v3H5z"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="atmo" id="atmo" aria-hidden="true"></div>
+
+  <!-- ══ PORTADA ══ -->
+  <div id="cover">
+    <div class="cover-inner">
+      <div class="logo-hex" aria-hidden="true">
+        <svg viewBox="0 0 120 130">
+          <path d="M60 6l48 28v62L60 124 12 96V34z" fill="rgba(255,45,70,0.05)" stroke="#ff2d46" stroke-width="2"/>
+          <path d="M60 16l39 23v52L60 114 21 91V39z" fill="none" stroke="rgba(255,45,70,0.35)" stroke-width="1"/>
+          <text class="neon-b" x="60" y="82" text-anchor="middle" font-size="52" font-family="Arial, sans-serif" font-weight="700" fill="#ff2d46" style="filter:drop-shadow(0 0 8px #ff2d46)">B</text>
+        </svg>
+      </div>
+      <h1 class="cover-title h-display">Berentani Studio 7</h1>
+      <p class="cover-sub">Laboratorio creativo de precisión.</p>
+      <p class="cover-tag">Donde la luz se dobla, nace la idea.</p>
+      <div class="cover-actions">
+        <button class="btn" id="enter-btn"><span class="sheen"></span>Entrar al laboratorio</button>
+        <button class="btn ghost" id="guest-btn"><span class="sheen"></span>Observar como invitado</button>
+      </div>
+      <p class="mono" style="margin-top:26px;font-size:10px;color:var(--off);letter-spacing:0.12em">100% OFFLINE · SIN APIS · SIN COSTE</p>
+    </div>
+  </div>
+
+  <!-- ══ LABORATORIO ══ -->
+  <div id="lab">
+    <header class="topbar glass hot">
+      <div class="session">
+        <b id="session-name">SESIÓN 07</b>
+        <span id="session-sub">operador: belentani7</span>
+      </div>
+      <div class="reactor" id="reactor">
+        <div class="ring"><span class="core"></span></div>
+        <span id="reactor-label">Reactor en reposo</span>
+      </div>
+      <div class="operator">
+        <small id="operator-role">OPERADOR</small>
+        <div class="ava" id="operator-ava">B7</div>
+      </div>
+    </header>
+
+    <nav class="rack glass" id="rack" aria-label="Módulos">
+      <h2>Módulos</h2>
+      <button class="mod active" data-mod="mix"><span class="bar"></span><svg><use href="#i-mix"/></svg><span class="lbl"><b>Mezclador</b><span>tubos 1–4</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="scope"><span class="bar"></span><svg><use href="#i-wave"/></svg><span class="lbl"><b>Espectro</b><span>osciloscopio</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="cam"><span class="bar"></span><svg><use href="#i-cam"/></svg><span class="lbl"><b>Cámara de Pruebas</b><span>ecos</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="arch"><span class="bar"></span><svg><use href="#i-arch"/></svg><span class="lbl"><b>Archivo 7</b><span>sellos</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="cfg"><span class="bar"></span><svg><use href="#i-seal"/></svg><span class="lbl"><b>Config. del Sello</b><span>calibración</span></span><span class="refl"></span></button>
+      <div class="rack-foot">
+        <button class="btn ghost" id="exit-btn" style="width:100%;justify-content:center">Sellar sesión y apagar los tubos</button>
+      </div>
+    </nav>
+
+    <main class="bench glass wave" id="bench">
+      <div class="waveline"></div>
+      <div class="bench-head">
+        <h1 class="h-display" id="bench-title">Mezclador</h1>
+        <span class="hint" id="bench-hint">El reactor duerme. Enciende el primer pulso.</span>
+      </div>
+      <div class="bench-body" id="bench-body"><!-- lo pinta JS --></div>
+    </main>
+
+    <aside class="console glass" id="console" aria-label="Consola">
+      <h2>Consola de cristal</h2>
+      <div class="lines" id="console-lines" role="log" aria-live="polite"></div>
+      <div class="foot">Berentani Studio 7 — precisión medida en pulsos.</div>
+    </aside>
+  </div>
+
+  <div id="toast" role="status"></div>
+
+<script>
+'use strict';
+/* ══ BERENTANI STUDIO 7 — lógica 100% local. Sin red, sin APIs. ══ */
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ── persistencia local (nada sale de esta máquina) ── */
+  var K = { glow: 'bs7_glow', motes: 'bs7_motes', flick: 'bs7_flick', seals: 'bs7_seals', session: 'bs7_session' };
+  function store(k, v) { try { localStorage.setItem(k, String(v)); } catch (e) {} }
+  function load(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
+
+  var state = {
+    guest: false,
+    running: false,
+    recording: false,
+    module: 'mix',
+    faders: [62, 41, 78, 30],
+    glow: parseFloat(load(K.glow, 1)),
+    motes: parseInt(load(K.motes, 26), 10),
+    flick: load(K.flick, '1') === '1'
+  };
+
+  /* ── atmósfera: tubos + partículas ── */
+  function buildAtmo() {
+    var atmo = $('#atmo');
+    atmo.innerHTML = '';
+    var tubes = 9;
+    for (var i = 0; i < tubes; i++) {
+      var t = document.createElement('span');
+      t.className = 'tube' + (state.flick && i % 3 === 0 ? ' flick' : '');
+      t.style.left = (6 + i * 11) + '%';
+      t.style.animationDelay = (i * 0.7) + 's';
+      atmo.appendChild(t);
+    }
+    for (var m = 0; m < state.motes; m++) {
+      var p = document.createElement('span');
+      p.className = 'mote';
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.animationDuration = (7 + Math.random() * 9) + 's';
+      p.style.animationDelay = (-Math.random() * 12) + 's';
+      p.style.transform = 'scale(' + (0.5 + Math.random()) + ')';
+      atmo.appendChild(p);
+    }
+  }
+
+  /* ── pulso radial en el clic ── */
+  document.addEventListener('pointerdown', function (e) {
+    var p = document.createElement('span');
+    p.className = 'pulse';
+    p.style.left = e.clientX + 'px';
+    p.style.top = e.clientY + 'px';
+    document.body.appendChild(p);
+    setTimeout(function () { p.remove(); }, 650);
+  });
+
+  /* ── consola ── */
+  function now() {
+    var d = new Date();
+    function z(n) { return (n < 10 ? '0' : '') + n; }
+    return z(d.getHours()) + ':' + z(d.getMinutes()) + ':' + z(d.getSeconds());
+  }
+  function log(msg, kind, big) {
+    var box = $('#console-lines');
+    $$('.line', box).forEach(function (l) { l.classList.remove('fresh'); });
+    var line = document.createElement('div');
+    line.className = 'line' + (kind ? ' ' + kind : '');
+    line.innerHTML = '<time>' + now() + '</time>' + msg;
+    box.appendChild(line);
+    line.classList.add('fresh');
+    box.scrollTop = box.scrollHeight;
+    if (big) {
+      var c = $('#console');
+      c.classList.remove('pulse'); void c.offsetWidth; c.classList.add('pulse');
+    }
+  }
+  function toast(msg) {
+    var t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toast._h);
+    toast._h = setTimeout(function () { t.classList.remove('show'); }, 2200);
+  }
+  function wave(el) {
+    el.classList.remove('done'); void el.offsetWidth; el.classList.add('done');
+  }
+
+  function guard(action) {
+    if (state.guest) {
+      toast('Modo invitado: ' + action + ' requiere sesión de operador.');
+      log('Intento de ' + action + ' denegado a invitado.', 'warn', true);
+      return false;
+    }
+    return true;
+  }
+
+  /* ── instrumentos ── */
+  var scope = null, scopeCtx = null, phase = 0;
+
+  function faderMarkup() {
+    var html = '<div class="inst"><div class="inst-grid"><div class="gauges">' +
+      gauge('GANANCIA', 'g-gain') + gauge('ESPECTRO', 'g-spec') +
+      '</div><div class="scope-wrap"><div class="scope-title">Osciloscopio — salida de tubos</div><canvas id="scope"></canvas></div></div>' +
+      '<div class="faders">';
+    for (var i = 0; i < 4; i++) {
+      html += '<div class="fader" data-i="' + i + '">' +
+        '<div class="slot"><div class="fill" style="height:' + state.faders[i] + '%"></div><div class="trail" style="height:' + state.faders[i] + '%"></div>' +
+        '<input type="range" min="0" max="100" value="' + state.faders[i] + '" aria-label="Tubo ' + (i + 1) + '"></div>' +
+        '<label>Tubo ' + (i + 1) + '</label><span class="read">' + state.faders[i] + '</span></div>';
+    }
+    html += '</div></div>';
+    return html;
+  }
+  function gauge(label, id) {
+    return '<div class="gauge"><svg viewBox="0 0 96 60">' +
+      '<path class="face" d="M8 52 A44 44 0 0 1 88 52"/>' +
+      '<path class="arc" id="' + id + '-arc" d="M8 52 A44 44 0 0 1 88 52"/>' +
+      '<line class="needle" id="' + id + '-needle" x1="48" y1="52" x2="48" y2="14"/>' +
+      '</svg><span class="val" id="' + id + '-val">0</span><small>' + label + '</small></div>';
+  }
+
+  function camMarkup() {
+    return '<div class="inst"><div class="empty" id="cam-empty">Aún no hay ecos en la cámara. Registra el primer sonido.</div>' +
+      '<div class="seals" id="cam-echoes" style="display:none"></div></div>';
+  }
+  function archMarkup() {
+    var seals = [];
+    try { seals = JSON.parse(load(K.seals, '[]')); } catch (e) {}
+    var html = '<div class="inst">';
+    if (!seals.length) {
+      html += '<div class="empty">El Archivo 7 está en silencio. Sella tu primera mezcla.</div>';
+    } else {
+      html += '<div class="seals">';
+      seals.slice().reverse().forEach(function (s) {
+        html += '<div class="seal"><b>' + s.name + '</b><span>' + s.time + ' · ' + s.mix + '</span></div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+  function cfgMarkup() {
+    return '<div class="inst cfg">' +
+      row('Intensidad del neón', 'r-glow', Math.round(state.glow * 100), '%') +
+      row('Densidad de partículas', 'r-motes', state.motes, '') +
+      '<div class="row"><header><span>Parpadeo de tubos</span></header>' +
+      '<button class="switch' + (state.flick ? ' on' : '') + '" id="sw-flick" role="switch" aria-checked="' + state.flick + '"><span class="track"><span class="knob"></span></span><span class="mono" style="font-size:10px;color:var(--data)">tubos que titilan</span></button></div>' +
+      '<div class="row"><header><span>Restablecer sello</span></header><button class="btn ghost" id="cfg-reset"><span class="sheen"></span>Borrar memoria local</button></div>' +
+      '</div>';
+  }
+  function row(label, id, val, unit) {
+    return '<div class="row"><header><span>' + label + '</span><span class="mono" id="' + id + '-out">' + val + unit + '</span></header>' +
+      '<input type="range" min="0" max="' + (id === 'r-glow' ? 200 : 60) + '" value="' + val + '" id="' + id + '"></div>';
+  }
+
+  function renderModule() {
+    var body = $('#bench-body');
+    var title = { mix: 'Mezclador', scope: 'Espectro', cam: 'Cámara de Pruebas', arch: 'Archivo 7', cfg: 'Configuración del Sello' }[state.module];
+    $('#bench-title').textContent = title;
+    if (state.module === 'mix') body.innerHTML = faderMarkup();
+    else if (state.module === 'scope') body.innerHTML = '<div class="inst scope-wrap" style="flex:1"><div class="scope-title">Espectro — análisis en vivo</div><canvas id="scope"></canvas></div>';
+    else if (state.module === 'cam') body.innerHTML = camMarkup();
+    else if (state.module === 'arch') body.innerHTML = archMarkup();
+    else body.innerHTML = cfgMarkup();
+
+    if (state.module === 'mix' || state.module === 'scope') initScope();
+    if (state.module === 'mix') bindFaders();
+    if (state.module === 'cfg') bindCfg();
+    if (state.module === 'cam') renderEchoes();
+  }
+
+  function renderEchoes() {
+    var echoes = [];
+    try { echoes = JSON.parse(load(K.seals, '[]')); } catch (e) {}
+    var empty = $('#cam-empty'), grid = $('#cam-echoes');
+    if (!empty || !grid) return;
+    if (!echoes.length) { empty.style.display = ''; grid.style.display = 'none'; return; }
+    empty.style.display = 'none'; grid.style.display = 'grid';
+    grid.innerHTML = echoes.slice(-6).reverse().map(function (s) {
+      return '<div class="seal"><b>' + s.name + '</b><span>' + s.time + '</span></div>';
+    }).join('');
+  }
+
+  function bindFaders() {
+    $$('.fader').forEach(function (f) {
+      var input = $('input', f), fill = $('.fill', f), trail = $('.trail', f), read = $('.read', f);
+      var i = parseInt(f.dataset.i, 10);
+      input.addEventListener('input', function () {
+        state.faders[i] = parseInt(input.value, 10);
+        fill.style.height = input.value + '%';
+        trail.style.height = input.value + '%';
+        trail.style.opacity = 0.8;
+        setTimeout(function () { trail.style.opacity = 0; }, 60);
+        read.textContent = input.value;
+      });
+    });
+  }
+
+  function bindCfg() {
+    var g = $('#r-glow'), m = $('#r-motes'), sw = $('#sw-flick'), reset = $('#cfg-reset');
+    if (g) g.addEventListener('input', function () {
+      state.glow = parseInt(g.value, 10) / 100;
+      document.documentElement.style.setProperty('--glow', state.glow);
+      $('#r-glow-out').textContent = g.value + '%';
+      store(K.glow, state.glow);
+    });
+    if (m) m.addEventListener('input', function () {
+      state.motes = parseInt(m.value, 10);
+      $('#r-motes-out').textContent = m.value;
+      store(K.motes, state.motes);
+      buildAtmo();
+    });
+    if (sw) sw.addEventListener('click', function () {
+      state.flick = !state.flick;
+      sw.classList.toggle('on', state.flick);
+      sw.setAttribute('aria-checked', state.flick);
+      store(K.flick, state.flick ? '1' : '0');
+      buildAtmo();
+    });
+    if (reset) reset.addEventListener('click', function () {
+      if (!guard('borrar memoria')) return;
+      try { localStorage.removeItem(K.seals); } catch (e) {}
+      log('Memoria local purgada. El laboratorio olvida.', 'warn', true);
+      toast('Memoria local borrada.');
+    });
+  }
+
+  /* ── osciloscopio + agujas ── */
+  function initScope() {
+    scope = $('#scope');
+    if (!scope) { scopeCtx = null; return; }
+    scopeCtx = scope.getContext('2d');
+    sizeScope();
+  }
+  function sizeScope() {
+    if (!scope) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    scope.width = scope.clientWidth * dpr;
+    scope.height = scope.clientHeight * dpr;
+  }
+  function drawScope(t) {
+    if (!scope || !scopeCtx) return;
+    var w = scope.width, h = scope.height, ctx = scopeCtx;
+    ctx.clearRect(0, 0, w, h);
+    var mid = h / 2;
+    ctx.lineWidth = Math.max(1.4, w / 600);
+    ctx.strokeStyle = '#ff2d46';
+    ctx.shadowColor = '#ff2d46';
+    ctx.shadowBlur = 14 * state.glow;
+    ctx.beginPath();
+    for (var x = 0; x <= w; x += 2) {
+      var u = x / w;
+      var y = mid;
+      for (var i = 0; i < 4; i++) {
+        var amp = (state.faders[i] / 100) * (h * 0.16);
+        y += Math.sin(u * (6 + i * 7) + t * (0.8 + i * 0.35)) * amp * (state.running ? 1 : 0.25);
+      }
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+  function setNeedle(id, frac) {
+    var n = $('#' + id + '-needle'), v = $('#' + id + '-val');
+    if (!n) return;
+    var deg = -50 + frac * 100;
+    n.style.transform = 'rotate(' + deg + 'deg)';
+    if (v) v.textContent = Math.round(frac * 100);
+  }
+
+  var raf;
+  function loop(t) {
+    raf = requestAnimationFrame(loop);
+    phase = t * 0.001;
+    drawScope(phase);
+    var avg = (state.faders[0] + state.faders[1] + state.faders[2] + state.faders[3]) / 400;
+    var spread = Math.abs(state.faders[0] - state.faders[3]) / 100;
+    setNeedle('g-gain', Math.min(1, avg + (state.running ? Math.sin(phase * 2) * 0.05 : 0)));
+    setNeedle('g-spec', Math.min(1, 0.2 + spread * 0.8 + (state.running ? Math.abs(Math.sin(phase)) * 0.1 : 0)));
+  }
+
+  /* ── transporte ── */
+  function setRunning(on) {
+    state.running = on;
+    $('#reactor').classList.toggle('live', on);
+    $('#reactor-label').textContent = on ? 'Reactor activo' : 'Reactor en reposo';
+    $('#bench-hint').textContent = on ? 'Registrando… la luz está escuchando.' : 'El reactor duerme. Enciende el primer pulso.';
+    $('#t-play').classList.toggle('on', on);
+    if (on) { log('Primer pulso encendido. El reactor despierta.', '', true); }
+    else { log('Reactor en reposo. Los tubos respiran despacio.'); }
+  }
+  function setRecording(on) {
+    if (on && !guard('registrar')) return;
+    state.recording = on;
+    $('#t-rec').classList.toggle('on', on);
+    if (on) { log('Registrando… la luz está escuchando.', 'warn', true); toast('Registrando… la luz está escuchando.'); }
+    else { log('Registro detenido.'); }
+  }
+  function seal() {
+    if (!guard('sellar')) return;
+    var seals = [];
+    try { seals = JSON.parse(load(K.seals, '[]')); } catch (e) {}
+    var mix = state.faders.join('-');
+    seals.push({ name: 'SELLO-' + String(seals.length + 1).padStart(3, '0'), time: now(), mix: mix });
+    store(K.seals, JSON.stringify(seals));
+    wave($('#bench'));
+    log('Mezcla sellada en el Archivo 7.', '', true);
+    toast('Mezcla sellada en el Archivo 7.');
+  }
+
+  function buildTransport() {
+    var bar = document.createElement('div');
+    bar.className = 'transport glass';
+    bar.innerHTML =
+      '<button class="tbtn" id="t-play" aria-label="Iniciar"><svg><use href="#i-play"/></svg></button>' +
+      '<button class="tbtn" id="t-pause" aria-label="Pausar"><svg><use href="#i-pause"/></svg></button>' +
+      '<button class="tbtn rec" id="t-rec" aria-label="Registrar"><svg><use href="#i-rec"/></svg></button>' +
+      '<button class="tbtn" id="t-seal" aria-label="Sellar"><svg><use href="#i-stamp"/></svg></button>' +
+      '<span class="tstate" id="t-state">EN REPOSO</span>';
+    $('#bench').appendChild(bar);
+    $('#t-play').addEventListener('click', function () { if (guard('iniciar')) setRunning(true); });
+    $('#t-pause').addEventListener('click', function () { setRunning(false); setRecording(false); });
+    $('#t-rec').addEventListener('click', function () { setRecording(!state.recording); });
+    $('#t-seal').addEventListener('click', seal);
+  }
+
+  function updateTransportState() {
+    var el = $('#t-state');
+    if (!el) return;
+    el.textContent = state.recording ? 'REGISTRANDO' : state.running ? 'ACTIVO' : 'EN REPOSO';
+  }
+  setInterval(updateTransportState, 300);
+
+  /* ── navegación de módulos ── */
+  $$('.mod').forEach(function (m) {
+    m.addEventListener('click', function () {
+      $$('.mod').forEach(function (x) { x.classList.remove('active'); });
+      m.classList.add('active');
+      state.module = m.dataset.mod;
+      renderModule();
+      log('Módulo <b>' + m.querySelector('.lbl b').textContent + '</b> en primer plano.');
+    });
+  });
+
+  /* ── entrada / salida ── */
+  function enter(guest) {
+    state.guest = guest;
+    document.body.classList.add('in-lab');
+    $('#operator-role').textContent = guest ? 'INVITADO' : 'OPERADOR';
+    $('#operator-ava').textContent = guest ? 'INV' : 'B7';
+    $('#session-sub').textContent = guest ? 'modo observación' : 'operador: belentani7';
+    buildAtmo();
+    renderModule();
+    log(guest ? 'Invitado dentro. Solo observación.' : 'Sesión 07 abierta. Tubos encendidos.', '', true);
+    log('El reactor duerme. Enciende el primer pulso.');
+  }
+  $('#enter-btn').addEventListener('click', function () { enter(false); });
+  $('#guest-btn').addEventListener('click', function () { enter(true); });
+  $('#exit-btn').addEventListener('click', function () {
+    setRunning(false); setRecording(false);
+    document.body.classList.remove('in-lab');
+    log('Sellar sesión y apagar los tubos.', 'warn', true);
+  });
+
+  /* ── restaurar calibración ── */
+  document.documentElement.style.setProperty('--glow', state.glow);
+
+  buildTransport();
+  buildAtmo();
+  requestAnimationFrame(loop);
+  window.addEventListener('resize', sizeScope);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+name: Feature request
+description: Suggest an improvement to the gallery or its tooling
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        House rule: the gallery stays dependency-free and free to host. Proposals that
+        require a runtime dependency, a paid service or a build step to *view* the site
+        will probably be declined — a `scripts/` improvement is a better fit.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      placeholder: I review mockups with a client on a phone and cannot share the exact viewport.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Viewer shell
+        - Manifest / build tooling
+        - Validator or CI
+        - Docs
+        - Design systems
+    validations:
+      required: true
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints
+      options:
+        - label: This keeps the gallery dependency-free at runtime
+          required: true
+        - label: This works offline / on a static host
+          required: true
