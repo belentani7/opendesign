@@ -33,6 +33,7 @@ const TYPES = {
   '.ico': 'image/x-icon',
   '.md': 'text/markdown; charset=utf-8',
   '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
   '.woff2': 'font/woff2',
 };
 

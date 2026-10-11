@@ -128,6 +128,13 @@ test('path traversal cannot escape the repository', async () => {
   }
 });
 
+test('sitemap.xml is served as XML', async () => {
+  const res = await fetch(`${base}/sitemap.xml`);
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get('content-type'), /application\/xml/);
+  assert.match(await res.text(), /<urlset/);
+});
+
 test('responses are not cached during development', async () => {
   const res = await fetch(`${base}/manifest.json`);
   assert.equal(res.headers.get('cache-control'), 'no-store');
