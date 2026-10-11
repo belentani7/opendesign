@@ -1,0 +1,68 @@
+name: Bug report
+description: Something in the gallery or a tool does not work
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Before submitting, run `npm run verify` on a clean clone —
+        if it fails locally, paste the output; that is usually the whole bug.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      placeholder: The preview stays blank when I open a CSS token file.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1. `npm run dev`
+        2. Open http://localhost:8080
+        3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where
+      options:
+        - Viewer shell (index.html / assets)
+        - Manifest build (scripts/build-manifest.mjs)
+        - Validator or CI
+        - Dev server
+        - A mockup
+        - A design system
+        - Documentation
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser / Node version
+      placeholder: "Chrome 141, Node v22.22.3"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console or terminal output
+      description: Paste logs inside a fenced code block.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I ran `npm run verify` on a clean clone
+          required: true
+        - label: I searched existing issues
+          required: true

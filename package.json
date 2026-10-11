@@ -1,0 +1,39 @@
+{
+  "name": "opendesign",
+  "version": "2.0.0",
+  "description": "Free, open-source, zero-dependency static gallery for design mockups and design systems. Open the repo, see every artifact.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/belentani7/opendesign.git"
+  },
+  "bugs": {
+    "url": "https://github.com/belentani7/opendesign/issues"
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "mockups",
+    "static-site",
+    "zero-dependency",
+    "open-source"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build-manifest.mjs",
+    "check:manifest": "node scripts/build-manifest.mjs --check",
+    "validate": "node scripts/validate.mjs",
+    "dev": "node scripts/serve.mjs",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "test:dom": "node --test tests/dom.test.mjs",
+    "lint": "npm run validate && npm run check:manifest",
+    "verify": "npm run validate && npm run check:manifest && npm test"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1"
+  }
+}

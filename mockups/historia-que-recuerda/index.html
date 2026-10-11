@@ -45,6 +45,14 @@
   .navBtns button.inactive{opacity:.25;cursor:not-allowed}
   .footerNote{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:9px;letter-spacing:.3em;color:rgba(163,163,163,.4);pointer-events:none;z-index:10;text-transform:uppercase}
   .phiSig{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;line-height:1.8;direction:ltr;text-align:left;background:var(--bg-card);padding:8px 12px;border:1px solid rgba(201,168,76,.1);margin-top:12px;white-space:pre-wrap;word-break:break-all;opacity:.7}
+  body.no3d #eyeCanvas{display:none}
+  body.no3d::before{content:"";position:fixed;inset:0;z-index:1;
+    background:
+      radial-gradient(1.2px 1.2px at 20% 30%,rgba(201,168,76,.5),transparent),
+      radial-gradient(1px 1px at 70% 60%,rgba(232,213,163,.45),transparent),
+      radial-gradient(1.4px 1.4px at 45% 80%,rgba(201,168,76,.35),transparent),
+      radial-gradient(900px 600px at 50% 45%,rgba(201,168,76,.08),transparent 70%),#000;
+    background-size:340px 340px,260px 260px,420px 420px,100% 100%}
   #glitchOverlay{position:fixed;inset:0;background:var(--bg);mix-blend-mode:exclusion;z-index:5;opacity:0;pointer-events:none}
   #glitchOverlay.flash{opacity:.25;animation:glitchFlash .6s}
   @keyframes glitchFlash{0%{opacity:.3;transform:translate(2px,-2px)}50%{opacity:.15;transform:translate(-3px,1px)}100%{opacity:0}}
@@ -156,6 +164,7 @@
     if(s===1){subt=subt.replace(/id="vname"/g,'').replace(/id="vname2"/g,'');subt=subt.replace(/<span id="vname"><\/span>/g,visitorName.toUpperCase());subt=subt.replace(/<span id="vname2"><\/span>/g,visitorName.toUpperCase());}
     $('#subtitle').innerHTML=subt;
     document.body.className=s===1?'knows':'';
+    $('#mid').className=s===1?'mid knows':'mid';
     $('#prevBtn').classList.toggle('inactive',!st.prev);
     $('#nextBtn').classList.toggle('inactive',!st.next);
     $('#nextBtn').textContent=st.next?'→ Continuar':'→ Fin';
@@ -202,6 +211,10 @@
     }
   }
 
+  /* Pointer state lives at IIFE scope: both init3D() and tick() read it.
+     (It used to be declared inside init3D, which made tick() throw
+     ReferenceError on every frame and left the canvas black.) */
+  let mx=0,my=0;
   let boostTarget=0;
   function advance(){
     if(state<states.length-1){
@@ -227,7 +240,7 @@
     renderer.setPixelRatio(DPR);
     renderer.setSize(innerWidth,innerHeight);
     renderer.setClearColor(0x000000,0);
-    renderer.outputEncoding=THREE.sRGBEncoding;
+    if('outputColorSpace' in renderer)renderer.outputColorSpace=THREE.SRGBColorSpace;
     renderer.toneMapping=THREE.ACESFilmicToneMapping;
 
     scene=new THREE.Scene();
@@ -270,7 +283,6 @@
     const rayMat=new THREE.LineBasicMaterial({color:0xc9a84c,transparent:true,opacity:.12,blending:THREE.AdditiveBlending});
     const rays=new THREE.LineSegments(rayGeo,rayMat);rays.computeLineDistances?.();scene.add(rays);
 
-    let mx=0,my=0;
     document.addEventListener('pointermove',(e)=>{
       mx=(e.clientX/innerWidth-0.5)*2;my=(e.clientY/innerHeight-0.5)*2;
       eyeMat.uniforms.uMouse.value.set(mx,my);
@@ -317,16 +329,34 @@ void main(){vec3 n=normalize(vN);
  gl_FragColor=vec4(col,clamp(a,0.0,1.0));}`;
 
   /* ── SESSION TIME TRACKING ── */
-  setInterval(()=>{const elapsed=NUM('noia_total_time',0)+Math.floor((performance.now()-sessionStart)/1000);SET('noia_total_time',elapsed);},15000);
-  window.addEventListener('beforeunload',()=>{const elapsed=NUM('noia_total_time',lastTime)+Math.floor((performance.now()-sessionStart)/1000);SET('noia_total_time',elapsed);});
+  /* Accumulated time = value stored at page load + this session. The old code
+     re-read localStorage on every tick and added the session again, so the
+     counter grew quadratically. */
+  const persistTime=()=>SET('noia_total_time',lastTime+Math.floor((performance.now()-sessionStart)/1000));
+  setInterval(persistTime,15000);
+  window.addEventListener('beforeunload',persistTime);
+  window.addEventListener('pagehide',persistTime);
 
   console.log('[NOIACORE] Sistema de memoria activado.');
   console.log('Visitas:',visitCount,'| Total time:',lastTime+'s','| Name:',savedName);
   console.log('First visit:',firstVisit,'| Truth known:',knowsTruth);
-  console.log('localStorage keys:',Object.keys(localStorage));
   console.log('[Phi] Firma cuántica:',Phi.encodeStr(visitorName||'ANÓNIMO'));
 
-  setTimeout(init3D,300);
+  /* three.js comes from a CDN. If it is blocked or offline, fall back to a
+     CSS starfield instead of a dead black screen. */
+  function start3D(){
+    if(typeof THREE==='undefined'||!window.WebGLRenderingContext){
+      document.body.classList.add('no3d');
+      console.warn('[NOIACORE] three.js unavailable — using the static fallback backdrop.');
+      return;
+    }
+    try{init3D();}
+    catch(err){
+      document.body.classList.add('no3d');
+      console.warn('[NOIACORE] WebGL init failed:',err);
+    }
+  }
+  setTimeout(start3D,300);
 })();
 </script>
 </body>

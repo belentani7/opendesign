@@ -1,325 +1,330 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="dark" data-theme-mode="system">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OpenDesign Viewer</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>OpenDesign — free, open-source design gallery</title>
+  <meta name="description" content="OpenDesign is a free, MIT-licensed, zero-dependency static gallery for design mockups and design systems. Every artifact in the repo, previewable in the browser with device frames, deep links and a command palette." />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#07080a" />
+  <meta name="author" content="belentani7" />
+  <meta name="license" content="MIT" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://belentani7.github.io/opendesign/" />
 
-    :root {
-      --sidebar-width: 240px;
-      --sidebar-bg: #1a1a1a;
-      --sidebar-text: #c8c8c8;
-      --sidebar-muted: #666;
-      --sidebar-hover: #2a2a2a;
-      --sidebar-active-bg: #2d2d2d;
-      --sidebar-active-text: #fff;
-      --accent: #4a9eff;
-      --border: #2e2e2e;
-      --preview-bg: #f0f0f0;
-      --header-height: 40px;
-      --preview-bar-bg: #242424;
-    }
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="OpenDesign" />
+  <meta property="og:title" content="OpenDesign — free, open-source design gallery" />
+  <meta property="og:description" content="Every design mockup and design system in one MIT-licensed, zero-dependency static gallery. No account, no paywall, no tracking." />
+  <meta property="og:url" content="https://belentani7.github.io/opendesign/" />
+  <meta name="twitter:card" content="summary" />
 
-    html, body {
-      height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 13px;
-      background: var(--sidebar-bg);
-      color: var(--sidebar-text);
-    }
-
-    .layout {
-      display: flex;
-      height: 100vh;
-    }
-
-    /* ── Sidebar ── */
-    .sidebar {
-      width: var(--sidebar-width);
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--border);
-      overflow-y: auto;
-    }
-
-    .sidebar-header {
-      height: var(--header-height);
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
-      border-bottom: 1px solid var(--border);
-      font-weight: 600;
-      font-size: 12px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--sidebar-muted);
-      flex-shrink: 0;
-    }
-
-    .sidebar-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 0;
-    }
-
-    /* Section label (Mockups / Design Systems) */
-    .section-label {
-      padding: 12px 12px 4px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--sidebar-muted);
-    }
-
-    /* Group = collapsible folder */
-    details.group {
-      margin-bottom: 2px;
-    }
-
-    details.group > summary {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      cursor: pointer;
-      list-style: none;
-      color: var(--sidebar-text);
-      font-weight: 500;
-      user-select: none;
-    }
-
-    details.group > summary::-webkit-details-marker { display: none; }
-
-    details.group > summary:hover {
-      background: var(--sidebar-hover);
-    }
-
-    details.group > summary::before {
-      content: "▶";
-      font-size: 8px;
-      color: var(--sidebar-muted);
-      transition: transform 0.15s;
-      flex-shrink: 0;
-    }
-
-    details.group[open] > summary::before {
-      transform: rotate(90deg);
-    }
-
-    /* File item */
-    .file-item {
-      display: block;
-      padding: 4px 12px 4px 28px;
-      color: var(--sidebar-text);
-      text-decoration: none;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      cursor: pointer;
-      border-left: 2px solid transparent;
-    }
-
-    .file-item:hover {
-      background: var(--sidebar-hover);
-    }
-
-    .file-item.active {
-      background: var(--sidebar-active-bg);
-      color: var(--sidebar-active-text);
-      border-left-color: var(--accent);
-    }
-
-    /* ── Preview ── */
-    .preview {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--preview-bg);
-    }
-
-    .preview-bar {
-      height: var(--header-height);
-      background: var(--preview-bar-bg);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .preview-bar-path {
-      font-size: 12px;
-      color: var(--sidebar-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .preview-bar-open {
-      margin-left: auto;
-      flex-shrink: 0;
-      font-size: 11px;
-      color: var(--accent);
-      text-decoration: none;
-      padding: 3px 8px;
-      border: 1px solid var(--accent);
-      border-radius: 3px;
-    }
-
-    .preview-bar-open:hover { background: rgba(74,158,255,0.1); }
-
-    iframe#preview {
-      flex: 1;
-      border: none;
-      background: #fff;
-    }
-
-    /* Empty state */
-    .empty-state {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: var(--sidebar-muted);
-      gap: 8px;
-      text-align: center;
-      padding: 24px;
-    }
-
-    .empty-state strong {
-      font-size: 15px;
-      color: var(--sidebar-text);
-    }
-
-    .empty-state code {
-      font-family: "JetBrains Mono", "Fira Code", monospace;
-      font-size: 12px;
-      background: #222;
-      padding: 2px 6px;
-      border-radius: 3px;
-    }
-
-    .sidebar-empty {
-      padding: 16px 12px;
-      color: var(--sidebar-muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-  </style>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <!-- Generated fallback so the viewer also works from file:// (fetch is blocked there). -->
+  <script src="manifest.js"></script>
+  <script type="module" src="assets/app.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <nav class="sidebar">
-      <div class="sidebar-header">OpenDesign</div>
-      <div class="sidebar-content" id="sidebar-content">
-        <div class="sidebar-empty">Loading…</div>
-      </div>
-    </nav>
+  <a class="skip" href="#stage">Skip to preview</a>
 
-    <main class="preview" id="preview-pane">
-      <div class="preview-bar" id="preview-bar" style="display:none">
-        <span class="preview-bar-path" id="preview-path"></span>
-        <a class="preview-bar-open" id="preview-open" href="#" target="_blank" rel="noopener noreferrer">Open ↗</a>
+  <!-- ── icon sprite ── -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-aperture" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 3v7M20.8 8.5l-6.1 3.5M18.4 19.5l-3.9-6.8M5.6 19.5l6.1-3.5M3.2 8.5l6.1 3.5" />
+        <circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none" />
+      </symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+        <path d="M12 3l9 5-9 5-9-5 9-5z" /><path d="M3 13l9 5 9-5" /><path d="M3 17.5l9 5 9-5" />
+      </symbol>
+      <symbol id="i-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+        <path d="M12 3a9 9 0 100 18c1.4 0 2-.9 2-1.8 0-1.3-1-1.7-1-2.7 0-.8.7-1.5 1.6-1.5H17a4 4 0 004-4c0-4.4-4-8-9-8z" />
+        <circle cx="8" cy="10" r="1.1" fill="currentColor" stroke="none" />
+        <circle cx="12" cy="7.5" r="1.1" fill="currentColor" stroke="none" />
+        <circle cx="16" cy="10" r="1.1" fill="currentColor" stroke="none" />
+      </symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 5l7 7-7 7" />
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+        <circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" />
+      </symbol>
+      <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </symbol>
+      <symbol id="i-contrast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="8.5" /><path d="M12 3.5a8.5 8.5 0 000 17z" fill="currentColor" stroke="none" />
+      </symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+        <path d="M4 7h16M4 12h16M4 17h16" />
+      </symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 12a8 8 0 11-2.6-5.9" /><path d="M20 4v5h-5" />
+      </symbol>
+      <symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 4h6v6" /><path d="M20 4l-9 9" /><path d="M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" />
+      </symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+        <rect x="9" y="9" width="11" height="11" rx="2" /><path d="M15 5.5A1.5 1.5 0 0013.5 4H6a2 2 0 00-2 2v7.5A1.5 1.5 0 005.5 15" />
+      </symbol>
+      <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 7l-5 5 5 5" /><path d="M15 7l5 5-5 5" />
+      </symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <path d="M6 12h12" />
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <path d="M12 6v12M6 12h12" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 13l4.5 4.5L19 7" />
+      </symbol>
+      <symbol id="i-github" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.03a9.5 9.5 0 015 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z" />
+      </symbol>
+      <symbol id="i-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <rect x="4" y="5" width="16" height="14" rx="2" />
+      </symbol>
+      <symbol id="i-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+        <rect x="3" y="4.5" width="18" height="12" rx="2" /><path d="M9 20h6M12 16.5V20" />
+      </symbol>
+      <symbol id="i-laptop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+        <rect x="5" y="5" width="14" height="9.5" rx="1.5" /><path d="M3 18h18" />
+      </symbol>
+      <symbol id="i-tablet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+        <rect x="5.5" y="3" width="13" height="18" rx="2" /><path d="M10.5 18h3" />
+      </symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+        <rect x="7.5" y="3" width="9" height="18" rx="2.5" /><path d="M11 18.5h2" />
+      </symbol>
+      <symbol id="i-lock-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+        <rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8.5 11V8a3.5 3.5 0 016.9-.8" /><circle cx="12" cy="15.5" r="1.3" fill="currentColor" stroke="none" />
+      </symbol>
+      <symbol id="i-keyboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+        <rect x="2.5" y="6" width="19" height="12" rx="2" /><path d="M6.5 10h.01M10 10h.01M13.5 10h.01M17 10h.01M8 14h8" stroke-linecap="round" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="app">
+    <!-- ── top bar ── -->
+    <header class="topbar">
+      <button class="icon-btn drawer-toggle" id="nav-toggle" type="button" aria-label="Toggle file list" aria-expanded="false" aria-controls="sidebar">
+        <svg aria-hidden="true"><use href="#i-menu" /></svg>
+      </button>
+
+      <a class="brand" href="./" aria-label="OpenDesign home">
+        <svg class="brand-mark" aria-hidden="true"><use href="#i-aperture" /></svg>
+        <span class="brand-name">OpenDesign<em>Studio</em></span>
+      </a>
+
+      <span class="divider-v" aria-hidden="true"></span>
+
+      <nav class="crumbs" aria-label="Current artifact">
+        <ol id="crumbs-list"><li>No artifact selected</li></ol>
+      </nav>
+
+      <div class="topbar-actions">
+        <button class="search-trigger" id="search-trigger" type="button" aria-label="Search artifacts">
+          <svg aria-hidden="true"><use href="#i-search" /></svg>
+          <span>Search</span>
+          <kbd>⌘K</kbd>
+        </button>
+
+        <a class="license-chip" href="LICENSE" title="MIT licence — free for any use, including commercial">
+          <svg aria-hidden="true"><use href="#i-lock-open" /></svg>
+          MIT · FREE
+        </a>
+
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Change theme">
+          <svg aria-hidden="true"><use href="#i-contrast" /></svg>
+        </button>
+
+        <button class="icon-btn" id="help-open" type="button" aria-label="Keyboard shortcuts">
+          <svg aria-hidden="true"><use href="#i-keyboard" /></svg>
+        </button>
+
+        <a class="icon-btn" id="repo-link" href="https://github.com/belentani7/opendesign" target="_blank" rel="noopener noreferrer" aria-label="Source code on GitHub">
+          <svg aria-hidden="true"><use href="#i-github" /></svg>
+        </a>
       </div>
-      <iframe id="preview" title="Preview" style="display:none"></iframe>
-      <div class="empty-state" id="empty-state">
-        <strong>No file selected</strong>
-        <span>Pick a file from the sidebar to preview it here.</span>
+    </header>
+
+    <!-- ── file list ── -->
+    <aside class="sidebar" id="sidebar" data-open="false" aria-label="Artifacts">
+      <div class="sidebar-head">
+        <div class="filter-wrap" id="filter-wrap" data-dirty="false">
+          <svg aria-hidden="true"><use href="#i-search" /></svg>
+          <input id="filter" type="search" placeholder="Filter artifacts" autocomplete="off" spellcheck="false" aria-label="Filter artifacts" />
+          <button class="filter-clear" id="filter-clear" type="button" aria-label="Clear filter">
+            <svg aria-hidden="true"><use href="#i-close" /></svg>
+          </button>
+        </div>
       </div>
+
+      <nav class="tree" id="tree" aria-label="Artifact tree">
+        <p class="tree-msg">Loading manifest…</p>
+      </nav>
+
+      <div class="sidebar-foot">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="status-count">offline-capable · MIT</span>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+
+    <!-- ── stage ── -->
+    <main class="stage" id="stage">
+      <div class="stage-bar" role="toolbar" aria-label="Preview controls">
+        <div class="segmented" id="devices" role="radiogroup" aria-label="Viewport">
+          <button type="button" role="radio" data-device="fill" aria-checked="true">
+            <svg aria-hidden="true"><use href="#i-expand" /></svg> Fill
+          </button>
+          <button type="button" role="radio" data-device="desktop" aria-checked="false">
+            <svg aria-hidden="true"><use href="#i-monitor" /></svg> Desktop <span class="dims">1440</span>
+          </button>
+          <button type="button" role="radio" data-device="laptop" aria-checked="false">
+            <svg aria-hidden="true"><use href="#i-laptop" /></svg> Laptop <span class="dims">1280</span>
+          </button>
+          <button type="button" role="radio" data-device="tablet" aria-checked="false">
+            <svg aria-hidden="true"><use href="#i-tablet" /></svg> Tablet <span class="dims">834</span>
+          </button>
+          <button type="button" role="radio" data-device="mobile" aria-checked="false">
+            <svg aria-hidden="true"><use href="#i-phone" /></svg> Mobile <span class="dims">390</span>
+          </button>
+        </div>
+
+        <div class="zoom-group">
+          <button class="icon-btn" id="zoom-out" type="button" aria-label="Zoom out"><svg aria-hidden="true"><use href="#i-minus" /></svg></button>
+          <input id="zoom-range" type="range" min="0.2" max="2" step="0.05" value="1" aria-label="Zoom" />
+          <span class="zoom-read" id="zoom-read" aria-live="off">100%</span>
+          <button class="icon-btn" id="zoom-in" type="button" aria-label="Zoom in"><svg aria-hidden="true"><use href="#i-plus" /></svg></button>
+        </div>
+
+        <span class="spacer"></span>
+
+        <button class="tool-btn" id="source-toggle" type="button" aria-pressed="false">
+          <svg aria-hidden="true"><use href="#i-code" /></svg> Source
+        </button>
+        <button class="tool-btn icon-only" id="reload" type="button" aria-label="Reload preview">
+          <svg aria-hidden="true"><use href="#i-refresh" /></svg>
+        </button>
+        <button class="tool-btn icon-only" id="copy-link" type="button" aria-label="Copy shareable link">
+          <svg aria-hidden="true"><use href="#i-copy" /></svg>
+        </button>
+        <a class="tool-btn" id="open-new" href="#" target="_blank" rel="noopener noreferrer">
+          <svg aria-hidden="true"><use href="#i-external" /></svg> Open
+        </a>
+      </div>
+
+      <div class="canvas" id="canvas">
+        <div class="device" id="device" data-mode="fill" data-shape="none" hidden>
+          <iframe id="preview" title="Artifact preview" loading="lazy" referrerpolicy="no-referrer"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads"></iframe>
+        </div>
+
+        <div class="placeholder" id="placeholder">
+          <div id="placeholder-body" style="display:contents">
+            <svg class="placeholder-mark" aria-hidden="true"><use href="#i-aperture" /></svg>
+            <h2>Pick an artifact</h2>
+            <p>Everything in <code>mockups/</code> and <code>design-systems/</code> is listed on the left — free to read, fork and ship.</p>
+            <div class="hints">
+              <span class="hint-chip"><kbd>⌘K</kbd> search</span>
+              <span class="hint-chip"><kbd>D</kbd> cycle viewport</span>
+              <span class="hint-chip"><kbd>?</kbd> all shortcuts</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- source drawer -->
+      <aside class="drawer" id="drawer" data-open="false" aria-hidden="true" aria-label="Source code">
+        <div class="drawer-head">
+          <svg aria-hidden="true" style="width:14px;height:14px;color:var(--gold)"><use href="#i-code" /></svg>
+          <span class="mono" id="drawer-path">—</span>
+          <button class="icon-btn" id="drawer-copy" type="button" aria-label="Copy source">
+            <svg aria-hidden="true"><use href="#i-copy" /></svg>
+          </button>
+          <button class="icon-btn" id="drawer-close" type="button" aria-label="Close source">
+            <svg aria-hidden="true"><use href="#i-close" /></svg>
+          </button>
+        </div>
+        <div class="drawer-body" id="drawer-body"><pre><span class="ln">Select an artifact.</span></pre></div>
+      </aside>
+
+      <footer class="statusbar">
+        <span class="path" id="status-path">—</span>
+        <span class="optional" id="status-meta">—</span>
+        <span class="grow"></span>
+        <span class="kbd-hint optional"><kbd>?</kbd> shortcuts</span>
+        <span id="status-view">fluid</span>
+      </footer>
     </main>
   </div>
 
-  <script>
-    const sidebar = document.getElementById('sidebar-content');
-    const previewFrame = document.getElementById('preview');
-    const previewBar = document.getElementById('preview-bar');
-    const previewPath = document.getElementById('preview-path');
-    const previewOpen = document.getElementById('preview-open');
-    const emptyState = document.getElementById('empty-state');
+  <!-- ── command palette ── -->
+  <div class="overlay" id="palette" hidden>
+    <div class="palette" role="dialog" aria-modal="true" aria-label="Search artifacts">
+      <div class="palette-input">
+        <svg aria-hidden="true"><use href="#i-search" /></svg>
+        <input id="palette-q" type="text" placeholder="Jump to an artifact…" autocomplete="off" spellcheck="false"
+          role="combobox" aria-expanded="true" aria-controls="palette-list" aria-label="Search artifacts" />
+      </div>
+      <div class="palette-list" id="palette-list" role="listbox" aria-label="Results"></div>
+      <div class="palette-foot">
+        <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> open</span>
+        <span><kbd>esc</kbd> close</span>
+      </div>
+    </div>
+  </div>
 
-    let activeItem = null;
+  <!-- ── shortcuts / about ── -->
+  <div class="overlay" id="help" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="help-title">
+      <div class="modal-head">
+        <h2 id="help-title">Keyboard &amp; about</h2>
+        <button class="icon-btn" id="help-close" type="button" aria-label="Close">
+          <svg aria-hidden="true"><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>Shortcuts</h3>
+        <div class="shortcut-grid">
+          <kbd>⌘K</kbd><span>Search every artifact</span>
+          <kbd>/</kbd><span>Focus the sidebar filter</span>
+          <kbd>↑ ↓</kbd><span>Move through the file list</span>
+          <kbd>D</kbd><span>Cycle viewport (fill → desktop → … → mobile)</span>
+          <kbd>F</kbd><span>Fit the current viewport to the stage</span>
+          <kbd>[ ]</kbd><span>Zoom out / in &nbsp;·&nbsp; <kbd>0</kbd> resets</span>
+          <kbd>S</kbd><span>Toggle the source drawer</span>
+          <kbd>R</kbd><span>Reload the preview</span>
+          <kbd>C</kbd><span>Copy a shareable deep link</span>
+          <kbd>O</kbd><span>Open the artifact in a new tab</span>
+          <kbd>T</kbd><span>Cycle theme (system → dark → light)</span>
+          <kbd>?</kbd><span>This panel</span>
+        </div>
+        <h3>About</h3>
+        <div class="about">
+          <p>
+            OpenDesign is a static gallery for design work: no build step to run it, no server,
+            no account, no tracking, no third-party requests. Clone it, open <code>index.html</code>,
+            or host the folder anywhere — it is <a href="LICENSE">MIT licensed</a> and free forever,
+            including for commercial use.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function loadFile(path, label, el) {
-      if (activeItem) activeItem.classList.remove('active');
-      activeItem = el;
-      el.classList.add('active');
+  <div class="toast" id="toast" role="status">
+    <svg aria-hidden="true"><use href="#i-check" /></svg>
+    <span data-toast-text>Done</span>
+  </div>
 
-      previewFrame.src = path;
-      previewPath.textContent = path;
-      previewOpen.href = path;
-      previewBar.style.display = 'flex';
-      emptyState.style.display = 'none';
-      previewFrame.style.display = 'block';
-    }
-
-    function esc(s) {
-      return String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function renderSidebar(manifest) {
-      const sections = manifest.sections || [];
-      if (sections.length === 0 || sections.every(s => (s.groups || []).length === 0)) {
-        sidebar.innerHTML = '<div class="sidebar-empty">No mockups yet.<br>Run the <code>opendesign</code> skill to create one.</div>';
-        return;
-      }
-
-      let html = '';
-      for (const section of sections) {
-        const groups = section.groups || [];
-        if (groups.length === 0) continue;
-
-        html += `<div class="section-label">${esc(section.label)}</div>`;
-
-        for (const group of groups) {
-          const files = group.files || [];
-          if (files.length === 0) continue;
-
-          html += `<details class="group" open><summary>${esc(group.slug)}</summary>`;
-          for (const file of files) {
-            // Use data attributes; attach listeners after inserting
-            html += `<span class="file-item" tabindex="0" data-path="${esc(file.path)}" data-label="${esc(file.label)}">${esc(file.label)}</span>`;
-          }
-          html += `</details>`;
-        }
-      }
-
-      sidebar.innerHTML = html;
-
-      // Attach click and keyboard listeners
-      sidebar.querySelectorAll('.file-item').forEach(el => {
-        el.addEventListener('click', () => loadFile(el.dataset.path, el.dataset.label, el));
-        el.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            loadFile(el.dataset.path, el.dataset.label, el);
-          }
-        });
-      });
-    }
-
-    async function init() {
-      try {
-        const res = await fetch('./manifest.json', { cache: 'no-store' });
-        if (!res.ok) throw new Error('not found');
-        const manifest = await res.json();
-        renderSidebar(manifest);
-      } catch (err) {
-        console.warn('[OpenDesign viewer] Failed to load manifest:', err);
-        sidebar.innerHTML = '<div class="sidebar-empty">No mockups yet.<br>Run the <code>opendesign</code> skill to create one.</div>';
-      }
-    }
-
-    init();
-  </script>
+  <p class="sr-only" id="live" aria-live="polite"></p>
 </body>
 </html>
