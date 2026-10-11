@@ -17,6 +17,12 @@ import { createApp } from '../assets/app.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const tick = (ms = 0) => new Promise((r) => setTimeout(r, ms));
+const MANIFEST = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
+const EXPECTED_FILES = MANIFEST.sections.reduce(
+  (n, sct) => n + sct.groups.reduce((m, g) => m + g.files.length, 0), 0);
+const EXPECTED_MOCKUP_FILES = MANIFEST.sections.find((x) => x.id === 'mockups')
+  .groups.reduce((m, g) => m + g.files.length, 0);
+const FIRST_FILE = MANIFEST.sections[0].groups[0].files[0].path;
 
 /** Minimal fetch(): resolves repo-relative URLs from disk. */
 function makeFetch(requested = []) {
@@ -62,10 +68,10 @@ async function boot({ hash = '', storage = {} } = {}) {
 test('boots and indexes every artifact in both sections', async () => {
   const { document } = await boot();
   const files = [...document.querySelectorAll('.file')];
-  assert.equal(files.length, 5, 'expected 2 mockups + 3 design-system files');
-  assert.equal(document.querySelectorAll('.section').length, 2);
+  assert.equal(files.length, EXPECTED_FILES, 'every artifact in the manifest must render');
+  assert.equal(document.querySelectorAll('.section').length, MANIFEST.sections.length);
   assert.match(document.querySelector('.section-head').textContent, /Mockups/);
-  assert.match(document.getElementById('status-count').textContent, /5 artifacts · MIT/);
+  assert.match(document.getElementById('status-count').textContent, new RegExp(EXPECTED_FILES + ' artifacts · MIT'));
 });
 
 test('the tree shows document titles and human-readable sizes', async () => {
@@ -86,12 +92,12 @@ test('exactly one file row is tabbable at a time (valid roving tabindex)', async
 test('first artifact is previewed on a clean load', async () => {
   const { document, window } = await boot();
   const preview = document.getElementById('preview');
-  assert.match(preview.getAttribute('src'), /mockups\/historia-que-recuerda\/index\.html/);
-  assert.equal(document.getElementById('status-path').textContent, 'mockups/historia-que-recuerda/index.html');
-  assert.equal(document.getElementById('open-new').getAttribute('href'), 'mockups/historia-que-recuerda/index.html');
+  assert.match(preview.getAttribute('src'), new RegExp(FIRST_FILE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  assert.equal(document.getElementById('status-path').textContent, FIRST_FILE);
+  assert.equal(document.getElementById('open-new').getAttribute('href'), FIRST_FILE);
   assert.equal(document.getElementById('placeholder').hidden, true);
-  assert.equal(window.location.hash, '#/mockups/historia-que-recuerda/index.html');
-  assert.equal(document.querySelector('.file[aria-current="true"]').dataset.path, 'mockups/historia-que-recuerda/index.html');
+  assert.equal(window.location.hash, '#/' + FIRST_FILE);
+  assert.equal(document.querySelector('.file[aria-current="true"]').dataset.path, FIRST_FILE);
 });
 
 test('deep links open the referenced artifact directly', async () => {
@@ -355,5 +361,5 @@ test('falls back to manifest.js when fetch is unavailable (file:// case)', async
   const app = createApp(dom.window.document, dom.window);
   await app.start();
   await tick();
-  assert.equal(dom.window.document.querySelectorAll('.file').length, 5);
+  assert.equal(dom.window.document.querySelectorAll('.file').length, EXPECTED_FILES);
 });

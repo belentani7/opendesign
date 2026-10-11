@@ -50,6 +50,14 @@ No install step is required — `npm run dev` uses only Node's standard library.
 In a hurry? Just open `index.html` in a browser; the viewer falls back to the
 generated `manifest.js` because `fetch()` is blocked on `file://`.
 
+## Shipped apps
+
+| Artifact | What it is |
+| --- | --- |
+| **Berentani Studio 7** | A self-contained "glass + red neon" laboratory — mixer, spectrum, test chamber, archive and seal config. Fully offline: no APIs, no internet, free. |
+| **Historia que recuerda** | An experimental WebGL "cosmic eye" prototype with persistent memory. |
+| **restaurant-automation** | A black-premium design token set that renders as swatches + type scale. |
+
 ## What you get
 
 | | |

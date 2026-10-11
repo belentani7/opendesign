@@ -5,8 +5,8 @@ window.OpenDesignManifest = {
   "name": "OpenDesign",
   "license": "MIT",
   "counts": {
-    "files": 5,
-    "mockups": 2,
+    "files": 7,
+    "mockups": 4,
     "designSystems": 3
   },
   "sections": [
@@ -16,6 +16,26 @@ window.OpenDesignManifest = {
       "icon": "layers",
       "hint": "Interactive prototypes. Drop an HTML file in its own folder.",
       "groups": [
+        {
+          "slug": "berentani-studio-7",
+          "label": "Berentani studio 7",
+          "files": [
+            {
+              "label": "index.html",
+              "path": "mockups/berentani-studio-7/index.html",
+              "kind": "html",
+              "bytes": 45507,
+              "title": "BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo"
+            },
+            {
+              "label": "README.md",
+              "path": "mockups/berentani-studio-7/README.md",
+              "kind": "markdown",
+              "bytes": 1879,
+              "title": "Berentani Studio 7 — Laboratorio \"Glass Rojo Neón\""
+            }
+          ]
+        },
         {
           "slug": "historia-que-recuerda",
           "label": "Historia que recuerda",
@@ -73,5 +93,5 @@ window.OpenDesignManifest = {
       ]
     }
   ],
-  "generated": "2026-10-11T08:20:21.737Z"
+  "generated": "2026-10-11T12:10:32.339Z"
 };

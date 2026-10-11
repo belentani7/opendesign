@@ -11,6 +11,12 @@ bugs found were fixed, and the project was made genuinely open source and free t
 
 ### Added
 
+- **Berentani Studio 7** (`mockups/berentani-studio-7/`) — a complete, 100 % offline
+  "glass + red neon" laboratory UI: cover with hexagon-B logo, module rack (Mezclador,
+  Espectro, Cámara de Pruebas, Archivo 7, Configuración del Sello), needle gauges, a live
+  neon oscilloscope, faders with light trails, a transport (iniciar/pausar/registrar/sellar),
+  a glass console that writes with light, guest mode, localStorage seals and full
+  responsive behaviour. No APIs, no network, no cost. Covered by 6 jsdom tests.
 - **New viewer UI** — graphite + gold studio shell built on this repo's own design tokens:
   icon sprite, collapsible artifact tree with titles and sizes, stage with device frames,
   status bar, source drawer, command palette, toast and help dialog.
