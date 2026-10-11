@@ -62,10 +62,10 @@ async function boot({ hash = '', storage = {} } = {}) {
 test('boots and indexes every artifact in both sections', async () => {
   const { document } = await boot();
   const files = [...document.querySelectorAll('.file')];
-  assert.equal(files.length, 4, 'expected 1 mockup + 3 design-system files');
+  assert.equal(files.length, 5, 'expected 2 mockups + 3 design-system files');
   assert.equal(document.querySelectorAll('.section').length, 2);
   assert.match(document.querySelector('.section-head').textContent, /Mockups/);
-  assert.match(document.getElementById('status-count').textContent, /4 artifacts · MIT/);
+  assert.match(document.getElementById('status-count').textContent, /5 artifacts · MIT/);
 });
 
 test('the tree shows document titles and human-readable sizes', async () => {
@@ -154,7 +154,7 @@ function ev(node, type) {
 test('filtering away the selected row still leaves one tabbable row', async () => {
   const { document } = await boot();
   const filter = document.getElementById('filter');
-  filter.value = 'readme'; // hides the currently selected mockup
+  filter.value = 'tokens.json'; // exactly one match, not the selected artifact
   filter.dispatchEvent(ev(filter, 'input'));
   const values = [...document.querySelectorAll('.file')].map((b) => b.getAttribute('tabindex'));
   assert.equal(values.length, 1);
@@ -238,6 +238,28 @@ test('keyboard: D cycles viewport, ? opens help, Esc closes it', async () => {
   assert.equal(document.getElementById('help').hidden, true);
   press('d');
   assert.equal(document.querySelector('[data-device="laptop"]').getAttribute('aria-checked'), 'true');
+});
+
+test('P toggles presentation mode and Esc leaves it', async () => {
+  const { document } = await boot();
+  const press = (key) =>
+    document.dispatchEvent(new document.defaultView.KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+
+  press('p');
+  assert.equal(document.body.dataset.presentation, 'true');
+  assert.equal(document.getElementById('present-toggle').getAttribute('aria-pressed'), 'true');
+  press('Escape');
+  assert.equal(document.body.dataset.presentation, 'false');
+  assert.equal(document.getElementById('present-toggle').getAttribute('aria-pressed'), 'false');
+});
+
+test('the presentation button works without the keyboard', async () => {
+  const { document } = await boot();
+  const btn = document.getElementById('present-toggle');
+  btn.dispatchEvent(ev(btn, 'click'));
+  assert.equal(document.body.dataset.presentation, 'true');
+  btn.dispatchEvent(ev(btn, 'click'));
+  assert.equal(document.body.dataset.presentation, 'false');
 });
 
 test('⌘K opens the palette from anywhere', async () => {
@@ -333,5 +355,5 @@ test('falls back to manifest.js when fetch is unavailable (file:// case)', async
   const app = createApp(dom.window.document, dom.window);
   await app.start();
   await tick();
-  assert.equal(dom.window.document.querySelectorAll('.file').length, 4);
+  assert.equal(dom.window.document.querySelectorAll('.file').length, 5);
 });

@@ -5,8 +5,8 @@ window.OpenDesignManifest = {
   "name": "OpenDesign",
   "license": "MIT",
   "counts": {
-    "files": 4,
-    "mockups": 1,
+    "files": 5,
+    "mockups": 2,
     "designSystems": 3
   },
   "sections": [
@@ -26,6 +26,13 @@ window.OpenDesignManifest = {
               "kind": "html",
               "bytes": 19132,
               "title": "NOIACORE — HISTORIA QUE RECUERDA"
+            },
+            {
+              "label": "README.md",
+              "path": "mockups/historia-que-recuerda/README.md",
+              "kind": "markdown",
+              "bytes": 1623,
+              "title": "Historia que recuerda — NOIACORE"
             }
           ]
         }
@@ -66,5 +73,5 @@ window.OpenDesignManifest = {
       ]
     }
   ],
-  "generated": "2026-10-11T07:26:07.457Z"
+  "generated": "2026-10-11T08:20:21.737Z"
 };

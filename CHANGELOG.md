@@ -18,6 +18,7 @@ bugs found were fixed, and the project was made genuinely open source and free t
   20–200 % zoom, fit-to-stage, and per-device persistence.
 - **Deep links** — `#/path?device=mobile&zoom=0.5`, kept in sync with history so back/forward
   and shared URLs land on the same view.
+- **Presentation mode** (<kbd>P</kbd>) — hide everything but the artifact; <kbd>Esc</kbd> returns.
 - **Command palette** (<kbd>⌘K</kbd>) with fuzzy ranking across label, title, group and path.
 - **Token specimens** — `.css` files render as colour swatches + type scale; DTCG `.json`
   token files render as a token gallery; Markdown renders as documentation; everything else
@@ -33,14 +34,19 @@ bugs found were fixed, and the project was made genuinely open source and free t
 - **`scripts/validate.mjs`** — eight repo health checks, replacing the old "index.html is
   not empty" CI step.
 - **`scripts/serve.mjs`** — dependency-free dev server bound to `0.0.0.0`, with path
-  traversal protection.
+  traversal protection; covered by a real HTTP integration test suite.
+- **Discovery for free hosting**: `robots.txt`, a generated `sitemap.xml` (rebuilt by
+  `npm run build`, checked by the validator) and a committed `assets/og-image.png` social
+  card (`og:image`, `twitter:card=summary_large_image`), with an optional
+  `scripts/make-og-image.sh` regenerator.
 - **Test suites** (`node --test` + jsdom): pure helpers, manifest integrity, an end-to-end
   DOM suite that drives the real `createApp()`, and mockup regression tests.
 - **CI**: `validate` + manifest drift check + tests on every push and PR, plus a GitHub
   Pages deployment workflow (free hosting).
 - **Community files**: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, issue
   templates and a pull request template.
-- `design-systems/restaurant-automation/README.md` — the token set now documents itself.
+- `design-systems/restaurant-automation/README.md` and
+  `mockups/historia-que-recuerda/README.md` — each artifact documents itself.
 - `404.html`, an inline SVG favicon, and full SEO/social metadata on the shell.
 
 ### Fixed

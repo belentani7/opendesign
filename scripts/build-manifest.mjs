@@ -22,7 +22,25 @@ import { buildManifest, manifestsMatch } from './lib/manifest.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const jsonPath = path.join(root, 'manifest.json');
 const jsPath = path.join(root, 'manifest.js');
+const sitemapPath = path.join(root, 'sitemap.xml');
+const SITE_URL = (process.env.SITE_URL || 'https://belentani7.github.io/opendesign/').replace(/\/+$/, '');
 const check = process.argv.includes('--check');
+
+/** Build sitemap.xml from the manifest so every artifact is discoverable. */
+function sitemapXml(manifest) {
+  const urls = [SITE_URL + '/'];
+  for (const section of manifest.sections) {
+    for (const group of section.groups) {
+      for (const file of group.files) urls.push(`${SITE_URL}/${file.path}`);
+    }
+  }
+  const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((u) => `  <url><loc>${esc(u)}</loc></url>`).join('\n')}
+</urlset>
+`;
+}
 
 const manifest = await buildManifest(root);
 manifest.generated = new Date().toISOString();
@@ -66,7 +84,8 @@ if (check) {
 
 await writeFile(jsonPath, jsonBody, 'utf8');
 await writeFile(jsPath, jsBody, 'utf8');
-console.log(`✔ wrote manifest.json + manifest.js — ${manifest.counts.files} file(s) indexed`);
+await writeFile(sitemapPath, sitemapXml(manifest), 'utf8');
+console.log(`✔ wrote manifest.json + manifest.js + sitemap.xml — ${manifest.counts.files} file(s) indexed`);
 for (const section of manifest.sections) {
   for (const group of section.groups) {
     for (const file of group.files) {

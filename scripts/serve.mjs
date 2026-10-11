@@ -67,5 +67,7 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(port, '0.0.0.0', () => {
-  console.log(`OpenDesign → http://0.0.0.0:${port}  (repo: ${root})`);
+  const bound = server.address();
+  const shown = bound && typeof bound === 'object' ? bound.port : port;
+  console.log(`OpenDesign → http://0.0.0.0:${shown}  (repo: ${root})`);
 });

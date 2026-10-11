@@ -17,7 +17,12 @@
   <meta property="og:title" content="OpenDesign — free, open-source design gallery" />
   <meta property="og:description" content="Every design mockup and design system in one MIT-licensed, zero-dependency static gallery. No account, no paywall, no tracking." />
   <meta property="og:url" content="https://belentani7.github.io/opendesign/" />
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://belentani7.github.io/opendesign/assets/og-image.png" />
+  <meta property="og:image" content="https://belentani7.github.io/opendesign/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="OpenDesign — the free, open-source gallery for design mockups and design systems." />
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="assets/styles.css" />
@@ -104,6 +109,10 @@
       </symbol>
       <symbol id="i-keyboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
         <rect x="2.5" y="6" width="19" height="12" rx="2" /><path d="M6.5 10h.01M10 10h.01M13.5 10h.01M17 10h.01M8 14h8" stroke-linecap="round" />
+      </symbol>
+      <symbol id="i-present" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4.5" width="18" height="11" rx="1.5" /><path d="M12 15.5V19M9 19h6" />
+        <path d="M10.5 8.2l3.6 2.3-3.6 2.3z" fill="currentColor" stroke="none" />
       </symbol>
     </defs>
   </svg>
@@ -205,6 +214,9 @@
 
         <span class="spacer"></span>
 
+        <button class="tool-btn" id="present-toggle" type="button" aria-pressed="false" title="Presentation mode (P)">
+          <svg aria-hidden="true"><use href="#i-present" /></svg> Present
+        </button>
         <button class="tool-btn" id="source-toggle" type="button" aria-pressed="false">
           <svg aria-hidden="true"><use href="#i-code" /></svg> Source
         </button>
@@ -305,6 +317,7 @@
           <kbd>C</kbd><span>Copy a shareable deep link</span>
           <kbd>O</kbd><span>Open the artifact in a new tab</span>
           <kbd>T</kbd><span>Cycle theme (system → dark → light)</span>
+          <kbd>P</kbd><span>Presentation mode — hide everything but the artifact</span>
           <kbd>?</kbd><span>This panel</span>
         </div>
         <h3>About</h3>

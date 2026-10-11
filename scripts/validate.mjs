@@ -162,6 +162,25 @@ for (const rel of jsonFiles) {
   }
 }
 
+/* ── 6b: sitemap covers the manifest ───────────────────────────── */
+console.log('\nsitemap.xml');
+try {
+  const sitemap = await read('sitemap.xml');
+  ok('parses as XML-shaped text');
+  const declared = manifest
+    ? manifest.sections.flatMap((sec) => sec.groups.flatMap((g) => g.files.map((f) => f.path)))
+    : [];
+  const missing = declared.filter((rel) => !sitemap.includes(`/${rel}</loc>`));
+  missing.length === 0
+    ? ok(`sitemap lists all ${declared.length} artifact(s)`)
+    : fail('sitemap completeness', `missing: ${missing.join(', ')}`);
+  /<loc>https?:[^<]*\/<\/loc>/.test(sitemap)
+    ? ok('sitemap lists the site root')
+    : fail('sitemap root', 'site root <loc> not found');
+} catch {
+  fail('sitemap.xml', 'missing — run `npm run build`');
+}
+
 /* ── 7: shell SEO + offline-safety ─────────────────────────────── */
 console.log('\nshell (index.html)');
 const shell = await read('index.html');
@@ -171,6 +190,8 @@ const required = [
   [/property=["']og:title["']/, 'og:title'],
   [/name=["']theme-color["']/, 'theme-color'],
   [/manifest\.js/, 'file:// manifest fallback'],
+  [/property=["']og:image["']/, 'og:image'],
+  [/name=["']twitter:card["']\s+content=["']summary_large_image["']/, 'twitter:card = summary_large_image'],
 ];
 for (const [re, label] of required) {
   re.test(shell) ? ok(label) : fail(label, 'not declared in index.html');

@@ -454,6 +454,7 @@ export function createApp(doc = globalThis.document, win = globalThis.window) {
     zoomIn: $('#zoom-in'),
     reload: $('#reload'),
     source: $('#source-toggle'),
+    present: $('#present-toggle'),
     open: $('#open-new'),
     copy: $('#copy-link'),
     drawer: $('#drawer'),
@@ -487,6 +488,7 @@ export function createApp(doc = globalThis.document, win = globalThis.window) {
     paletteIndex: 0,
     paletteResults: [],
     sourceOpen: false,
+    presentation: false,
   };
 
   /* ── small utilities ─────────────────────────────────────────── */
@@ -973,6 +975,17 @@ ${specimenBase(dark)}</head><body>
     setZoom(Math.min(1, Math.max(0.2, z)));
   }
 
+  /* ── presentation mode ───────────────────────────────────────── */
+
+  function setPresentation(on) {
+    state.presentation = !!on;
+    doc.body.dataset.presentation = String(state.presentation);
+    el.present?.setAttribute('aria-pressed', String(state.presentation));
+    if (state.presentation) fitZoom();
+    toast(state.presentation ? 'Presentation mode — press P or Esc to exit' : 'Back to the studio');
+    announce(state.presentation ? 'Presentation mode on' : 'Presentation mode off');
+  }
+
   /* ── source drawer ───────────────────────────────────────────── */
 
   async function toggleSource(force) {
@@ -1169,6 +1182,7 @@ ${specimenBase(dark)}</head><body>
       toast('Preview reloaded');
     });
     el.source.addEventListener('click', () => toggleSource());
+    el.present?.addEventListener('click', () => setPresentation(!state.presentation));
     el.drawerClose.addEventListener('click', () => toggleSource(false));
     el.drawerCopy.addEventListener('click', copySource);
     el.copy.addEventListener('click', copyLink);
@@ -1220,6 +1234,7 @@ ${specimenBase(dark)}</head><body>
       }
       if (e.key === 'Escape') {
         if (!el.palette.hidden) return closePalette();
+        if (state.presentation) return setPresentation(false);
         if (!el.help.hidden) {
           el.help.hidden = true;
           return;
@@ -1256,6 +1271,7 @@ ${specimenBase(dark)}</head><body>
         c: copyLink,
         r: () => el.reload.click(),
         t: cycleTheme,
+        p: () => setPresentation(!state.presentation),
         '[': () => setZoom(state.zoom - 0.1),
         ']': () => setZoom(state.zoom + 0.1),
         '0': () => setZoom(1),

@@ -1175,6 +1175,23 @@
   }
 }
 
+/* ── presentation mode: nothing but the artifact ── */
+body[data-presentation="true"] .app {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: "stage";
+}
+body[data-presentation="true"] .topbar,
+body[data-presentation="true"] .sidebar,
+body[data-presentation="true"] .scrim,
+body[data-presentation="true"] .stage-bar,
+body[data-presentation="true"] .statusbar { display: none; }
+body[data-presentation="true"] .canvas {
+  padding: 0;
+  background-image: none;
+  background-color: var(--bg-0);
+}
+
 /* ─────────────────────────── responsive ────────────────────── */
 @layer responsive {
   .drawer-toggle { display: none; }

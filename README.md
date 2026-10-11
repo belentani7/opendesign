@@ -58,6 +58,7 @@ generated `manifest.js` because `fetch()` is blocked on `file://`.
 | **Device frames** | Fill · Desktop 1440 · Laptop 1280 · Tablet 834 · Mobile 390, with zoom 20–200 %. |
 | **Deep links** | `#/mockups/foo/index.html?device=mobile&zoom=0.5` — copy it, share it, it lands on the same view. |
 | **Command palette** | <kbd>⌘K</kbd> / <kbd>Ctrl K</kbd> fuzzy search across every artifact. |
+| **Presentation mode** | <kbd>P</kbd> hides everything but the artifact; <kbd>Esc</kbd> returns to the studio. |
 | **Token specimens** | `.css` and `.json` token files render as colour swatches and a type scale — not as raw text. |
 | **Markdown** | Repo docs render in place, so a design system can document itself. |
 | **Source drawer** | <kbd>S</kbd> shows the highlighted source with line numbers and a copy button. |
@@ -68,7 +69,7 @@ generated `manifest.js` because `fetch()` is blocked on `file://`.
 
 <kbd>⌘K</kbd> search · <kbd>/</kbd> filter · <kbd>↑↓</kbd> browse · <kbd>D</kbd> viewport ·
 <kbd>F</kbd> fit · <kbd>[ ]</kbd> zoom · <kbd>0</kbd> reset zoom · <kbd>S</kbd> source ·
-<kbd>R</kbd> reload · <kbd>C</kbd> copy link · <kbd>O</kbd> open · <kbd>T</kbd> theme ·
+<kbd>R</kbd> reload · <kbd>C</kbd> copy link · <kbd>O</kbd> open · <kbd>T</kbd> theme · <kbd>P</kbd> present ·
 <kbd>?</kbd> help
 
 ## Repository layout
@@ -77,9 +78,12 @@ generated `manifest.js` because `fetch()` is blocked on `file://`.
 index.html               the gallery shell
 manifest.json            generated index of every artifact
 manifest.js              same data as a script, for file:// usage
+sitemap.xml              generated; lists every artifact for search engines
+robots.txt               allows all crawlers; points at the sitemap
 assets/                  styles.css, app.js, favicon.svg
 scripts/
-  build-manifest.mjs     scans the repo → manifest.json + manifest.js
+  build-manifest.mjs     scans the repo → manifest.json + manifest.js + sitemap.xml
+  make-og-image.sh       regenerates assets/og-image.png (needs ImageMagick; optional)
   validate.mjs           repo health checks (see below)
   serve.mjs              dependency-free dev server
   lib/manifest.mjs       shared scanning/parsing helpers
@@ -115,7 +119,7 @@ and `manifest.js` — CI fails if they drift from the files on disk.
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Serve the repo on `http://localhost:8080` (Node stdlib only). |
-| `npm run build` | Re-scan the repo and rewrite `manifest.json` + `manifest.js`. |
+| `npm run build` | Re-scan the repo and rewrite `manifest.json` + `manifest.js` + `sitemap.xml`. |
 | `npm run check:manifest` | Fail if the committed manifest is stale. |
 | `npm run validate` | Repo health checks — see below. |
 | `npm test` | Run every suite with `node --test`. |
