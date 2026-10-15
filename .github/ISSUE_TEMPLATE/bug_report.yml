@@ -1,9 +1,2 @@
 name: Bug Report
-title: "[BUG] "
 labels: ["bug"]
-body:
-  - type: textarea
-    id: desc
-    attributes:
-      label: Description
-      required: true
