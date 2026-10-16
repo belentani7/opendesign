@@ -34,6 +34,6 @@
     "verify": "npm run validate && npm run check:manifest && npm test"
   },
   "devDependencies": {
-    "jsdom": "^25.0.1"
+    "jsdom": "^30.1.2"
   }
 }
