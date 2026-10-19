@@ -21,7 +21,7 @@
     "open-source"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "build": "node scripts/build-manifest.mjs",
