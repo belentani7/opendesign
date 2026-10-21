@@ -1,12 +1,30 @@
-name: CI
-on: [push, pull_request]
+name: OpenDesign — gallery contracts
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  lint:
+  verify:
+    name: Validate real gallery and automated tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
-        with: { node-version: '20', cache: 'pnpm' }
-      - run: pnpm install
-      - run: pnpm lint
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Restore lockfile dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Build preview manifest
+        run: npm run build
+      - name: Run gallery/link/DOM regression suite
+        run: npm run verify
+      - name: Assert a real entrypoint exists
+        run: test -s index.html
