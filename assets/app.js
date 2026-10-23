@@ -230,6 +230,9 @@ export function flattenTokens(node, prefix = '', out = []) {
  */
 export function safeUrl(url) {
   const value = String(url ?? '').trim();
+  // Browsers can silently strip embedded ASCII controls while parsing URLs.
+  // Reject them before scheme detection to prevent disguised scriptable links.
+  if (/[\u0000-\u001f\u007f]/.test(value)) return '#';
   const scheme = /^([a-z][a-z0-9+.-]*):/i.exec(value);
   if (!scheme) return value; // relative, absolute path or fragment
   return ['http', 'https', 'mailto', 'tel'].includes(scheme[1].toLowerCase()) ? value : '#';
@@ -491,6 +494,10 @@ export function createApp(doc = globalThis.document, win = globalThis.window) {
     presentation: false,
   };
 
+  // In-flight artifact loads must never overwrite a newer selection or drawer.
+  let previewRequestId = 0;
+  let sourceRequestId = 0;
+
   /* ── small utilities ─────────────────────────────────────────── */
 
   const announce = (msg) => {
@@ -674,6 +681,8 @@ export function createApp(doc = globalThis.document, win = globalThis.window) {
   function navigate(path, { push = true, device, zoom } = {}) {
     const file = state.files.find((f) => f.path === path);
     if (!file) {
+      previewRequestId += 1;
+      closeDrawer();
       showError(`No artifact at that path`, path);
       return;
     }
@@ -745,6 +754,7 @@ export function createApp(doc = globalThis.document, win = globalThis.window) {
   /* ── preview ─────────────────────────────────────────────────── */
 
   async function renderPreview(file) {
+    const requestId = ++previewRequestId;
     el.placeholder.hidden = true;
     el.device.hidden = false;
     el.preview.removeAttribute('srcdoc');
@@ -761,8 +771,10 @@ export function createApp(doc = globalThis.document, win = globalThis.window) {
       const res = await win.fetch(file.path, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const text = await res.text();
+      if (requestId !== previewRequestId) return;
       body = specimenFor(file, text);
     } catch (err) {
+      if (requestId !== previewRequestId) return;
       showError(`Could not load ${file.label}`, `${file.path} — ${err.message}`);
       return;
     }
@@ -957,7 +969,10 @@ ${specimenBase(dark)}</head><body>
   }
 
   function setZoom(z, { silent = false } = {}) {
-    state.zoom = Math.min(2, Math.max(0.2, Math.round(z * 100) / 100));
+    const numeric = Number(z);
+    state.zoom = Number.isFinite(numeric)
+      ? Math.min(2, Math.max(0.2, Math.round(numeric * 100) / 100))
+      : 1;
     el.device.style.setProperty('--zoom', String(state.zoom));
     el.zoom.value = String(state.zoom);
     el.zoomRead.textContent = `${Math.round(state.zoom * 100)}%`;
@@ -991,6 +1006,7 @@ ${specimenBase(dark)}</head><body>
   async function toggleSource(force) {
     const open = force ?? !state.sourceOpen;
     if (open && !state.current) return;
+    const requestId = ++sourceRequestId;
     state.sourceOpen = open;
     el.drawer.dataset.open = String(open);
     el.source.setAttribute('aria-pressed', String(open));
@@ -1006,10 +1022,13 @@ ${specimenBase(dark)}</head><body>
     }
     try {
       const res = await win.fetch(file.path, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const text = await res.text();
+      if (requestId !== sourceRequestId || !state.sourceOpen || state.current?.path !== file.path) return;
       const lang = file.kind === 'markdown' ? 'markdown' : file.kind;
       el.drawerBody.innerHTML = `<pre>${withLineNumbers(highlight(text, lang))}</pre>`;
     } catch (err) {
+      if (requestId !== sourceRequestId || !state.sourceOpen || state.current?.path !== file.path) return;
       el.drawerBody.innerHTML = `<pre><span class="ln">Could not read source: ${escapeHtml(err.message)}</span></pre>`;
     }
   }
