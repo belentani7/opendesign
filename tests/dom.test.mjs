@@ -363,3 +363,67 @@ test('falls back to manifest.js when fetch is unavailable (file:// case)', async
   await tick();
   assert.equal(dom.window.document.querySelectorAll('.file').length, EXPECTED_FILES);
 });
+
+test('late preview responses cannot replace a newer artifact', async () => {
+  const { document, window, app } = await boot();
+  const oldPath = 'design-systems/restaurant-automation/README.md';
+  const newPath = 'design-systems/restaurant-automation/tokens/tokens.json';
+  const fetchOriginal = window.fetch;
+  let finishOld;
+  window.fetch = (url) => {
+    if (url === oldPath) return new Promise((resolve) => { finishOld = () => resolve(fetchOriginal(url)); });
+    return fetchOriginal(url);
+  };
+
+  app.navigate(oldPath);
+  app.navigate(newPath);
+  await tick(10);
+  const preview = document.getElementById('preview');
+  assert.match(preview.srcdoc, /JSON ·/);
+  finishOld();
+  await tick(10);
+  assert.match(preview.srcdoc, /JSON ·/, 'old Markdown response must not overwrite JSON');
+  assert.equal(document.getElementById('status-path').textContent, newPath);
+});
+
+test('closing or switching the source drawer invalidates pending reads', async () => {
+  const { document, window, app } = await boot();
+  const oldPath = 'design-systems/restaurant-automation/README.md';
+  const newPath = 'design-systems/restaurant-automation/tokens/tokens.json';
+  const fetchOriginal = window.fetch;
+  let finishOld;
+  window.fetch = (url) => {
+    if (url === oldPath) return new Promise((resolve) => { finishOld = () => resolve(fetchOriginal(url)); });
+    return fetchOriginal(url);
+  };
+
+  app.navigate(oldPath);
+  document.getElementById('source-toggle').click();
+  app.navigate(newPath); // also closes the previous drawer
+  document.getElementById('source-toggle').click();
+  await tick(10);
+  const before = document.getElementById('drawer-body').innerHTML;
+  assert.match(before, /tk-key/);
+  finishOld();
+  await tick(10);
+  assert.equal(document.getElementById('drawer-body').innerHTML, before);
+  assert.equal(document.getElementById('drawer-path').textContent, newPath);
+});
+
+test('source drawer reports HTTP failures instead of displaying error pages as code', async () => {
+  const { document, window } = await boot();
+  window.fetch = async () => ({ ok: false, status: 404, text: async () => '<h1>Not Found</h1>' });
+  document.getElementById('source-toggle').click();
+  await tick(5);
+  assert.match(document.getElementById('drawer-body').textContent, /Could not read source: HTTP 404/);
+  assert.ok(!document.getElementById('drawer-body').textContent.includes('Not Found'));
+});
+
+test('non-finite zoom values in deep links recover to a valid viewport', async () => {
+  const { document } = await boot({
+    hash: '#/design-systems/restaurant-automation/tokens/tokens.json?device=mobile&zoom=garbage',
+  });
+  assert.equal(document.getElementById('zoom-read').textContent, '100%');
+  assert.equal(document.getElementById('device').style.getPropertyValue('--zoom'), '1');
+  assert.ok(!document.getElementById('status-view').textContent.includes('NaN'));
+});
