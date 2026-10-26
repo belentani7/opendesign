@@ -17,6 +17,15 @@ import { createApp } from '../assets/app.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const tick = (ms = 0) => new Promise((r) => setTimeout(r, ms));
+async function waitFor(predicate, label, timeoutMs = 2500) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (predicate()) return;
+    await tick(20);
+  }
+  assert.fail(`Timed out waiting for ${label}`);
+}
+
 const MANIFEST = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
 const EXPECTED_FILES = MANIFEST.sections.reduce(
   (n, sct) => n + sct.groups.reduce((m, g) => m + g.files.length, 0), 0);
@@ -279,7 +288,7 @@ test('the source drawer loads and highlights the artifact source', async () => {
   app.navigate('design-systems/restaurant-automation/tokens/tokens.json');
   await tick(5);
   document.getElementById('source-toggle').dispatchEvent(ev(document.getElementById('source-toggle'), 'click'));
-  await tick(10);
+  await waitFor(() => document.getElementById('drawer-body').innerHTML.includes('tk-key'), 'source drawer');
   const drawer = document.getElementById('drawer');
   assert.equal(drawer.dataset.open, 'true');
   assert.equal(drawer.getAttribute('aria-hidden'), 'false');
@@ -401,7 +410,7 @@ test('closing or switching the source drawer invalidates pending reads', async (
   document.getElementById('source-toggle').click();
   app.navigate(newPath); // also closes the previous drawer
   document.getElementById('source-toggle').click();
-  await tick(10);
+  await waitFor(() => document.getElementById('drawer-body').innerHTML.includes('tk-key'), 'new source drawer');
   const before = document.getElementById('drawer-body').innerHTML;
   assert.match(before, /tk-key/);
   finishOld();
