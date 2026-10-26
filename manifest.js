@@ -24,7 +24,7 @@ window.OpenDesignManifest = {
               "label": "index.html",
               "path": "mockups/berentani-studio-7/index.html",
               "kind": "html",
-              "bytes": 45507,
+              "bytes": 46183,
               "title": "BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo"
             },
             {
