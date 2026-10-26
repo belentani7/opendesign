@@ -427,3 +427,71 @@ test('non-finite zoom values in deep links recover to a valid viewport', async (
   assert.equal(document.getElementById('device').style.getPropertyValue('--zoom'), '1');
   assert.ok(!document.getElementById('status-view').textContent.includes('NaN'));
 });
+
+test('palette traps Tab, restores trigger focus and exposes active option to screen readers', async () => {
+  const { document, window } = await boot();
+  const trigger = document.getElementById('search-trigger');
+  trigger.focus();
+  trigger.click();
+  const input = document.getElementById('palette-q');
+  const options = [...document.querySelectorAll('.palette-item')];
+  assert.equal(document.activeElement, input);
+  assert.equal(input.getAttribute('aria-expanded'), 'true');
+  assert.equal(input.getAttribute('aria-activedescendant'), options[0].id);
+
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+  assert.equal(input.getAttribute('aria-activedescendant'), options[1].id);
+  options.at(-1).focus();
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+  assert.equal(document.activeElement, input, 'Tab wraps from last option to search');
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true }));
+  assert.equal(document.activeElement, options.at(-1), 'Shift+Tab wraps to last option');
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+  assert.equal(document.getElementById('palette').hidden, true);
+  assert.equal(input.getAttribute('aria-expanded'), 'false');
+  assert.equal(input.hasAttribute('aria-activedescendant'), false);
+  assert.equal(document.activeElement, trigger, 'focus returns to the control that opened search');
+});
+
+test('empty palette results clear the active descendant and keep the search field reachable', async () => {
+  const { document, window } = await boot();
+  document.getElementById('search-trigger').click();
+  const input = document.getElementById('palette-q');
+  input.value = 'no-matching-artifact';
+  input.dispatchEvent(ev(input, 'input'));
+  assert.equal(input.hasAttribute('aria-activedescendant'), false);
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+  assert.equal(document.activeElement, input);
+});
+
+test('help dialog takes focus, traps keyboard navigation, and restores focus on close', async () => {
+  const { document, window } = await boot();
+  const trigger = document.getElementById('help-open');
+  trigger.focus();
+  trigger.click();
+  const overlay = document.getElementById('help');
+  const close = document.getElementById('help-close');
+  assert.equal(overlay.hidden, false);
+  assert.equal(document.activeElement, close);
+  const focusable = [...overlay.querySelectorAll('a[href], button:not([disabled]), input:not([disabled])')];
+  assert.ok(focusable.length > 1);
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true }));
+  assert.equal(document.activeElement, focusable.at(-1), 'Shift+Tab wraps inside help');
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));
+  assert.equal(document.getElementById('palette').hidden, true, 'background shortcuts are inactive in help');
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+  assert.equal(overlay.hidden, true);
+  assert.equal(document.activeElement, trigger);
+});
+
+test('keyboard help shortcut and backdrop close preserve focus origin', async () => {
+  const { document, window } = await boot();
+  const trigger = document.getElementById('search-trigger');
+  trigger.focus();
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: '?', bubbles: true, cancelable: true }));
+  assert.equal(document.getElementById('help').hidden, false);
+  assert.equal(document.activeElement, document.getElementById('help-close'));
+  document.getElementById('help').dispatchEvent(ev(document.getElementById('help'), 'click'));
+  assert.equal(document.getElementById('help').hidden, true);
+  assert.equal(document.activeElement, trigger);
+});
