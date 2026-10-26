@@ -497,6 +497,7 @@ export function createApp(doc = globalThis.document, win = globalThis.window) {
   // In-flight artifact loads must never overwrite a newer selection or drawer.
   let previewRequestId = 0;
   let sourceRequestId = 0;
+  const dialogReturnFocus = { palette: null, help: null };
 
   /* ── small utilities ─────────────────────────────────────────── */
 
@@ -1078,8 +1079,37 @@ ${specimenBase(dark)}</head><body>
 
   /* ── command palette ─────────────────────────────────────────── */
 
+  function restoreDialogFocus(kind) {
+    const previous = dialogReturnFocus[kind];
+    dialogReturnFocus[kind] = null;
+    if (previous?.isConnected && typeof previous.focus === 'function') previous.focus();
+  }
+
+  function trapDialogTab(event, overlay) {
+    if (event.key !== 'Tab') return;
+    const dialog = overlay.querySelector('[role="dialog"]');
+    const items = [...dialog.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+      .filter((item) => !item.closest('[hidden]'));
+    if (!items.length) {
+      event.preventDefault();
+      return;
+    }
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (event.shiftKey && (doc.activeElement === first || !dialog.contains(doc.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (doc.activeElement === last || !dialog.contains(doc.activeElement))) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
   function openPalette() {
+    if (!el.palette.hidden) return;
+    dialogReturnFocus.palette = doc.activeElement;
     el.palette.hidden = false;
+    el.paletteQ.setAttribute('aria-expanded', 'true');
     el.paletteQ.value = '';
     renderPalette('');
     el.paletteQ.focus();
@@ -1087,8 +1117,25 @@ ${specimenBase(dark)}</head><body>
   }
 
   function closePalette() {
+    if (el.palette.hidden) return;
     el.palette.hidden = true;
+    el.paletteQ.setAttribute('aria-expanded', 'false');
+    el.paletteQ.removeAttribute('aria-activedescendant');
     el.paletteQ.value = '';
+    restoreDialogFocus('palette');
+  }
+
+  function openHelp() {
+    if (!el.help.hidden) return;
+    dialogReturnFocus.help = doc.activeElement;
+    el.help.hidden = false;
+    el.helpClose.focus();
+  }
+
+  function closeHelp() {
+    if (el.help.hidden) return;
+    el.help.hidden = true;
+    restoreDialogFocus('help');
   }
 
   function renderPalette(query) {
@@ -1097,12 +1144,13 @@ ${specimenBase(dark)}</head><body>
     state.paletteIndex = 0;
     if (!results.length) {
       el.paletteList.innerHTML = `<p class="palette-empty">No artifact matches “${escapeHtml(query)}”.</p>`;
+      el.paletteQ.removeAttribute('aria-activedescendant');
       return;
     }
     el.paletteList.innerHTML = results
       .map(({ file }, i) => {
         const name = query ? markMatch(file.label, query) : escapeHtml(file.label);
-        return `<button type="button" class="palette-item" data-path="${escapeHtml(file.path)}" data-index="${i}"
+        return `<button type="button" id="palette-option-${i}" class="palette-item" data-path="${escapeHtml(file.path)}" data-index="${i}"
             data-active="${i === 0}" role="option" aria-selected="${i === 0}">
           ${iconFor(file.kind)}
           <span class="pi-main">
@@ -1119,6 +1167,7 @@ ${specimenBase(dark)}</head><body>
       });
       btn.addEventListener('pointermove', () => setActivePalette(Number(btn.dataset.index)));
     });
+    setActivePalette(0);
   }
 
   function markMatch(label, query) {
@@ -1144,7 +1193,10 @@ ${specimenBase(dark)}</head><body>
       const active = Number(btn.dataset.index) === state.paletteIndex;
       btn.dataset.active = String(active);
       btn.setAttribute('aria-selected', String(active));
-      if (active) btn.scrollIntoView({ block: 'nearest' });
+      if (active) {
+        el.paletteQ.setAttribute('aria-activedescendant', btn.id);
+        btn.scrollIntoView({ block: 'nearest' });
+      }
     });
   }
 
@@ -1210,15 +1262,11 @@ ${specimenBase(dark)}</head><body>
     el.palette.addEventListener('click', (e) => {
       if (e.target === el.palette) closePalette();
     });
-    el.helpOpen.addEventListener('click', () => {
-      el.help.hidden = false;
-    });
+    el.helpOpen.addEventListener('click', openHelp);
     el.help.addEventListener('click', (e) => {
-      if (e.target === el.help) el.help.hidden = true;
+      if (e.target === el.help) closeHelp();
     });
-    el.helpClose.addEventListener('click', () => {
-      el.help.hidden = true;
-    });
+    el.helpClose.addEventListener('click', closeHelp);
     el.themeToggle.addEventListener('click', cycleTheme);
     el.navToggle?.addEventListener('click', () => setDrawer(el.sidebar.dataset.open !== 'true'));
     el.scrim.addEventListener('click', () => setDrawer(false));
@@ -1246,24 +1294,34 @@ ${specimenBase(dark)}</head><body>
       const typing = /^(INPUT|TEXTAREA)$/.test(doc.activeElement?.tagName || '');
       const mod = e.metaKey || e.ctrlKey;
 
+      if (!el.help.hidden) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeHelp();
+        } else {
+          trapDialogTab(e, el.help);
+        }
+        return;
+      }
+
       if (mod && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         el.palette.hidden ? openPalette() : closePalette();
         return;
       }
       if (e.key === 'Escape') {
-        if (!el.palette.hidden) return closePalette();
-        if (state.presentation) return setPresentation(false);
-        if (!el.help.hidden) {
-          el.help.hidden = true;
-          return;
+        if (!el.palette.hidden) {
+          e.preventDefault();
+          return closePalette();
         }
+        if (state.presentation) return setPresentation(false);
         if (state.sourceOpen) return toggleSource(false);
         if (el.sidebar.dataset.open === 'true') return setDrawer(false);
         if (typing) return doc.activeElement.blur();
         return;
       }
       if (!el.palette.hidden) {
+        trapDialogTab(e, el.palette);
         if (e.key === 'ArrowDown') {
           e.preventDefault();
           setActivePalette(state.paletteIndex + 1);
@@ -1280,9 +1338,7 @@ ${specimenBase(dark)}</head><body>
 
       const keys = {
         '/': () => el.filter.focus(),
-        '?': () => {
-          el.help.hidden = false;
-        },
+        '?': openHelp,
         d: cycleDevice,
         f: fitZoom,
         s: () => toggleSource(),
