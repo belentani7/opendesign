@@ -125,7 +125,7 @@ test('deep links open the referenced artifact directly', async () => {
 test('a CSS token file renders as a swatch specimen', async () => {
   const { document, app } = await boot();
   app.navigate('design-systems/restaurant-automation/tokens/colors_and_type.css');
-  await tick(5);
+  await waitFor(() => document.getElementById('preview').getAttribute('srcdoc'), 'CSS token preview');
   const srcdoc = document.getElementById('preview').getAttribute('srcdoc');
   assert.match(srcdoc, /class="swatch"/);
   assert.match(srcdoc, /#000000/i);
@@ -136,7 +136,7 @@ test('a CSS token file renders as a swatch specimen', async () => {
 test('a JSON token file renders its colour tokens', async () => {
   const { document, app } = await boot();
   app.navigate('design-systems/restaurant-automation/tokens/tokens.json');
-  await tick(5);
+  await waitFor(() => document.getElementById('preview').getAttribute('srcdoc'), 'JSON token preview');
   const srcdoc = document.getElementById('preview').getAttribute('srcdoc');
   assert.match(srcdoc, /color\.primitive\.black/);
   assert.match(srcdoc, /class="kind">JSON · \d+ tokens/);
