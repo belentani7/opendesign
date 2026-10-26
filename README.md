@@ -133,7 +133,7 @@ and `manifest.js` — CI fails if they drift from the files on disk.
 | `npm test` | Run every suite with `node --test`. |
 | `npm run verify` | `validate` + `check:manifest` + `test` (what CI runs). |
 
-`npm install` is only needed for `npm test` (jsdom). Everything else runs on a bare Node ≥ 18.
+`npm install` is only needed for `npm test` (jsdom). Everything else runs on a bare Node ≥ 22 (the version pinned in `package.json` engines and `.nvmrc`).
 
 ## What `npm run validate` checks
 
