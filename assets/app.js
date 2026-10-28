@@ -233,9 +233,17 @@ export function safeUrl(url) {
   // Browsers can silently strip embedded ASCII controls while parsing URLs.
   // Reject them before scheme detection to prevent disguised scriptable links.
   if (/[\u0000-\u001f\u007f]/.test(value)) return '#';
+  // A network-path reference (including browser-normalised backslashes) is not local.
+  if (/^[\\/]{2}/.test(value)) return '#';
   const scheme = /^([a-z][a-z0-9+.-]*):/i.exec(value);
   if (!scheme) return value; // relative, absolute path or fragment
   return ['http', 'https', 'mailto', 'tel'].includes(scheme[1].toLowerCase()) ? value : '#';
+}
+
+/** Markdown images must remain local: remote images silently contact third parties. */
+function safeImageUrl(url) {
+  const value = safeUrl(url);
+  return /^[a-z][a-z0-9+.-]*:/i.test(value) ? '#' : value;
 }
 
 /* ── minimal Markdown renderer (no dependencies) ───────────────────── */
@@ -281,7 +289,7 @@ export function renderMarkdown(src) {
   function inline(text) {
     let s = escapeHtml(text);
     s = s.replace(/`([^`]+)`/g, (_, c) => `<code>${c}</code>`);
-    s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_, alt, src) => `<img alt="${alt}" src="${safeUrl(src)}">`);
+    s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (_, alt, src) => `<img alt="${alt}" src="${safeImageUrl(src)}">`);
     s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text, href) => `<a href="${safeUrl(href)}">${text}</a>`);
     s = s.replace(/(^|[\s(])\*{2}([^*]+)\*{2}/g, '$1<strong>$2</strong>');
     s = s.replace(/(^|[\s(])\*([^*\n]+)\*/g, '$1<em>$2</em>');
