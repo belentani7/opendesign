@@ -186,6 +186,9 @@ test('safeUrl blocks scriptable link targets', () => {
   assert.equal(safeUrl('javascript:alert(1)'), '#');
   assert.equal(safeUrl('JaVaScRiPt:alert(1)'), '#');
   assert.equal(safeUrl('data:text/html,<script>1</script>'), '#');
+  assert.equal(safeUrl('java\nscript:alert(1)'), '#');
+  assert.equal(safeUrl('java\tscript:alert(1)'), '#');
+  assert.equal(safeUrl('https://example.com/\u0000bad'), '#');
 });
 
 test('renderMarkdown neutralises javascript: links', () => {
@@ -193,6 +196,23 @@ test('renderMarkdown neutralises javascript: links', () => {
   assert.ok(!/href="javascript:/i.test(html), html);
   assert.ok(!/src="data:/i.test(html), html);
   assert.match(html, /<a href="#">click<\/a>/);
+});
+
+test('safeUrl rejects network-path links, including browser-normalised backslashes', () => {
+  assert.equal(safeUrl('//tracker.example/path'), '#');
+  assert.equal(safeUrl('\\\\tracker.example/path'), '#');
+  assert.equal(safeUrl('/\\tracker.example/path'), '#');
+  assert.equal(safeUrl('\\/tracker.example/path'), '#');
+  assert.equal(safeUrl('/local/path'), '/local/path');
+  assert.equal(safeUrl('https://example.com'), 'https://example.com');
+});
+
+test('Markdown images cannot make implicit third-party requests', () => {
+  const html = renderMarkdown('![remote](https://tracker.example/pixel) ![scheme-relative](//tracker.example/pixel) ![local](./images/logo.png) [external](https://example.com)');
+  assert.equal((html.match(/<img alt=/g) || []).length, 3);
+  assert.equal((html.match(/src="#"/g) || []).length, 2, html);
+  assert.match(html, /<img alt="local" src="\.\/images\/logo\.png">/);
+  assert.match(html, /<a href="https:\/\/example\.com">external<\/a>/);
 });
 
 test('highlight escapes first, then colourises', () => {

@@ -134,3 +134,12 @@ test('the page makes no network requests of any kind', async () => {
   // fetch/XHR/WebSocket are never referenced
   assert.ok(!/\bfetch\(|XMLHttpRequest|new WebSocket/.test(html), 'no network APIs in the source');
 });
+
+test('the studio cover has a compact 320px layout with stacked usable actions', async () => {
+  const source = await readFile(path.join(root, 'mockups/berentani-studio-7/index.html'), 'utf8');
+  const mobile = source.match(/@media\s*\(max-width:\s*420px\)\s*\{([\s\S]*?)\n\}/);
+  assert.ok(mobile, 'compact viewport breakpoint must exist');
+  assert.match(mobile[1], /\.cover-title\s*\{[^}]*letter-spacing:\s*0\.07em/);
+  assert.match(mobile[1], /\.cover-actions\s*\{[^}]*flex-direction:\s*column/);
+  assert.match(mobile[1], /\.cover-actions \.btn\s*\{[^}]*justify-content:\s*center/);
+});

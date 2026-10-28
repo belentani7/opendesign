@@ -1,0 +1,15 @@
+# Published static artifacts must have identical bytes on Windows and Linux.
+# Otherwise Git autocrlf rewrites CRLF and the generated manifest fails byte-size checks.
+*.html text eol=lf
+*.htm text eol=lf
+*.md text eol=lf
+*.markdown text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.txt text eol=lf
+*.svg text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

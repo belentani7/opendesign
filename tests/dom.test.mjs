@@ -17,6 +17,15 @@ import { createApp } from '../assets/app.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const tick = (ms = 0) => new Promise((r) => setTimeout(r, ms));
+async function waitFor(predicate, label, timeoutMs = 2500) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (predicate()) return;
+    await tick(20);
+  }
+  assert.fail(`Timed out waiting for ${label}`);
+}
+
 const MANIFEST = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
 const EXPECTED_FILES = MANIFEST.sections.reduce(
   (n, sct) => n + sct.groups.reduce((m, g) => m + g.files.length, 0), 0);
@@ -116,7 +125,7 @@ test('deep links open the referenced artifact directly', async () => {
 test('a CSS token file renders as a swatch specimen', async () => {
   const { document, app } = await boot();
   app.navigate('design-systems/restaurant-automation/tokens/colors_and_type.css');
-  await tick(5);
+  await waitFor(() => document.getElementById('preview').getAttribute('srcdoc'), 'CSS token preview');
   const srcdoc = document.getElementById('preview').getAttribute('srcdoc');
   assert.match(srcdoc, /class="swatch"/);
   assert.match(srcdoc, /#000000/i);
@@ -127,7 +136,7 @@ test('a CSS token file renders as a swatch specimen', async () => {
 test('a JSON token file renders its colour tokens', async () => {
   const { document, app } = await boot();
   app.navigate('design-systems/restaurant-automation/tokens/tokens.json');
-  await tick(5);
+  await waitFor(() => document.getElementById('preview').getAttribute('srcdoc'), 'JSON token preview');
   const srcdoc = document.getElementById('preview').getAttribute('srcdoc');
   assert.match(srcdoc, /color\.primitive\.black/);
   assert.match(srcdoc, /class="kind">JSON · \d+ tokens/);
@@ -279,7 +288,7 @@ test('the source drawer loads and highlights the artifact source', async () => {
   app.navigate('design-systems/restaurant-automation/tokens/tokens.json');
   await tick(5);
   document.getElementById('source-toggle').dispatchEvent(ev(document.getElementById('source-toggle'), 'click'));
-  await tick(10);
+  await waitFor(() => document.getElementById('drawer-body').innerHTML.includes('tk-key'), 'source drawer');
   const drawer = document.getElementById('drawer');
   assert.equal(drawer.dataset.open, 'true');
   assert.equal(drawer.getAttribute('aria-hidden'), 'false');
@@ -362,4 +371,136 @@ test('falls back to manifest.js when fetch is unavailable (file:// case)', async
   await app.start();
   await tick();
   assert.equal(dom.window.document.querySelectorAll('.file').length, EXPECTED_FILES);
+});
+
+test('late preview responses cannot replace a newer artifact', async () => {
+  const { document, window, app } = await boot();
+  const oldPath = 'design-systems/restaurant-automation/README.md';
+  const newPath = 'design-systems/restaurant-automation/tokens/tokens.json';
+  const fetchOriginal = window.fetch;
+  let finishOld;
+  window.fetch = (url) => {
+    if (url === oldPath) return new Promise((resolve) => { finishOld = () => resolve(fetchOriginal(url)); });
+    return fetchOriginal(url);
+  };
+
+  app.navigate(oldPath);
+  app.navigate(newPath);
+  await tick(10);
+  const preview = document.getElementById('preview');
+  assert.match(preview.srcdoc, /JSON ·/);
+  finishOld();
+  await tick(10);
+  assert.match(preview.srcdoc, /JSON ·/, 'old Markdown response must not overwrite JSON');
+  assert.equal(document.getElementById('status-path').textContent, newPath);
+});
+
+test('closing or switching the source drawer invalidates pending reads', async () => {
+  const { document, window, app } = await boot();
+  const oldPath = 'design-systems/restaurant-automation/README.md';
+  const newPath = 'design-systems/restaurant-automation/tokens/tokens.json';
+  const fetchOriginal = window.fetch;
+  let finishOld;
+  window.fetch = (url) => {
+    if (url === oldPath) return new Promise((resolve) => { finishOld = () => resolve(fetchOriginal(url)); });
+    return fetchOriginal(url);
+  };
+
+  app.navigate(oldPath);
+  document.getElementById('source-toggle').click();
+  app.navigate(newPath); // also closes the previous drawer
+  document.getElementById('source-toggle').click();
+  await waitFor(() => document.getElementById('drawer-body').innerHTML.includes('tk-key'), 'new source drawer');
+  const before = document.getElementById('drawer-body').innerHTML;
+  assert.match(before, /tk-key/);
+  finishOld();
+  await tick(10);
+  assert.equal(document.getElementById('drawer-body').innerHTML, before);
+  assert.equal(document.getElementById('drawer-path').textContent, newPath);
+});
+
+test('source drawer reports HTTP failures instead of displaying error pages as code', async () => {
+  const { document, window } = await boot();
+  window.fetch = async () => ({ ok: false, status: 404, text: async () => '<h1>Not Found</h1>' });
+  document.getElementById('source-toggle').click();
+  await tick(5);
+  assert.match(document.getElementById('drawer-body').textContent, /Could not read source: HTTP 404/);
+  assert.ok(!document.getElementById('drawer-body').textContent.includes('Not Found'));
+});
+
+test('non-finite zoom values in deep links recover to a valid viewport', async () => {
+  const { document } = await boot({
+    hash: '#/design-systems/restaurant-automation/tokens/tokens.json?device=mobile&zoom=garbage',
+  });
+  assert.equal(document.getElementById('zoom-read').textContent, '100%');
+  assert.equal(document.getElementById('device').style.getPropertyValue('--zoom'), '1');
+  assert.ok(!document.getElementById('status-view').textContent.includes('NaN'));
+});
+
+test('palette traps Tab, restores trigger focus and exposes active option to screen readers', async () => {
+  const { document, window } = await boot();
+  const trigger = document.getElementById('search-trigger');
+  trigger.focus();
+  trigger.click();
+  const input = document.getElementById('palette-q');
+  const options = [...document.querySelectorAll('.palette-item')];
+  assert.equal(document.activeElement, input);
+  assert.equal(input.getAttribute('aria-expanded'), 'true');
+  assert.equal(input.getAttribute('aria-activedescendant'), options[0].id);
+
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+  assert.equal(input.getAttribute('aria-activedescendant'), options[1].id);
+  options.at(-1).focus();
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+  assert.equal(document.activeElement, input, 'Tab wraps from last option to search');
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true }));
+  assert.equal(document.activeElement, options.at(-1), 'Shift+Tab wraps to last option');
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+  assert.equal(document.getElementById('palette').hidden, true);
+  assert.equal(input.getAttribute('aria-expanded'), 'false');
+  assert.equal(input.hasAttribute('aria-activedescendant'), false);
+  assert.equal(document.activeElement, trigger, 'focus returns to the control that opened search');
+});
+
+test('empty palette results clear the active descendant and keep the search field reachable', async () => {
+  const { document, window } = await boot();
+  document.getElementById('search-trigger').click();
+  const input = document.getElementById('palette-q');
+  input.value = 'no-matching-artifact';
+  input.dispatchEvent(ev(input, 'input'));
+  assert.equal(input.hasAttribute('aria-activedescendant'), false);
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+  assert.equal(document.activeElement, input);
+});
+
+test('help dialog takes focus, traps keyboard navigation, and restores focus on close', async () => {
+  const { document, window } = await boot();
+  const trigger = document.getElementById('help-open');
+  trigger.focus();
+  trigger.click();
+  const overlay = document.getElementById('help');
+  const close = document.getElementById('help-close');
+  assert.equal(overlay.hidden, false);
+  assert.equal(document.activeElement, close);
+  const focusable = [...overlay.querySelectorAll('a[href], button:not([disabled]), input:not([disabled])')];
+  assert.ok(focusable.length > 1);
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true }));
+  assert.equal(document.activeElement, focusable.at(-1), 'Shift+Tab wraps inside help');
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));
+  assert.equal(document.getElementById('palette').hidden, true, 'background shortcuts are inactive in help');
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+  assert.equal(overlay.hidden, true);
+  assert.equal(document.activeElement, trigger);
+});
+
+test('keyboard help shortcut and backdrop close preserve focus origin', async () => {
+  const { document, window } = await boot();
+  const trigger = document.getElementById('search-trigger');
+  trigger.focus();
+  document.dispatchEvent(new window.KeyboardEvent('keydown', { key: '?', bubbles: true, cancelable: true }));
+  assert.equal(document.getElementById('help').hidden, false);
+  assert.equal(document.activeElement, document.getElementById('help-close'));
+  document.getElementById('help').dispatchEvent(ev(document.getElementById('help'), 'click'));
+  assert.equal(document.getElementById('help').hidden, true);
+  assert.equal(document.activeElement, trigger);
 });
