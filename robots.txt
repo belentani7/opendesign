@@ -3,4 +3,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://belentani7.github.io/opendesign/sitemap.xml
+Sitemap: https://opendesign-gules.vercel.app/sitemap.xml
