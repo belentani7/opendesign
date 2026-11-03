@@ -190,12 +190,24 @@ const required = [
   [/property=["']og:title["']/, 'og:title'],
   [/name=["']theme-color["']/, 'theme-color'],
   [/manifest\.js/, 'file:// manifest fallback'],
-  [/property=["']og:image["']/, 'og:image'],
-  [/name=["']twitter:card["']\s+content=["']summary_large_image["']/, 'twitter:card = summary_large_image'],
+  [/name=["']twitter:card["']\s+content=["'](?:summary|summary_large_image)["']/, 'valid twitter:card'],
 ];
 for (const [re, label] of required) {
   re.test(shell) ? ok(label) : fail(label, 'not declared in index.html');
 }
+// Never announce an HTML repository page as the social preview image.
+const declaredImage = shell.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i)?.[1];
+const largeCard = /<meta\s+name=["']twitter:card["']\s+content=["']summary_large_image["']/i.test(shell);
+if (declaredImage) {
+  let valid = false;
+  try {
+    const image = new URL(declaredImage);
+    valid = image.protocol === 'https:' && image.pathname !== '/belentani7/opendesign';
+  } catch {}
+  valid ? ok('social preview URL is not a repository page') : fail('social image', 'invalid preview URL');
+}
+if (largeCard && !declaredImage) fail('social image', 'large Twitter card without a preview image');
+
 const remote = findRemoteResources(shell);
 remote.length === 0
   ? ok('no third-party resource loads (works offline, no tracking, no cost)')
