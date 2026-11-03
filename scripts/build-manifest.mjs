@@ -23,7 +23,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const jsonPath = path.join(root, 'manifest.json');
 const jsPath = path.join(root, 'manifest.js');
 const sitemapPath = path.join(root, 'sitemap.xml');
-const SITE_URL = (process.env.SITE_URL || 'https://belentani7.github.io/opendesign/').replace(/\/+$/, '');
+const SITE_URL = (process.env.SITE_URL || 'https://opendesign-gules.vercel.app/').replace(/\/+$/, '');
 const check = process.argv.includes('--check');
 
 /** Build sitemap.xml from the manifest so every artifact is discoverable. */
