@@ -17,6 +17,18 @@ import { createApp } from '../assets/app.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const tick = (ms = 0) => new Promise((r) => setTimeout(r, ms));
+
+// Await the real asynchronously fetched specimen, rather than sleeping for
+// a fixed 5 ms (which is not deterministic on a loaded CI runner).
+async function waitForSpecimen(document, expected) {
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    const html = document.getElementById('preview').getAttribute('srcdoc');
+    if (html && expected.test(html)) return html;
+    await tick(10);
+  }
+  const error = document.getElementById('placeholder-body')?.textContent || '';
+  assert.fail(`Specimen did not render in 1 second. ${error}`);
+}
 const MANIFEST = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
 const EXPECTED_FILES = MANIFEST.sections.reduce(
   (n, sct) => n + sct.groups.reduce((m, g) => m + g.files.length, 0), 0);
@@ -116,8 +128,7 @@ test('deep links open the referenced artifact directly', async () => {
 test('a CSS token file renders as a swatch specimen', async () => {
   const { document, app } = await boot();
   app.navigate('design-systems/restaurant-automation/tokens/colors_and_type.css');
-  await tick(5);
-  const srcdoc = document.getElementById('preview').getAttribute('srcdoc');
+  const srcdoc = await waitForSpecimen(document, /class="swatch"/);
   assert.match(srcdoc, /class="swatch"/);
   assert.match(srcdoc, /#000000/i);
   assert.match(srcdoc, /--color-accent-gold/);
@@ -127,8 +138,7 @@ test('a CSS token file renders as a swatch specimen', async () => {
 test('a JSON token file renders its colour tokens', async () => {
   const { document, app } = await boot();
   app.navigate('design-systems/restaurant-automation/tokens/tokens.json');
-  await tick(5);
-  const srcdoc = document.getElementById('preview').getAttribute('srcdoc');
+  const srcdoc = await waitForSpecimen(document, /color\.primitive\.black/);
   assert.match(srcdoc, /color\.primitive\.black/);
   assert.match(srcdoc, /class="kind">JSON · \d+ tokens/);
 });
