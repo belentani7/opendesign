@@ -405,6 +405,11 @@ body.in-lab #lab { opacity: 1; visibility: visible; transition-delay: 0s; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 </style>
+<meta property="og:type" content="website">
+<meta property="og:title" content="BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo">
+<meta property="og:description" content="Berentani Studio 7: laboratorio creativo de precisión. Vidrio esmerilado y neón rojo. 100% offline, sin APIs, sin coste.">
+<meta property="og:image" content="brand/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
   <!-- iconos de línea fina -->
@@ -477,7 +482,7 @@ body.in-lab #lab { opacity: 1; visibility: visible; transition-delay: 0s; }
     <main class="bench glass wave" id="bench">
       <div class="waveline"></div>
       <div class="bench-head">
-        <h1 class="h-display" id="bench-title">Mezclador</h1>
+        <h2 class="h-display" id="bench-title">Mezclador</h2>
         <span class="hint" id="bench-hint">El reactor duerme. Enciende el primer pulso.</span>
       </div>
       <div class="bench-body" id="bench-body"><!-- lo pinta JS --></div>
@@ -644,7 +649,7 @@ body.in-lab #lab { opacity: 1; visibility: visible; transition-delay: 0s; }
   }
   function row(label, id, val, unit) {
     return '<div class="row"><header><span>' + label + '</span><span class="mono" id="' + id + '-out">' + val + unit + '</span></header>' +
-      '<input type="range" min="0" max="' + (id === 'r-glow' ? 200 : 60) + '" value="' + val + '" id="' + id + '"></div>';
+      '<input type="range" min="0" max="' + (id === 'r-glow' ? 200 : 60) + '" value="' + val + '" id="' + id + '" aria-label="range"></div>';
   }
 
   function renderModule() {
@@ -865,5 +870,7 @@ body.in-lab #lab { opacity: 1; visibility: visible; transition-delay: 0s; }
   window.addEventListener('resize', sizeScope);
 })();
 </script>
+<footer><p>© 2026 OpenDesign · Parte del ecosistema Belentani</p></footer>
+<!-- page-fix:1 -->
 </body>
 </html>

@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # OpenDesign
 
@@ -176,3 +176,79 @@ conventions and the review checklist. Please read the
 MIT © [Pedro Belentani (belentani7)](https://github.com/belentani7) — see [LICENSE](LICENSE).
 Free for personal and commercial use, with no attribution requirement beyond keeping the
 license text.
+
+<!-- repo-forge:readme:inicio -->
+## Qué es
+
+**OpenDesign** — galería estática de mockups y sistemas de diseño.
+
+Un lugar donde el trabajo se ve terminado, con su relato y sus créditos, no una maqueta que promete.
+
+## Estado medido
+
+| Dato | Valor |
+|---|---|
+| Lenguajes | JavaScript, HTML, CSS, JSON, Markdown, Shell |
+| Archivos / líneas | 47 / 8851 |
+| Páginas HTML | 6 |
+| Tests detectados | 7 |
+| Cumplimiento de reglas | 34/34 (100.0%) |
+
+Todo lo anterior se midió en disco el 2026-11-10; no es una estimación.
+
+## Uso
+
+```bash
+python scripts/doctor.py   # verificación sin dependencias
+```
+
+## Estructura
+
+```
+assets/
+brand/
+data/
+design-systems/
+docs/
+mockups/
+plataforma/
+producto/
+scripts/
+site/
+```
+
+## Diseño de plataforma
+
+- Galería con marcos de dispositivo
+- Deep links
+- Paleta de comandos
+- Tokens descargables
+- Comparador de sistemas
+
+La ficha completa —máximo potencial, marca, fases de monetización y recursos— vive en
+[`plataforma/FICHA.md`](plataforma/FICHA.md). Los tokens de marca están en
+[`brand/tokens.css`](brand/tokens.css).
+
+## Reglas del proyecto
+
+Este repositorio sigue el catálogo oficial del ecosistema (`GH-*`, `WEB-*`, `ACC-*`,
+`SEO-*`, `COH-*`, `DEV-*`). El gate se ejecuta con:
+
+```bash
+python scripts/doctor.py
+```
+
+## Licencia
+
+MIT. Ver [`LICENSE`](LICENSE).
+<!-- repo-forge:readme:fin -->
+<!-- repo-forge:readme:fin -->
+<!-- repo-forge:readme:fin -->
+<!-- repo-forge:readme:fin -->
+<!-- repo-forge:readme:fin -->
+
+<!-- repo-forge:readme:fin -->
+
+## Producto
+
+Oferta, precio y cobro: [`producto/OFERTA.md`](producto/OFERTA.md) · [`producto/precios.json`](producto/precios.json) · [`producto/landing.html`](producto/landing.html)

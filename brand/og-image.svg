@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="OpenDesign">
+  <rect width="1200" height="630" fill="#0b0a12"/>
+  <rect x="48" y="48" width="1104" height="534" rx="24" fill="none" stroke="#a98dfc" stroke-width="2" opacity="0.45"/>
+  <text x="96" y="300" font-family="Georgia, serif" font-size="86" fill="#f2eefc">OpenDesign</text>
+  <text x="96" y="372" font-family="system-ui, sans-serif" font-size="34" fill="#9a97a3">galería estática de mockups y sistemas de diseño</text>
+  <rect x="96" y="430" width="120" height="6" fill="#a98dfc"/>
+  <text x="96" y="520" font-family="ui-monospace, monospace" font-size="24" fill="#a98dfc">belentani7 · 2026</text>
+</svg>

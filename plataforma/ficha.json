@@ -1,0 +1,77 @@
+{
+  "esquema": "repo-forge/ficha/1",
+  "nombre": "opendesign",
+  "remoto": "https://github.com/belentani7/opendesign",
+  "arquetipo": "web-static",
+  "stack": "JavaScript",
+  "modelo": "galería estática de mockups y sistemas de diseño",
+  "publico": "diseñadores y equipos que necesitan previsualizar artefactos sin cuenta",
+  "techo": "el catálogo de referencia de design systems abiertos: cada artefacto previsualizable, enlazable y comparable, sin tracking ni registro",
+  "modulos": [
+    "Galería con marcos de dispositivo",
+    "Deep links",
+    "Paleta de comandos",
+    "Tokens descargables",
+    "Comparador de sistemas"
+  ],
+  "no_go": "telemetría, muros de registro",
+  "marca": {
+    "nombre": "OpenDesign",
+    "familia": "creativo",
+    "paleta": {
+      "familia": "creativo",
+      "bg": "#0b0a12",
+      "surface": "#15141c",
+      "ink": "#f2eefc",
+      "muted": "#9a97a3",
+      "accent": "#a98dfc",
+      "accent2": "#f472b6",
+      "ok": "#15803d",
+      "warn": "#b45309",
+      "danger": "#b91c1c",
+      "contraste_ink_bg": 17.26,
+      "contraste_accent_bg": 7.41,
+      "accent_sobre_bg_ok": true
+    },
+    "narrativa": "La obra primero"
+  },
+  "paywall": {
+    "principio": "acceso abierto; monetización solo si hay servicio real detrás",
+    "fases": 4
+  },
+  "medido": {
+    "archivos": 47,
+    "lineas": 8851,
+    "html": 6,
+    "tests": 7,
+    "bytes": 477677,
+    "lenguajes": {
+      "JavaScript": 39.4,
+      "HTML": 32.6,
+      "CSS": 13.1,
+      "JSON": 11.0,
+      "Markdown": 3.3,
+      "Shell": 0.6
+    },
+    "fecha": "2026-11-10"
+  },
+  "gate": {
+    "pass": 34,
+    "fail": 0,
+    "skip": 15,
+    "cumplimiento": 100.0,
+    "fallos": []
+  },
+  "ajustes": {
+    "total": 61,
+    "aplicados": 51,
+    "ya_estaban": 10,
+    "fallos": 0
+  },
+  "esfuerzo_dias": 51,
+  "doctor": {
+    "ok": true,
+    "detalle": "35/35 comprobaciones en verde"
+  },
+  "huella": "0630e75c27826367"
+}

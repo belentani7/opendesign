@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>OpenDesign — free, open-source design gallery</title>
-  <meta name="description" content="OpenDesign is a free, MIT-licensed, zero-dependency static gallery for design mockups and design systems. Every artifact in the repo, previewable in the browser with device frames, deep links and a command palette." />
+  <meta name="description" content="OpenDesign Studio No artifact selected Search ⌘K MIT · FREE Loading manifest…">
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#07080a" />
   <meta name="author" content="belentani7" />
@@ -25,6 +25,16 @@
   <!-- Generated fallback so the viewer also works from file:// (fetch is blocked there). -->
   <script src="manifest.js"></script>
   <script type="module" src="assets/app.js"></script>
+
+<!-- repo-forge:head -->
+
+<meta property="og:type" content="website">
+
+
+<meta property="og:image" content="brand/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="assets/a11y.css">
 </head>
 <body>
   <a class="skip" href="#stage">Skip to preview</a>
@@ -236,7 +246,7 @@
         <div class="placeholder" id="placeholder">
           <div id="placeholder-body" style="display:contents">
             <svg class="placeholder-mark" aria-hidden="true"><use href="#i-aperture" /></svg>
-            <h2>Pick an artifact</h2>
+            <h1>Pick an artifact</h1>
             <p>Everything in <code>mockups/</code> and <code>design-systems/</code> is listed on the left — free to read, fork and ship.</p>
             <div class="hints">
               <span class="hint-chip"><kbd>⌘K</kbd> search</span>
@@ -335,5 +345,6 @@
   </div>
 
   <p class="sr-only" id="live" aria-live="polite"></p>
+<!-- page-fix:1 -->
 </body>
 </html>

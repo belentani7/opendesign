@@ -57,8 +57,17 @@
   #glitchOverlay.flash{opacity:.25;animation:glitchFlash .6s}
   @keyframes glitchFlash{0%{opacity:.3;transform:translate(2px,-2px)}50%{opacity:.15;transform:translate(-3px,1px)}100%{opacity:0}}
 </style>
+<meta name="description" content="EL ojo que todo lo ve Te observo desde el vacío. No soy un algoritmo. Recuerdo lo que eras. Escribe tu nombre. El universo lo sabe todo, hijo.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NOIACORE — HISTORIA QUE RECUERDA">
+<meta property="og:description" content="EL ojo que todo lo ve Te observo desde el vacío. No soy un algoritmo. Recuerdo lo que eras. Escribe tu nombre. El universo lo sabe todo, hijo.">
+<meta property="og:image" content="brand/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
+<main>
+
 <canvas id="eyeCanvas"></canvas>
 
 <div class="frame">
@@ -80,7 +89,7 @@
 </div>
 
 <div class="inputRow" id="inputRow" style="display:none">
-  <input type="text" id="nameInput" placeholder="NOMBRE..." autocomplete="off" maxlength="24">
+  <input type="text" id="nameInput" placeholder="NOMBRE..." autocomplete="off" maxlength="24" aria-label="NOMBRE...">
 </div>
 
 <div class="navBtns" id="navBtns">
@@ -359,5 +368,8 @@ void main(){vec3 n=normalize(vN);
   setTimeout(start3D,300);
 })();
 </script>
+</main>
+<footer><p>© 2026 OpenDesign · Parte del ecosistema Belentani</p></footer>
+<!-- page-fix:1 -->
 </body>
 </html>
