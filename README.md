@@ -176,3 +176,7 @@ conventions and the review checklist. Please read the
 MIT © [Pedro Belentani (belentani7)](https://github.com/belentani7) — see [LICENSE](LICENSE).
 Free for personal and commercial use, with no attribution requirement beyond keeping the
 license text.
+
+
+## Producto
+Véase `plataforma/OFERTA.md`, `plataforma/precios.json`, `plataforma/ONEPAGER.md`.
