@@ -24,14 +24,14 @@ window.OpenDesignManifest = {
               "label": "index.html",
               "path": "mockups/berentani-studio-7/index.html",
               "kind": "html",
-              "bytes": 46376,
+              "bytes": 46041,
               "title": "BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo"
             },
             {
               "label": "README.md",
               "path": "mockups/berentani-studio-7/README.md",
               "kind": "markdown",
-              "bytes": 1919,
+              "bytes": 1879,
               "title": "Berentani Studio 7 — Laboratorio \"Glass Rojo Neón\""
             }
           ]
@@ -44,14 +44,14 @@ window.OpenDesignManifest = {
               "label": "index.html",
               "path": "mockups/historia-que-recuerda/index.html",
               "kind": "html",
-              "bytes": 19495,
+              "bytes": 19929,
               "title": "NOIACORE — HISTORIA QUE RECUERDA"
             },
             {
               "label": "README.md",
               "path": "mockups/historia-que-recuerda/README.md",
               "kind": "markdown",
-              "bytes": 1660,
+              "bytes": 1623,
               "title": "Historia que recuerda — NOIACORE"
             }
           ]
@@ -72,20 +72,20 @@ window.OpenDesignManifest = {
               "label": "README.md",
               "path": "design-systems/restaurant-automation/README.md",
               "kind": "markdown",
-              "bytes": 2354,
+              "bytes": 2299,
               "title": "Restaurant Automation — design system"
             },
             {
               "label": "colors_and_type.css",
               "path": "design-systems/restaurant-automation/tokens/colors_and_type.css",
               "kind": "css",
-              "bytes": 7189
+              "bytes": 6963
             },
             {
               "label": "tokens.json",
               "path": "design-systems/restaurant-automation/tokens/tokens.json",
               "kind": "json",
-              "bytes": 14042,
+              "bytes": 13789,
               "title": "restaurant-automation"
             }
           ]
@@ -93,5 +93,5 @@ window.OpenDesignManifest = {
       ]
     }
   ],
-  "generated": "2026-11-08T07:25:43.535Z"
+  "generated": "2026-11-11T12:50:40.214Z"
 };
