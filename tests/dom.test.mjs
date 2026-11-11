@@ -29,6 +29,13 @@ async function waitForSpecimen(document, expected) {
   const error = document.getElementById('placeholder-body')?.textContent || '';
   assert.fail(`Specimen did not render in 1 second. ${error}`);
 }
+async function waitFor(predicate, message, timeoutMs = 1000) {
+  for (let attempt = 0; attempt * 10 < timeoutMs; attempt += 1) {
+    if (predicate()) return;
+    await tick(10);
+  }
+  assert.fail(message);
+}
 const MANIFEST = JSON.parse(await readFile(path.join(root, 'manifest.json'), 'utf8'));
 const EXPECTED_FILES = MANIFEST.sections.reduce(
   (n, sct) => n + sct.groups.reduce((m, g) => m + g.files.length, 0), 0);
@@ -117,8 +124,9 @@ test('deep links open the referenced artifact directly', async () => {
   assert.equal(document.getElementById('status-path').textContent, 'design-systems/restaurant-automation/README.md');
   assert.equal(document.querySelector('.file[aria-current="true"]').dataset.path, 'design-systems/restaurant-automation/README.md');
   assert.match(document.querySelectorAll('#crumbs-list li')[0].textContent, /design-systems/);
-  // Markdown is rendered, not dumped raw
-  const srcdoc = document.getElementById('preview').getAttribute('srcdoc');
+  // Markdown is rendered, not dumped raw. Await the real asynchronous render:
+  // a fixed delay after boot() is not deterministic on a loaded CI runner.
+  const srcdoc = await waitForSpecimen(document, /<h1>Restaurant Automation/);
   assert.match(srcdoc, /<h1>Restaurant Automation/);
   assert.match(srcdoc, /<table>/);
   assert.match(srcdoc, /<blockquote>/);
@@ -289,7 +297,12 @@ test('the source drawer loads and highlights the artifact source', async () => {
   app.navigate('design-systems/restaurant-automation/tokens/tokens.json');
   await tick(5);
   document.getElementById('source-toggle').dispatchEvent(ev(document.getElementById('source-toggle'), 'click'));
-  await tick(10);
+  // The drawer body is fetched asynchronously: await the real render instead of
+  // racing a fixed delay that a loaded CI runner can overshoot.
+  await waitFor(
+    () => /tk-key/.test(document.getElementById('drawer-body').innerHTML),
+    'the source drawer did not load the artifact source in 1 second',
+  );
   const drawer = document.getElementById('drawer');
   assert.equal(drawer.dataset.open, 'true');
   assert.equal(drawer.getAttribute('aria-hidden'), 'false');
