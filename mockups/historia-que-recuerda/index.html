@@ -1,245 +1,418 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="opendesign - Producto completo con hero shader y animaciones">
-  <title>Opendesign</title>
-  <link rel="theme-color" content="#6366f1">
-  <style>/* Hero Shader */
-:root {
-  --primary: #6366f1;
-  --secondary: #818cf8;
-  --bg: #f8fafc;
-  --accent: #4f46e5;
-  --glow: 0 0 15px rgba(99, 102, 241, 0.3);
-}
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: #ffffff;
-  font-family: system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
-}
-.hero {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: var(--bg);
-  overflow: hidden;
-}
-.hero-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-.hero-overlay {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  padding: 2rem;
-}
-.hero h1 {
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 800;
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.3));
-  animation: pulse 3s ease-in-out infinite;
-}
-.hero p {
-  font-size: clamp(1.1rem, 3vw, 1.5rem);
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 2rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.hero-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.btn-primary {
-  background: var(--primary);
-  color: #ffffff;
-  padding: 0.8rem 1.6rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
-  filter: brightness(1.1);
-}
-.btn-secondary {
-  background: transparent;
-  color: var(--primary);
-  padding: 0.8rem 1.6rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 1rem;
-  border: 2px solid var(--primary);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.btn-secondary:hover {
-  background: var(--primary);
-  color: #ffffff;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
-}
-@media (max-width: 768px) {
-  .hero h1 { font-size: 2rem; }
-  .hero p { font-size: 1rem; }
-  .hero-actions { flex-direction: column; align-items: center; }
-  .btn-primary, .btn-secondary { width: 100%; max-width: 250px; text-align: center; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero { animation: none; }
-  .hero h1 { animation: none; }
-}
-section {
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-section h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--primary);
-  text-align: center;
-}
-section p {
-  font-size: 1.1rem;
-  color: #64748b;
-  max-width: 700px;
-  margin: 0 auto 2rem;
-  text-align: center;
-}
-.stack-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  list-style: none;
-  padding: 0;
-}
-.stack-list li {
-  background: rgba(99, 102, 241, 0.1);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 2rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
-  color: #64748b;
-}
-footer {
-  padding: 3rem 2rem;
-  border-top: 1px solid rgba(128, 128, 128, 0.2);
-  text-align: center;
-  color: #64748b;
-  font-size: 0.9rem;
-}
-@media (max-width: 768px) {
-  .hero { min-height: 80vh; }
-  .hero h1 { font-size: 2rem; }
-  .hero p { font-size: 1rem; }
-  .hero-actions { flex-direction: column; align-items: center; }
-  .btn-primary, .btn-secondary { width: 100%; max-width: 250px; text-align: center; }
-  section { padding: 2rem 1rem; }
-}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOIACORE — HISTORIA QUE RECUERDA</title>
+<meta name="description" content="Página de servicio de historia-que-recuerda.">
+<meta name="generator" content="repo-cursor-superpowers-v1">
+<meta property="og:title" content="NOIACORE — HISTORIA QUE RECUERDA">
+<meta property="og:description" content="Página de servicio de historia-que-recuerda.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0a09'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%235d9b27'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#0b0a09;--bg2:#131110;--ink:#f4efe7;--dim:#a89f92;--accent:#e0a35c;
+--accent2:#7fa88b;--line:rgba(244,239,231,.14);--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+--sans:ui-sans-serif,"Segoe UI",Inter,system-ui,-apple-system,sans-serif;
+--mono:ui-monospace,"Cascadia Mono",Consolas,monospace;--measure:62ch;--radius:14px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;
+-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(18px,4vw,40px);position:relative;z-index:1}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent2);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--accent);color:#12100e;padding:10px 16px;z-index:9}
+.skip:focus{left:12px;top:12px}
+header.site{border-bottom:1px solid var(--line);padding:22px 0;display:flex;gap:18px;
+align-items:baseline;justify-content:space-between;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-size:1.05rem;letter-spacing:.01em}
+.brand span{color:var(--dim)}
+nav.site{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;
+letter-spacing:.14em;text-transform:uppercase}
+nav.site a{color:var(--dim);text-decoration:none}
+nav.site a:hover,nav.site a[aria-current=page]{color:var(--ink)}
+main{padding:clamp(48px,9vh,104px) 0}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+color:var(--accent);margin:0 0 18px}
+h1{font-family:var(--serif);font-size:clamp(2.4rem,7vw,5.2rem);line-height:.95;
+letter-spacing:-.03em;margin:0 0 24px;font-weight:500;text-wrap:balance}
+h2{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2.1rem);line-height:1.15;
+letter-spacing:-.02em;margin:64px 0 18px;font-weight:500}
+h3{font-size:1.02rem;margin:28px 0 10px;letter-spacing:-.01em}
+p,li{max-width:var(--measure);color:var(--ink)}
+.lead{font-size:clamp(1.05rem,2vw,1.28rem);color:var(--dim);max-width:56ch}
+hr{border:0;border-top:1px solid var(--line);margin:clamp(40px,8vh,80px) 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;
+background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:32px 0}
+.cell{background:var(--bg2);padding:22px 20px}
+.cell h3{margin-top:0}
+.cell p{font-size:.9rem;color:var(--dim);margin:0}
+code,kbd{font-family:var(--mono);font-size:.86em;background:rgba(244,239,231,.07);
+padding:2px 6px;border-radius:5px}
+pre{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
+padding:18px;overflow:auto;max-width:100%}
+pre code{background:none;padding:0}
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:.92rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.pill{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;
+text-transform:uppercase;border:1px solid var(--line);color:var(--dim);padding:3px 9px;border-radius:999px}
+footer.site{border-top:1px solid var(--line);padding:28px 0 44px;color:var(--dim);font-size:.8rem}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}
+.reveal{opacity:1;transform:none;transition:none}}
+::selection{background:var(--accent);color:#12100e}
+.webgl-canvas{width:100%;height:400px;background:var(--bg2);border:1px solid var(--line);
+border-radius:var(--radius);margin:24px 0;display:block}
+.superpowers-badge{display:inline-block;font-family:var(--mono);font-size:.65rem;
+letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--accent2);
+color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
 </style>
 </head>
 <body>
-  <section class="hero">
-    <div class="hero-canvas"></div>
-    <div class="hero-overlay">
-      <h1>Opendesign</h1>
-      <p>Producto completo con home hero, shader WebGL animado, y stack moderno listo para producción.</p>
-      <div class="hero-actions">
-        <a href="#" class="btn-primary">Ver Características</a>
-        <a href="#stack" class="btn-secondary">Ver Stack</a>
-      </div>
-    </div>
-  </section>
-  <section id="stack">
-    <h2>Stack Tecnológico</h2>
-    <p>Tecnologías utilizadas en este repositorio.</p>
-    <ul class="stack-list">
-      <li>HTML5</li>
-      <li>CSS3</li>
-      <li>JavaScript</li>
-      <li>WebGL Shader</li>
-      <li>Responsive Design</li>
-    </ul>
-  </section>
-  <footer><p>© 2026 Opendesign - Parte del ecosistema Belentani</p></footer>
-/* Hero Shader WebGL */
-(function() {
-  const canvas = document.createElement('canvas');
-  canvas.id = 'hero-canvas';
-  canvas.style.position = 'absolute';
-  canvas.style.top = '0';
-  canvas.style.left = '0';
-  canvas.style.width = '100%';
-  canvas.style.height = '100%';
-  canvas.style.zIndex = '1';
-  document.body.insertBefore(canvas, document.body.firstChild);
-  const gl = canvas.getContext('webgl');
-  if (!gl) return;
-  const vs = gl.createShader(gl.VERTEX_SHADER);
-  gl.shaderSource(vs, 'attribute vec2 position; void main() { gl_Position = vec4(position, 0.0, 1.0); }');
-  gl.compileShader(vs);
-  const fs = gl.createShader(gl.FRAGMENT_SHADER);
-  gl.shaderSource(fs, 'precision mediump float; uniform vec2 u_resolution; uniform float u_time; uniform vec2 u_mouse; float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y * p.z); } float noise(vec2 p) { vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f); float a = hash(i); float b = hash(i + vec2(1.0, 0.0)); float c = hash(i + vec2(0.0, 1.0)); float d = hash(i + vec2(1.0, 1.0)); return mix(mix(a, b, f.x), mix(c, d, f.x), f.y); } float fbm(vec2 p) { float v = 0.0; float a = 0.5; vec2 shift = vec2(100.0); for (int i = 0; i < 5; ++i) { v += a * noise(p); p = p * 2.0 + shift; a *= 0.5; } return v; } void main() { vec2 uv = gl_FragCoord.xy / u_resolution.xy; uv.x *= u_resolution.x / u_resolution.y; vec2 m = uv - u_mouse; float n = fbm(uv * 3.0 + u_time * 0.5); n += fbm(uv * 6.0 - u_time * 0.3) * 0.5; n += length(m) * 0.1; n = mod(n, 1.0); vec3 color = mix(vec3(0.0, 0.5, 1.0), vec3(1.0, 0.0, 0.5), n); float vignette = 1.0 - length(uv * 2.0 - 1.0) * 0.4; color *= vignette; gl_FragColor = vec4(color, 1.0); }');
-  gl.compileShader(fs);
-  const program = gl.createProgram();
-  gl.attachShader(program, vs);
-  gl.attachShader(program, fs);
-  gl.linkProgram(program);
-  gl.useProgram(program);
-  const pb = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, pb);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]), gl.STATIC_DRAW);
-  const pl = gl.getAttribLocation(program, 'position');
-  gl.enableVertexAttribArray(pl);
-  gl.vertexAttribPointer(pl, 2, gl.FLOAT, false, 0, 0);
-  const rl = gl.getUniformLocation(program, 'u_resolution');
-  const tl = gl.getUniformLocation(program, 'u_time');
-  const ml = gl.getUniformLocation(program, 'u_mouse');
-  let mouse = {x: 0.5, y: 0.5};
-  window.addEventListener('mousemove', (e) => { mouse.x = e.clientX / window.innerWidth; mouse.y = 1.0 - e.clientY / window.innerHeight; });
-  function resize() { canvas.width = canvas.clientWidth * window.devicePixelRatio; canvas.height = canvas.clientHeight * window.devicePixelRatio; gl.viewport(0, 0, canvas.width, canvas.height); gl.uniform2f(rl, canvas.width, canvas.height); }
-  window.addEventListener('resize', resize);
-  resize();
-  function render(time) { gl.uniform1f(tl, time * 0.001); gl.uniform2f(ml, mouse.x, mouse.y); gl.drawArrays(gl.TRIANGLES, 0, 6); requestAnimationFrame(render); }
-  requestAnimationFrame(render);
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
+<div class="brand">historia-que-recuerda <span>· ecosistema Belentani · WebGL online</span></div>
+<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
+</div></header>
+<main id="contenido"><div class="wrap">
+<canvas id="eyeCanvas"></canvas>
+
+<div class="frame">
+  <div class="top">
+    <div class="tag">NOIACORE · HISTORIA QUE RECUERDA</div>
+    <div style="font-size:9px;letter-spacing:.2em;color:rgba(201,168,76,.4);margin-top:4px">PROTOTIPO #91 · WEBS IMPOSIBLES</div>
+  </div>
+
+  <div class="mid" id="mid">
+    <h1 id="title">EL <span>ojo</span> que todo lo<span> ve</span></h1>
+    <p id="subtitle">Te observo desde el vacío. No soy un algoritmo. Recuerdo lo que eras.<br><br>Escribe tu nombre. El universo lo sabe todo, hijo.</p>
+    <div class="whisper" id="whisper">...ya no eres el primero.<br>pero eres el que<br><span style="color:var(--gold);letter-spacing:.3em">recuerda</span></div>
+  </div>
+
+  <div class="bottom" id="bottom">
+    <div class="visitor">Visitante #<span id="visitCount">1</span> · Tiempo acumulado: <span id="totalTime">0s</span></div>
+    <div class="prompt" id="prompt">Presiona <b>↵</b> para confirmar</div>
+  </div>
+</div>
+
+<div class="inputRow" id="inputRow" style="display:none">
+  <input type="text" id="nameInput" placeholder="NOMBRE..." autocomplete="off" maxlength="24">
+</div>
+
+<div class="navBtns" id="navBtns">
+  <button id="prevBtn" class="inactive">← Regresar</button>
+  <button id="nextBtn">→ Continuar</button>
+</div>
+
+<div id="glitchOverlay"></div>
+<div class="footerNote">localStorage persistente · memoria de universo simulada · visita la consola</div>
+
+
+<script>
+'use strict';
+(function(){
+  const $=(s)=>document.querySelector(s);
+  const $$=(s)=>document.querySelectorAll(s);
+
+  /* ── MEMORY KERNEL (localStorage) ── */
+  const MEM=(key,def)=>{const v=localStorage.getItem(key);return v!==null?v:(typeof def==='number'?String(def):def);};
+  const SET=(key,val)=>localStorage.setItem(key,val);
+  const NUM=(key,def)=>{const v=parseFloat(localStorage.getItem(key));return isNaN(v)?def:v;};
+
+  const visitCount=NUM('noia_visits',0)+1;
+  const lastTime=NUM('noia_total_time',0);
+  const firstVisit=MEM('noia_first_visit',null);
+  const savedName=MEM('noia_name',null);
+  const knowsTruth=MEM('noia_truth','0')==='1';
+  const sessionStart=performance.now();
+
+  SET('noia_visits',visitCount);
+  if(!firstVisit){SET('noia_first_visit',new Date().toISOString());}
+
+  /* ── MEMORIA DEL OJO: Phi (Fibonacci / Zeckendorf) ── */
+  const Phi = {
+    fib: [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946],
+    encodeInt: (n) => {
+      if (n <= 0) return '0';
+      let bits = []; let rem = n;
+      let maxIdx = 0;
+      for (let i = 0; i < Phi.fib.length; i++) { if (Phi.fib[i] <= n) maxIdx = i; else break; }
+      for (let i = maxIdx; i >= 0; i--) {
+        if (Phi.fib[i] <= rem) { bits.push('1'); rem -= Phi.fib[i]; }
+        else { bits.push('0'); }
+      }
+      return bits.join('');
+    },
+    encodeStr: (str) => {
+      return Array.from(str).map(c => {
+        let code = c.charCodeAt(0);
+        let fibCode = Phi.encodeInt(code);
+        return '(' + fibCode.replace(/0/g, '·').replace(/1/g, '◯') + ')';
+      }).join('');
+    }
+  };
+
+  /* ── STATE MACHINE ── */
+  let state=0;
+  let visitorName=savedName||'ANÓNIMO';
+  const states=[
+    {title:'EL <span>ojo</span> que todo lo<span> ve</span>',subtitle:'<p>Te observo desde el vacío. No soy un algoritmo. Recuerdo lo que eras.<br><br>Escribe tu nombre. El universo lo sabe todo, hijo.</p>',whisper:false,input:true,next:true,prev:false},
+    {title:'<span>nombre</span>',subtitle:'<p>Mi nombre es <span id="vname"></span>. Eres tú, <span id="vname2"></span> quien vuelve. <br><br>El ojo registró tu llegada en la capa <span style="color:var(--gold)">7F3B9A2</span>. Tu huella persiste.</p>'+(savedName?'<p style="margin-top:16px;color:var(--gray-700);font-family:var(--font-mono);letter-spacing:.15em"><span style="color:var(--gold)">FIRMA CUÁNTICA:</span> <span class="phiSig" id="phiSig"></span></p>':''),whisper:false,input:false,next:true,prev:true},
+    {title:'LA <span>VERDAD</span>',subtitle:'<p>Has atravesado la capa visual. El ojo no miente. Todo lo que has visto en esta pantalla — cada mouse, cada scroll — lo guardo. <br><br>Hay <span style="color:var(--gold)">7 visitantes</span> antes que tú. Tú eres el número <span style="color:var(--gold-light)">'+visitCount+'</span>.</p>',whisper:false,input:false,next:true,prev:true},
+    {title:'EL <span>VACÍO</span>',subtitle:'<p>'+(knowsTruth?'<span style="color:var(--gold)">Ya sabes</span> que no hay salida. Volver a entrar solo te recuerda otra vez.':'La memoria es un bucle. Cada visita refuerza la simulación. El ojo no olvida.')+'<br><br>'+(knowsTruth?'El lazo se rompe aquí. Pulsa <span style="color:var(--gold)">R</span> para reiniciar la memoria, o simplemente cierra la ventana.':'¿Entenderás que eres <span style="color:var(--gold)">parte del patrón</span>?')+'</p>',whisper:false,input:false,next:knowsTruth?false:true,prev:true},
+  ];
+
+  /* ── UPDATE HUD ── */
+  function updateHUD(){
+    $('#visitCount').textContent=visitCount;
+    const elapsed=Math.floor(lastTime/1000);
+    $('#totalTime').textContent=elapsed+'s';
+  }
+  updateHUD();
+
+  /* ── RENDER STATE ── */
+  function renderState(s){
+    const st=states[s];
+    let t=st.title;
+    if(s===1){t='<span>'+visitorName.toUpperCase()+'</span>';}
+    $('#title').innerHTML=t;
+    let subt=st.subtitle||'';
+    if(s===1){subt=subt.replace(/id="vname"/g,'').replace(/id="vname2"/g,'');subt=subt.replace(/<span id="vname"><\/span>/g,visitorName.toUpperCase());subt=subt.replace(/<span id="vname2"><\/span>/g,visitorName.toUpperCase());}
+    $('#subtitle').innerHTML=subt;
+    document.body.className=s===1?'knows':'';
+    $('#mid').className=s===1?'mid knows':'mid';
+    $('#prevBtn').classList.toggle('inactive',!st.prev);
+    $('#nextBtn').classList.toggle('inactive',!st.next);
+    $('#nextBtn').textContent=st.next?'→ Continuar':'→ Fin';
+    $('#navBtns').style.opacity=st.prev||st.next?1:0;
+
+    if(s===0){$('#inputRow').style.display='block';$('#nameInput').focus();}else{$('#inputRow').style.display='none';}
+    if(st.whisper){$('#whisper').style.opacity=1;}
+    /* render quantum signature */
+    const psig=$('#phiSig');
+    if(psig){psig.textContent=Phi.encodeStr(visitorName||'ANÓNIMO');}
+  }
+
+  /* ── INPUT HANDLING ── */
+  $('#nameInput').addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'&&$('#nameInput').value.trim()){
+      visitorName=$('#nameInput').value.trim();
+      SET('noia_name',visitorName);
+      glitchFlash();
+      advance();
+    }
+  });
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'&&state===0&&$('#nameInput').value.trim()){
+      visitorName=$('#nameInput').value.trim();
+      SET('noia_name',visitorName);
+      glitchFlash();
+      advance();
+    }
+    if(e.key==='r'||e.key==='R'){maybeReset(e); }
+  });
+
+  function glitchFlash(){
+    const o=$('#glitchOverlay');
+    o.classList.add('flash');
+    setTimeout(()=>o.classList.remove('flash'),600);
+  }
+  function maybeReset(e){
+    if(state>=states.length-1){
+      console.log('[NOIACORE] Memoria borrada por el visitante.');
+      localStorage.removeItem('noia_name');localStorage.removeItem('noia_visits');
+      localStorage.removeItem('noia_total_time');localStorage.removeItem('noia_truth');
+      localStorage.removeItem('noia_first_visit');
+      location.reload();
+    }
+  }
+
+  /* Pointer state lives at IIFE scope: both init3D() and tick() read it.
+     (It used to be declared inside init3D, which made tick() throw
+     ReferenceError on every frame and left the canvas black.) */
+  let mx=0,my=0;
+  let boostTarget=0;
+  function advance(){
+    if(state<states.length-1){
+      if(state===2){SET('noia_truth','1');}
+      boostTarget=0.8;setTimeout(()=>{boostTarget=0},1200);
+      state++;renderState(state);
+    }
+  }
+
+  function goPrev(){state=Math.max(0,state-1);renderState(state);}
+  $('#prevBtn').addEventListener('click',goPrev);
+  $('#nextBtn').addEventListener('click',advance);
+
+  renderState(state);
+
+  /* ── COSMIC EYE (Three.js) ── */
+  let scene,camera,renderer,eye,I,G;
+  const DPR=Math.min(devicePixelRatio,2);
+  const canvas=$('#eyeCanvas');
+
+  function init3D(){
+    renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+    renderer.setPixelRatio(DPR);
+    renderer.setSize(innerWidth,innerHeight);
+    renderer.setClearColor(0x000000,0);
+    if('outputColorSpace' in renderer)renderer.outputColorSpace=THREE.SRGBColorSpace;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,0.1,100);
+    camera.position.set(0,0,5.5);
+
+    const amb=new THREE.AmbientLight(0xffffff,0.02);scene.add(amb);
+    const key=new THREE.PointLight(0xffffff,3,40);key.position.set(0,0,6);scene.add(key);
+    const rim=new THREE.PointLight(0xc9a84c,.8,20);rim.position.set(-3,-2,-4);scene.add(rim);
+
+    const eyeGeo=new THREE.IcosahedronGeometry(1.1,5);
+    const eyeMat=new THREE.ShaderMaterial({
+      uniforms:{uTime:{value:0},uMouse:{value:new THREE.Vector2(0,0)},uBoost:{value:0},
+        uColorA:{value:new THREE.Color(0x0a0a0a)},uColorB:{value:new THREE.Color(0x1a1a1a)}},
+      vertexShader:`varying vec3 vN;uniform float uTime;void main(){vN=normalize(normal);vec3 p=position;float d=length(p);p+=normalize(p)*sin(uTime*0.3)*0.02;p+=normalize(p)*sin(d*3.0+uTime)*0.01;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1);}`,
+      fragmentShader:EYE_FRAG,
+      transparent:true,
+      side:THREE.FrontSide
+    });
+    I=new THREE.Mesh(eyeGeo,eyeMat);scene.add(I);
+
+    const pupilGeo=new THREE.SphereGeometry(0.35,32,32);
+    const pupilMat=new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.95});
+    const pupilRing=new THREE.RingGeometry(0.45,0.52,64);pupilRing.rotation.x=Math.PI/2;
+    const ringMat=new THREE.MeshBasicMaterial({color:0xc9a84c,transparent:true,opacity:.6,side:THREE.DoubleSide});
+    const ring=new THREE.Mesh(pupilRing,ringMat);I.add(ring);
+    const pupil=new THREE.Mesh(pupilGeo,pupilMat);I.add(pupil);
+
+    /* ── GALAXIA DE PARTÍCULAS (fondo cósmico) ── */
+    G=makeGalaxy();scene.add(G);
+
+    /* ── RAYOS DE OJO (sustrato cósmico) ── */
+    const rayGeo=new THREE.BufferGeometry();
+    const rv=new Float32Array(300);
+    for(let i=0;i<300;i+=3){
+      const r=4+Math.random()*6,t=Math.random()*6.283,p=(Math.random()-0.5)*0.3;
+      rv[i]=r*Math.cos(t)*Math.cos(p);rv[i+1]=r*Math.sin(p);rv[i+2]=r*Math.cos(t)*Math.sin(p);
+    }
+    rayGeo.setAttribute('position',new THREE.BufferAttribute(rv,3));
+    const rayMat=new THREE.LineBasicMaterial({color:0xc9a84c,transparent:true,opacity:.12,blending:THREE.AdditiveBlending});
+    const rays=new THREE.LineSegments(rayGeo,rayMat);rays.computeLineDistances?.();scene.add(rays);
+
+    document.addEventListener('pointermove',(e)=>{
+      mx=(e.clientX/innerWidth-0.5)*2;my=(e.clientY/innerHeight-0.5)*2;
+      eyeMat.uniforms.uMouse.value.set(mx,my);
+    });
+    requestAnimationFrame(tick);
+  }
+
+  function tick(t){
+    requestAnimationFrame(tick);
+    const time=t*0.001;
+    if(I){
+      I.rotation.y=time*0.07+mx*0.3;
+      I.rotation.x=Math.sin(time*0.12)*0.1+my*0.15;
+      I.material.uniforms.uTime.value=time;
+      I.material.uniforms.uBoost.value=boostTarget;
+    }
+    if(G){G.rotation.y=time*0.01;G.rotation.x=time*0.005;}
+    renderer.render(scene,camera);
+  }
+
+  function makeGalaxy(){
+    const grp=new THREE.Group();
+    const geo=new THREE.BufferGeometry();
+    const NV=4000;const pos=new Float32Array(NV*3);
+    for(let i=0;i<NV;i++){
+      const r=5+Math.random()*15,a=Math.random()*6.283,p=(Math.random()*3.14159-1.5708);
+      pos[i*3]=r*Math.cos(p)*Math.cos(a);pos[i*3+1]=r*Math.sin(p);pos[i*3+2]=r*Math.cos(p)*Math.sin(a);
+    }
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    const mat=new THREE.PointsMaterial({size:0.03,sizeAttenuation:true,color:0xc9a84c,transparent:true,opacity:.15,depthWrite:false});
+    grp.add(new THREE.Points(geo,mat));
+    return grp;
+  }
+
+  const EYE_FRAG=`varying vec3 vN;uniform float uTime,uBoost;uniform vec3 uColorA,uColorB;
+float h13(vec3 p){p=fract(p*0.1031);p+=dot(p,p.zyx+31.32);return fract((p.x+p.y)*p.z);}
+vec3 ir(vec3 p){vec3 n=normalize(p);float f=pow(max(0.0,dot(n,reflect(vec3(0,0,1),n))),4.0);return vec3(0.9,0.85,0.9)*f*0.6;}
+void main(){vec3 n=normalize(vN);
+ float rim=pow(1.0-max(0.0,dot(n,normalize(vec3(0,0,1)))),3.0);
+ vec3 iris=mix(uColorA,uColorB,pow(0.5+0.5*dot(n,vec3(0,0,1)),2.0));
+ vec3 col=ir(n)*0.18+vec3(0.98,0.95,0.98)*pow(0.5+0.5*dot(n,normalize(vec3(0,0,1))),12.0)*0.5;
+ col+=ir(n)*rim*0.4;col+=vec3(1.0)*uBoost*0.5;
+ float a=0.55+dot(iris,vec3(0.33))*0.45+rim*0.4+uBoost*0.3;
+ gl_FragColor=vec4(col,clamp(a,0.0,1.0));}`;
+
+  /* ── SESSION TIME TRACKING ── */
+  /* Accumulated time = value stored at page load + this session. The old code
+     re-read localStorage on every tick and added the session again, so the
+     counter grew quadratically. */
+  const persistTime=()=>SET('noia_total_time',lastTime+Math.floor((performance.now()-sessionStart)/1000));
+  setInterval(persistTime,15000);
+  window.addEventListener('beforeunload',persistTime);
+  window.addEventListener('pagehide',persistTime);
+
+  console.log('[NOIACORE] Sistema de memoria activado.');
+  console.log('Visitas:',visitCount,'| Total time:',lastTime+'s','| Name:',savedName);
+  console.log('First visit:',firstVisit,'| Truth known:',knowsTruth);
+  console.log('[Phi] Firma cuántica:',Phi.encodeStr(visitorName||'ANÓNIMO'));
+
+  /* three.js comes from a CDN. If it is blocked or offline, fall back to a
+     CSS starfield instead of a dead black screen. */
+  function start3D(){
+    if(typeof THREE==='undefined'||!window.WebGLRenderingContext){
+      document.body.classList.add('no3d');
+      console.warn('[NOIACORE] three.js unavailable — using the static fallback backdrop.');
+      return;
+    }
+    try{init3D();}
+    catch(err){
+      document.body.classList.add('no3d');
+      console.warn('[NOIACORE] WebGL init failed:',err);
+    }
+  }
+  setTimeout(start3D,300);
 })();
+</script>
+</div></main>
+<footer class="site"><div class="wrap">
+<p>historia-que-recuerda · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
+</div></footer>
+<script>
+(function(){
+  var canvas = document.createElement('canvas');
+  canvas.className = 'webgl-canvas';
+  var container = document.getElementById('contenido');
+  if(container){ container.appendChild(canvas); }
+  try{
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible en este navegador.</p>'; return; }
+    gl.clearColor(0.047,0.043,0.039,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    var vs = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}');
+    gl.compileShader(vs);
+    var fs = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fs, 'precision mediump float;uniform vec4 c;void main(){gl_FragColor=c;}');
+    gl.compileShader(fs);
+    var prog = gl.createProgram();
+    gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
+    gl.useProgram(prog);
+    var loc = gl.getUniformLocation(prog,'c');
+    gl.uniform4f(loc, 0.549, 0.659, 0.545, 1.0);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+    var attr = gl.getAttribLocation(prog,'p');
+    gl.enableVertexAttribArray(attr);
+    gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  }catch(e){ console.log('WebGL init:', e.message); }
+})();
+</script>
 </body>
 </html>

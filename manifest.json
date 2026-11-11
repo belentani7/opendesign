@@ -22,14 +22,14 @@
               "label": "index.html",
               "path": "mockups/berentani-studio-7/index.html",
               "kind": "html",
-              "bytes": 45507,
+              "bytes": 46376,
               "title": "BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo"
             },
             {
               "label": "README.md",
               "path": "mockups/berentani-studio-7/README.md",
               "kind": "markdown",
-              "bytes": 1879,
+              "bytes": 1919,
               "title": "Berentani Studio 7 — Laboratorio \"Glass Rojo Neón\""
             }
           ]
@@ -42,14 +42,14 @@
               "label": "index.html",
               "path": "mockups/historia-que-recuerda/index.html",
               "kind": "html",
-              "bytes": 19132,
+              "bytes": 19495,
               "title": "NOIACORE — HISTORIA QUE RECUERDA"
             },
             {
               "label": "README.md",
               "path": "mockups/historia-que-recuerda/README.md",
               "kind": "markdown",
-              "bytes": 1623,
+              "bytes": 1660,
               "title": "Historia que recuerda — NOIACORE"
             }
           ]
@@ -70,20 +70,20 @@
               "label": "README.md",
               "path": "design-systems/restaurant-automation/README.md",
               "kind": "markdown",
-              "bytes": 2299,
+              "bytes": 2354,
               "title": "Restaurant Automation — design system"
             },
             {
               "label": "colors_and_type.css",
               "path": "design-systems/restaurant-automation/tokens/colors_and_type.css",
               "kind": "css",
-              "bytes": 6962
+              "bytes": 7189
             },
             {
               "label": "tokens.json",
               "path": "design-systems/restaurant-automation/tokens/tokens.json",
               "kind": "json",
-              "bytes": 13788,
+              "bytes": 14042,
               "title": "restaurant-automation"
             }
           ]
@@ -91,5 +91,5 @@
       ]
     }
   ],
-  "generated": "2026-10-11T12:10:32.339Z"
+  "generated": "2026-11-08T05:38:39.376Z"
 }

@@ -1,245 +1,726 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="opendesign - Producto completo con hero shader y animaciones">
-  <title>Opendesign</title>
-  <link rel="theme-color" content="#6366f1">
-  <style>/* Hero Shader */
-:root {
-  --primary: #6366f1;
-  --secondary: #818cf8;
-  --bg: #f8fafc;
-  --accent: #4f46e5;
-  --glow: 0 0 15px rgba(99, 102, 241, 0.3);
-}
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: #ffffff;
-  font-family: system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
-}
-.hero {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: var(--bg);
-  overflow: hidden;
-}
-.hero-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-.hero-overlay {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  padding: 2rem;
-}
-.hero h1 {
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 800;
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.3));
-  animation: pulse 3s ease-in-out infinite;
-}
-.hero p {
-  font-size: clamp(1.1rem, 3vw, 1.5rem);
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 2rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.hero-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.btn-primary {
-  background: var(--primary);
-  color: #ffffff;
-  padding: 0.8rem 1.6rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
-  filter: brightness(1.1);
-}
-.btn-secondary {
-  background: transparent;
-  color: var(--primary);
-  padding: 0.8rem 1.6rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 1rem;
-  border: 2px solid var(--primary);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.btn-secondary:hover {
-  background: var(--primary);
-  color: #ffffff;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
-}
-@media (max-width: 768px) {
-  .hero h1 { font-size: 2rem; }
-  .hero p { font-size: 1rem; }
-  .hero-actions { flex-direction: column; align-items: center; }
-  .btn-primary, .btn-secondary { width: 100%; max-width: 250px; text-align: center; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero { animation: none; }
-  .hero h1 { animation: none; }
-}
-section {
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-section h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--primary);
-  text-align: center;
-}
-section p {
-  font-size: 1.1rem;
-  color: #64748b;
-  max-width: 700px;
-  margin: 0 auto 2rem;
-  text-align: center;
-}
-.stack-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  list-style: none;
-  padding: 0;
-}
-.stack-list li {
-  background: rgba(99, 102, 241, 0.1);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 2rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.85rem;
-  color: #64748b;
-}
-footer {
-  padding: 3rem 2rem;
-  border-top: 1px solid rgba(128, 128, 128, 0.2);
-  text-align: center;
-  color: #64748b;
-  font-size: 0.9rem;
-}
-@media (max-width: 768px) {
-  .hero { min-height: 80vh; }
-  .hero h1 { font-size: 2rem; }
-  .hero p { font-size: 1rem; }
-  .hero-actions { flex-direction: column; align-items: center; }
-  .btn-primary, .btn-secondary { width: 100%; max-width: 250px; text-align: center; }
-  section { padding: 2rem 1rem; }
-}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo</title>
+<meta name="description" content="Berentani Studio 7: laboratorio creativo de precisión. Vidrio esmerilado y neón rojo. 100% offline, sin APIs, sin coste.">
+<meta name="generator" content="repo-superpowers-audit-v1">
+<meta property="og:title" content="BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo">
+<meta property="og:description" content="Berentani Studio 7: laboratorio creativo de precisión. Vidrio esmerilado y neón rojo. 100% offline, sin APIs, sin coste.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0a09'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23092d32'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#0b0a09;--bg2:#131110;--ink:#f4efe7;--dim:#a89f92;--accent:#e0a35c;
+--accent2:#7fa88b;--line:rgba(244,239,231,.14);--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+--sans:ui-sans-serif,"Segoe UI",Inter,system-ui,-apple-system,sans-serif;
+--mono:ui-monospace,"Cascadia Mono",Consolas,monospace;--measure:62ch;--radius:14px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;
+-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(18px,4vw,40px);position:relative;z-index:1}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent2);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--accent);color:#12100e;padding:10px 16px;z-index:9}
+.skip:focus{left:12px;top:12px}
+header.site{border-bottom:1px solid var(--line);padding:22px 0;display:flex;gap:18px;
+align-items:baseline;justify-content:space-between;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-size:1.05rem;letter-spacing:.01em}
+.brand span{color:var(--dim)}
+nav.site{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;
+letter-spacing:.14em;text-transform:uppercase}
+nav.site a{color:var(--dim);text-decoration:none}
+nav.site a:hover,nav.site a[aria-current=page]{color:var(--ink)}
+main{padding:clamp(48px,9vh,104px) 0}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+color:var(--accent);margin:0 0 18px}
+h1{font-family:var(--serif);font-size:clamp(2.4rem,7vw,5.2rem);line-height:.95;
+letter-spacing:-.03em;margin:0 0 24px;font-weight:500;text-wrap:balance}
+h2{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2.1rem);line-height:1.15;
+letter-spacing:-.02em;margin:64px 0 18px;font-weight:500}
+h3{font-size:1.02rem;margin:28px 0 10px;letter-spacing:-.01em}
+p,li{max-width:var(--measure);color:var(--ink)}
+.lead{font-size:clamp(1.05rem,2vw,1.28rem);color:var(--dim);max-width:56ch}
+hr{border:0;border-top:1px solid var(--line);margin:clamp(40px,8vh,80px) 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;
+background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:32px 0}
+.cell{background:var(--bg2);padding:22px 20px}
+.cell h3{margin-top:0}
+.cell p{font-size:.9rem;color:var(--dim);margin:0}
+code,kbd{font-family:var(--mono);font-size:.86em;background:rgba(244,239,231,.07);
+padding:2px 6px;border-radius:5px}
+pre{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
+padding:18px;overflow:auto;max-width:100%}
+pre code{background:none;padding:0}
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:.92rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.pill{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;
+text-transform:uppercase;border:1px solid var(--line);color:var(--dim);padding:3px 9px;border-radius:999px}
+footer.site{border-top:1px solid var(--line);padding:28px 0 44px;color:var(--dim);font-size:.8rem}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}
+.reveal{opacity:1;transform:none;transition:none}}
+::selection{background:var(--accent);color:#12100e}
+.webgl-canvas{width:100%;height:400px;background:var(--bg2);border:1px solid var(--line);
+border-radius:var(--radius);margin:24px 0;display:block}
+.superpowers-badge{display:inline-block;font-family:var(--mono);font-size:.65rem;
+letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--accent2);
+color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
 </style>
 </head>
 <body>
-  <section class="hero">
-    <div class="hero-canvas"></div>
-    <div class="hero-overlay">
-      <h1>Opendesign</h1>
-      <p>Producto completo con home hero, shader WebGL animado, y stack moderno listo para producción.</p>
-      <div class="hero-actions">
-        <a href="#" class="btn-primary">Ver Características</a>
-        <a href="#stack" class="btn-secondary">Ver Stack</a>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
+<div class="brand">berentani-studio-7 <span>· ecosistema Belentani · WebGL online</span></div>
+<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
+</div></header>
+<main id="contenido"><div class="wrap">
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
+<div class="brand">berentani-studio-7 <span>· ecosistema Belentani · WebGL online</span></div>
+<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
+</div></header>
+<main id="contenido"><div class="wrap">
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
+<div class="brand">berentani-studio-7 <span>· ecosistema Belentani · WebGL online</span></div>
+<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
+</div></header>
+<main id="contenido"><div class="wrap">
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
+<div class="brand">berentani-studio-7 <span>· ecosistema Belentani · WebGL online</span></div>
+<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
+</div></header>
+<main id="contenido"><div class="wrap">
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
+<div class="brand">berentani-studio-7 <span>· ecosistema Belentani · WebGL online</span></div>
+<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
+</div></header>
+<main id="contenido"><div class="wrap">
+<!-- iconos de línea fina -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-mix" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 4v16M12 4v16M18 4v16"/><circle cx="6" cy="14" r="2" fill="currentColor"/><circle cx="12" cy="8" r="2" fill="currentColor"/><circle cx="18" cy="16" r="2" fill="currentColor"/></symbol>
+      <symbol id="i-wave" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 12c2 0 2-6 4-6s2 12 4 12 2-12 4-12 2 12 4 12 2-6 4-6"/></symbol>
+      <symbol id="i-cam" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 11l5-3v8l-5-3"/></symbol>
+      <symbol id="i-arch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 8h16M4 8v10a2 2 0 002 2h12a2 2 0 002-2V8M4 8l2-4h12l2 4M10 12h4"/></symbol>
+      <symbol id="i-seal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l7 4v10l-7 4-7-4V7z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5l11 7-11 7z"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></symbol>
+      <symbol id="i-rec" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></symbol>
+      <symbol id="i-stamp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 4h6v6l2 3H7l2-3zM5 17h14v3H5z"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="atmo" id="atmo" aria-hidden="true"></div>
+
+  <!-- ══ PORTADA ══ -->
+  <div id="cover">
+    <div class="cover-inner">
+      <div class="logo-hex" aria-hidden="true">
+        <svg viewBox="0 0 120 130">
+          <path d="M60 6l48 28v62L60 124 12 96V34z" fill="rgba(255,45,70,0.05)" stroke="#ff2d46" stroke-width="2"/>
+          <path d="M60 16l39 23v52L60 114 21 91V39z" fill="none" stroke="rgba(255,45,70,0.35)" stroke-width="1"/>
+          <text class="neon-b" x="60" y="82" text-anchor="middle" font-size="52" font-family="Arial, sans-serif" font-weight="700" fill="#ff2d46" style="filter:drop-shadow(0 0 8px #ff2d46)">B</text>
+        </svg>
       </div>
+      <h1 class="cover-title h-display">Berentani Studio 7</h1>
+      <p class="cover-sub">Laboratorio creativo de precisión.</p>
+      <p class="cover-tag">Donde la luz se dobla, nace la idea.</p>
+      <div class="cover-actions">
+        <button class="btn" id="enter-btn"><span class="sheen"></span>Entrar al laboratorio</button>
+        <button class="btn ghost" id="guest-btn"><span class="sheen"></span>Observar como invitado</button>
+      </div>
+      <p class="mono" style="margin-top:26px;font-size:10px;color:var(--off);letter-spacing:0.12em">100% OFFLINE · SIN APIS · SIN COSTE</p>
     </div>
-  </section>
-  <section id="stack">
-    <h2>Stack Tecnológico</h2>
-    <p>Tecnologías utilizadas en este repositorio.</p>
-    <ul class="stack-list">
-      <li>HTML5</li>
-      <li>CSS3</li>
-      <li>JavaScript</li>
-      <li>WebGL Shader</li>
-      <li>Responsive Design</li>
-    </ul>
-  </section>
-  <footer><p>© 2026 Opendesign - Parte del ecosistema Belentani</p></footer>
-/* Hero Shader WebGL */
-(function() {
-  const canvas = document.createElement('canvas');
-  canvas.id = 'hero-canvas';
-  canvas.style.position = 'absolute';
-  canvas.style.top = '0';
-  canvas.style.left = '0';
-  canvas.style.width = '100%';
-  canvas.style.height = '100%';
-  canvas.style.zIndex = '1';
-  document.body.insertBefore(canvas, document.body.firstChild);
-  const gl = canvas.getContext('webgl');
-  if (!gl) return;
-  const vs = gl.createShader(gl.VERTEX_SHADER);
-  gl.shaderSource(vs, 'attribute vec2 position; void main() { gl_Position = vec4(position, 0.0, 1.0); }');
-  gl.compileShader(vs);
-  const fs = gl.createShader(gl.FRAGMENT_SHADER);
-  gl.shaderSource(fs, 'precision mediump float; uniform vec2 u_resolution; uniform float u_time; uniform vec2 u_mouse; float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y * p.z); } float noise(vec2 p) { vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f); float a = hash(i); float b = hash(i + vec2(1.0, 0.0)); float c = hash(i + vec2(0.0, 1.0)); float d = hash(i + vec2(1.0, 1.0)); return mix(mix(a, b, f.x), mix(c, d, f.x), f.y); } float fbm(vec2 p) { float v = 0.0; float a = 0.5; vec2 shift = vec2(100.0); for (int i = 0; i < 5; ++i) { v += a * noise(p); p = p * 2.0 + shift; a *= 0.5; } return v; } void main() { vec2 uv = gl_FragCoord.xy / u_resolution.xy; uv.x *= u_resolution.x / u_resolution.y; vec2 m = uv - u_mouse; float n = fbm(uv * 3.0 + u_time * 0.5); n += fbm(uv * 6.0 - u_time * 0.3) * 0.5; n += length(m) * 0.1; n = mod(n, 1.0); vec3 color = mix(vec3(0.0, 0.5, 1.0), vec3(1.0, 0.0, 0.5), n); float vignette = 1.0 - length(uv * 2.0 - 1.0) * 0.4; color *= vignette; gl_FragColor = vec4(color, 1.0); }');
-  gl.compileShader(fs);
-  const program = gl.createProgram();
-  gl.attachShader(program, vs);
-  gl.attachShader(program, fs);
-  gl.linkProgram(program);
-  gl.useProgram(program);
-  const pb = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, pb);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]), gl.STATIC_DRAW);
-  const pl = gl.getAttribLocation(program, 'position');
-  gl.enableVertexAttribArray(pl);
-  gl.vertexAttribPointer(pl, 2, gl.FLOAT, false, 0, 0);
-  const rl = gl.getUniformLocation(program, 'u_resolution');
-  const tl = gl.getUniformLocation(program, 'u_time');
-  const ml = gl.getUniformLocation(program, 'u_mouse');
-  let mouse = {x: 0.5, y: 0.5};
-  window.addEventListener('mousemove', (e) => { mouse.x = e.clientX / window.innerWidth; mouse.y = 1.0 - e.clientY / window.innerHeight; });
-  function resize() { canvas.width = canvas.clientWidth * window.devicePixelRatio; canvas.height = canvas.clientHeight * window.devicePixelRatio; gl.viewport(0, 0, canvas.width, canvas.height); gl.uniform2f(rl, canvas.width, canvas.height); }
-  window.addEventListener('resize', resize);
-  resize();
-  function render(time) { gl.uniform1f(tl, time * 0.001); gl.uniform2f(ml, mouse.x, mouse.y); gl.drawArrays(gl.TRIANGLES, 0, 6); requestAnimationFrame(render); }
-  requestAnimationFrame(render);
+  </div>
+
+  <!-- ══ LABORATORIO ══ -->
+  <div id="lab">
+    <header class="topbar glass hot">
+      <div class="session">
+        <b id="session-name">SESIÓN 07</b>
+        <span id="session-sub">operador: belentani7</span>
+      </div>
+      <div class="reactor" id="reactor">
+        <div class="ring"><span class="core"></span></div>
+        <span id="reactor-label">Reactor en reposo</span>
+      </div>
+      <div class="operator">
+        <small id="operator-role">OPERADOR</small>
+        <div class="ava" id="operator-ava">B7</div>
+      </div>
+    </header>
+
+    <nav class="rack glass" id="rack" aria-label="Módulos">
+      <h2>Módulos</h2>
+      <button class="mod active" data-mod="mix"><span class="bar"></span><svg><use href="#i-mix"/></svg><span class="lbl"><b>Mezclador</b><span>tubos 1–4</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="scope"><span class="bar"></span><svg><use href="#i-wave"/></svg><span class="lbl"><b>Espectro</b><span>osciloscopio</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="cam"><span class="bar"></span><svg><use href="#i-cam"/></svg><span class="lbl"><b>Cámara de Pruebas</b><span>ecos</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="arch"><span class="bar"></span><svg><use href="#i-arch"/></svg><span class="lbl"><b>Archivo 7</b><span>sellos</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="cfg"><span class="bar"></span><svg><use href="#i-seal"/></svg><span class="lbl"><b>Config. del Sello</b><span>calibración</span></span><span class="refl"></span></button>
+      <div class="rack-foot">
+        <button class="btn ghost" id="exit-btn" style="width:100%;justify-content:center">Sellar sesión y apagar los tubos</button>
+      </div>
+    </nav>
+
+    <main class="bench glass wave" id="bench">
+      <div class="waveline"></div>
+      <div class="bench-head">
+        <h1 class="h-display" id="bench-title">Mezclador</h1>
+        <span class="hint" id="bench-hint">El reactor duerme. Enciende el primer pulso.</span>
+      </div>
+      <div class="bench-body" id="bench-body"><!-- lo pinta JS --></div>
+    </main>
+
+    <aside class="console glass" id="console" aria-label="Consola">
+      <h2>Consola de cristal</h2>
+      <div class="lines" id="console-lines" role="log" aria-live="polite"></div>
+      <div class="foot">Berentani Studio 7 — precisión medida en pulsos.</div>
+    </aside>
+  </div>
+
+  <div id="toast" role="status"></div>
+
+<script>
+'use strict';
+/* ══ BERENTANI STUDIO 7 — lógica 100% local. Sin red, sin APIs. ══ */
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ── persistencia local (nada sale de esta máquina) ── */
+  var K = { glow: 'bs7_glow', motes: 'bs7_motes', flick: 'bs7_flick', seals: 'bs7_seals', session: 'bs7_session' };
+  function store(k, v) { try { localStorage.setItem(k, String(v)); } catch (e) {} }
+  function load(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
+
+  var state = {
+    guest: false,
+    running: false,
+    recording: false,
+    module: 'mix',
+    faders: [62, 41, 78, 30],
+    glow: parseFloat(load(K.glow, 1)),
+    motes: parseInt(load(K.motes, 26), 10),
+    flick: load(K.flick, '1') === '1'
+  };
+
+  /* ── atmósfera: tubos + partículas ── */
+  function buildAtmo() {
+    var atmo = $('#atmo');
+    atmo.innerHTML = '';
+    var tubes = 9;
+    for (var i = 0; i < tubes; i++) {
+      var t = document.createElement('span');
+      t.className = 'tube' + (state.flick && i % 3 === 0 ? ' flick' : '');
+      t.style.left = (6 + i * 11) + '%';
+      t.style.animationDelay = (i * 0.7) + 's';
+      atmo.appendChild(t);
+    }
+    for (var m = 0; m < state.motes; m++) {
+      var p = document.createElement('span');
+      p.className = 'mote';
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.animationDuration = (7 + Math.random() * 9) + 's';
+      p.style.animationDelay = (-Math.random() * 12) + 's';
+      p.style.transform = 'scale(' + (0.5 + Math.random()) + ')';
+      atmo.appendChild(p);
+    }
+  }
+
+  /* ── pulso radial en el clic ── */
+  document.addEventListener('pointerdown', function (e) {
+    var p = document.createElement('span');
+    p.className = 'pulse';
+    p.style.left = e.clientX + 'px';
+    p.style.top = e.clientY + 'px';
+    document.body.appendChild(p);
+    setTimeout(function () { p.remove(); }, 650);
+  });
+
+  /* ── consola ── */
+  function now() {
+    var d = new Date();
+    function z(n) { return (n < 10 ? '0' : '') + n; }
+    return z(d.getHours()) + ':' + z(d.getMinutes()) + ':' + z(d.getSeconds());
+  }
+  function log(msg, kind, big) {
+    var box = $('#console-lines');
+    $$('.line', box).forEach(function (l) { l.classList.remove('fresh'); });
+    var line = document.createElement('div');
+    line.className = 'line' + (kind ? ' ' + kind : '');
+    line.innerHTML = '<time>' + now() + '</time>' + msg;
+    box.appendChild(line);
+    line.classList.add('fresh');
+    box.scrollTop = box.scrollHeight;
+    if (big) {
+      var c = $('#console');
+      c.classList.remove('pulse'); void c.offsetWidth; c.classList.add('pulse');
+    }
+  }
+  function toast(msg) {
+    var t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toast._h);
+    toast._h = setTimeout(function () { t.classList.remove('show'); }, 2200);
+  }
+  function wave(el) {
+    el.classList.remove('done'); void el.offsetWidth; el.classList.add('done');
+  }
+
+  function guard(action) {
+    if (state.guest) {
+      toast('Modo invitado: ' + action + ' requiere sesión de operador.');
+      log('Intento de ' + action + ' denegado a invitado.', 'warn', true);
+      return false;
+    }
+    return true;
+  }
+
+  /* ── instrumentos ── */
+  var scope = null, scopeCtx = null, phase = 0;
+
+  function faderMarkup() {
+    var html = '<div class="inst"><div class="inst-grid"><div class="gauges">' +
+      gauge('GANANCIA', 'g-gain') + gauge('ESPECTRO', 'g-spec') +
+      '</div><div class="scope-wrap"><div class="scope-title">Osciloscopio — salida de tubos</div><canvas id="scope"></canvas></div></div>' +
+      '<div class="faders">';
+    for (var i = 0; i < 4; i++) {
+      html += '<div class="fader" data-i="' + i + '">' +
+        '<div class="slot"><div class="fill" style="height:' + state.faders[i] + '%"></div><div class="trail" style="height:' + state.faders[i] + '%"></div>' +
+        '<input type="range" min="0" max="100" value="' + state.faders[i] + '" aria-label="Tubo ' + (i + 1) + '"></div>' +
+        '<label>Tubo ' + (i + 1) + '</label><span class="read">' + state.faders[i] + '</span></div>';
+    }
+    html += '</div></div>';
+    return html;
+  }
+  function gauge(label, id) {
+    return '<div class="gauge"><svg viewBox="0 0 96 60">' +
+      '<path class="face" d="M8 52 A44 44 0 0 1 88 52"/>' +
+      '<path class="arc" id="' + id + '-arc" d="M8 52 A44 44 0 0 1 88 52"/>' +
+      '<line class="needle" id="' + id + '-needle" x1="48" y1="52" x2="48" y2="14"/>' +
+      '</svg><span class="val" id="' + id + '-val">0</span><small>' + label + '</small></div>';
+  }
+
+  function camMarkup() {
+    return '<div class="inst"><div class="empty" id="cam-empty">Aún no hay ecos en la cámara. Registra el primer sonido.</div>' +
+      '<div class="seals" id="cam-echoes" style="display:none"></div></div>';
+  }
+  function archMarkup() {
+    var seals = [];
+    try { seals = JSON.parse(load(K.seals, '[]')); } catch (e) {}
+    var html = '<div class="inst">';
+    if (!seals.length) {
+      html += '<div class="empty">El Archivo 7 está en silencio. Sella tu primera mezcla.</div>';
+    } else {
+      html += '<div class="seals">';
+      seals.slice().reverse().forEach(function (s) {
+        html += '<div class="seal"><b>' + s.name + '</b><span>' + s.time + ' · ' + s.mix + '</span></div>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+  function cfgMarkup() {
+    return '<div class="inst cfg">' +
+      row('Intensidad del neón', 'r-glow', Math.round(state.glow * 100), '%') +
+      row('Densidad de partículas', 'r-motes', state.motes, '') +
+      '<div class="row"><header><span>Parpadeo de tubos</span></header>' +
+      '<button class="switch' + (state.flick ? ' on' : '') + '" id="sw-flick" role="switch" aria-checked="' + state.flick + '"><span class="track"><span class="knob"></span></span><span class="mono" style="font-size:10px;color:var(--data)">tubos que titilan</span></button></div>' +
+      '<div class="row"><header><span>Restablecer sello</span></header><button class="btn ghost" id="cfg-reset"><span class="sheen"></span>Borrar memoria local</button></div>' +
+      '</div>';
+  }
+  function row(label, id, val, unit) {
+    return '<div class="row"><header><span>' + label + '</span><span class="mono" id="' + id + '-out">' + val + unit + '</span></header>' +
+      '<input type="range" min="0" max="' + (id === 'r-glow' ? 200 : 60) + '" value="' + val + '" id="' + id + '"></div>';
+  }
+
+  function renderModule() {
+    var body = $('#bench-body');
+    var title = { mix: 'Mezclador', scope: 'Espectro', cam: 'Cámara de Pruebas', arch: 'Archivo 7', cfg: 'Configuración del Sello' }[state.module];
+    $('#bench-title').textContent = title;
+    if (state.module === 'mix') body.innerHTML = faderMarkup();
+    else if (state.module === 'scope') body.innerHTML = '<div class="inst scope-wrap" style="flex:1"><div class="scope-title">Espectro — análisis en vivo</div><canvas id="scope"></canvas></div>';
+    else if (state.module === 'cam') body.innerHTML = camMarkup();
+    else if (state.module === 'arch') body.innerHTML = archMarkup();
+    else body.innerHTML = cfgMarkup();
+
+    if (state.module === 'mix' || state.module === 'scope') initScope();
+    if (state.module === 'mix') bindFaders();
+    if (state.module === 'cfg') bindCfg();
+    if (state.module === 'cam') renderEchoes();
+  }
+
+  function renderEchoes() {
+    var echoes = [];
+    try { echoes = JSON.parse(load(K.seals, '[]')); } catch (e) {}
+    var empty = $('#cam-empty'), grid = $('#cam-echoes');
+    if (!empty || !grid) return;
+    if (!echoes.length) { empty.style.display = ''; grid.style.display = 'none'; return; }
+    empty.style.display = 'none'; grid.style.display = 'grid';
+    grid.innerHTML = echoes.slice(-6).reverse().map(function (s) {
+      return '<div class="seal"><b>' + s.name + '</b><span>' + s.time + '</span></div>';
+    }).join('');
+  }
+
+  function bindFaders() {
+    $$('.fader').forEach(function (f) {
+      var input = $('input', f), fill = $('.fill', f), trail = $('.trail', f), read = $('.read', f);
+      var i = parseInt(f.dataset.i, 10);
+      input.addEventListener('input', function () {
+        state.faders[i] = parseInt(input.value, 10);
+        fill.style.height = input.value + '%';
+        trail.style.height = input.value + '%';
+        trail.style.opacity = 0.8;
+        setTimeout(function () { trail.style.opacity = 0; }, 60);
+        read.textContent = input.value;
+      });
+    });
+  }
+
+  function bindCfg() {
+    var g = $('#r-glow'), m = $('#r-motes'), sw = $('#sw-flick'), reset = $('#cfg-reset');
+    if (g) g.addEventListener('input', function () {
+      state.glow = parseInt(g.value, 10) / 100;
+      document.documentElement.style.setProperty('--glow', state.glow);
+      $('#r-glow-out').textContent = g.value + '%';
+      store(K.glow, state.glow);
+    });
+    if (m) m.addEventListener('input', function () {
+      state.motes = parseInt(m.value, 10);
+      $('#r-motes-out').textContent = m.value;
+      store(K.motes, state.motes);
+      buildAtmo();
+    });
+    if (sw) sw.addEventListener('click', function () {
+      state.flick = !state.flick;
+      sw.classList.toggle('on', state.flick);
+      sw.setAttribute('aria-checked', state.flick);
+      store(K.flick, state.flick ? '1' : '0');
+      buildAtmo();
+    });
+    if (reset) reset.addEventListener('click', function () {
+      if (!guard('borrar memoria')) return;
+      try { localStorage.removeItem(K.seals); } catch (e) {}
+      log('Memoria local purgada. El laboratorio olvida.', 'warn', true);
+      toast('Memoria local borrada.');
+    });
+  }
+
+  /* ── osciloscopio + agujas ── */
+  function initScope() {
+    scope = $('#scope');
+    if (!scope) { scopeCtx = null; return; }
+    scopeCtx = scope.getContext('2d');
+    sizeScope();
+  }
+  function sizeScope() {
+    if (!scope) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    scope.width = scope.clientWidth * dpr;
+    scope.height = scope.clientHeight * dpr;
+  }
+  function drawScope(t) {
+    if (!scope || !scopeCtx) return;
+    var w = scope.width, h = scope.height, ctx = scopeCtx;
+    ctx.clearRect(0, 0, w, h);
+    var mid = h / 2;
+    ctx.lineWidth = Math.max(1.4, w / 600);
+    ctx.strokeStyle = '#ff2d46';
+    ctx.shadowColor = '#ff2d46';
+    ctx.shadowBlur = 14 * state.glow;
+    ctx.beginPath();
+    for (var x = 0; x <= w; x += 2) {
+      var u = x / w;
+      var y = mid;
+      for (var i = 0; i < 4; i++) {
+        var amp = (state.faders[i] / 100) * (h * 0.16);
+        y += Math.sin(u * (6 + i * 7) + t * (0.8 + i * 0.35)) * amp * (state.running ? 1 : 0.25);
+      }
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+  function setNeedle(id, frac) {
+    var n = $('#' + id + '-needle'), v = $('#' + id + '-val');
+    if (!n) return;
+    var deg = -50 + frac * 100;
+    n.style.transform = 'rotate(' + deg + 'deg)';
+    if (v) v.textContent = Math.round(frac * 100);
+  }
+
+  var raf;
+  function loop(t) {
+    raf = requestAnimationFrame(loop);
+    phase = t * 0.001;
+    drawScope(phase);
+    var avg = (state.faders[0] + state.faders[1] + state.faders[2] + state.faders[3]) / 400;
+    var spread = Math.abs(state.faders[0] - state.faders[3]) / 100;
+    setNeedle('g-gain', Math.min(1, avg + (state.running ? Math.sin(phase * 2) * 0.05 : 0)));
+    setNeedle('g-spec', Math.min(1, 0.2 + spread * 0.8 + (state.running ? Math.abs(Math.sin(phase)) * 0.1 : 0)));
+  }
+
+  /* ── transporte ── */
+  function setRunning(on) {
+    state.running = on;
+    $('#reactor').classList.toggle('live', on);
+    $('#reactor-label').textContent = on ? 'Reactor activo' : 'Reactor en reposo';
+    $('#bench-hint').textContent = on ? 'Registrando… la luz está escuchando.' : 'El reactor duerme. Enciende el primer pulso.';
+    $('#t-play').classList.toggle('on', on);
+    if (on) { log('Primer pulso encendido. El reactor despierta.', '', true); }
+    else { log('Reactor en reposo. Los tubos respiran despacio.'); }
+  }
+  function setRecording(on) {
+    if (on && !guard('registrar')) return;
+    state.recording = on;
+    $('#t-rec').classList.toggle('on', on);
+    if (on) { log('Registrando… la luz está escuchando.', 'warn', true); toast('Registrando… la luz está escuchando.'); }
+    else { log('Registro detenido.'); }
+  }
+  function seal() {
+    if (!guard('sellar')) return;
+    var seals = [];
+    try { seals = JSON.parse(load(K.seals, '[]')); } catch (e) {}
+    var mix = state.faders.join('-');
+    seals.push({ name: 'SELLO-' + String(seals.length + 1).padStart(3, '0'), time: now(), mix: mix });
+    store(K.seals, JSON.stringify(seals));
+    wave($('#bench'));
+    log('Mezcla sellada en el Archivo 7.', '', true);
+    toast('Mezcla sellada en el Archivo 7.');
+  }
+
+  function buildTransport() {
+    var bar = document.createElement('div');
+    bar.className = 'transport glass';
+    bar.innerHTML =
+      '<button class="tbtn" id="t-play" aria-label="Iniciar"><svg><use href="#i-play"/></svg></button>' +
+      '<button class="tbtn" id="t-pause" aria-label="Pausar"><svg><use href="#i-pause"/></svg></button>' +
+      '<button class="tbtn rec" id="t-rec" aria-label="Registrar"><svg><use href="#i-rec"/></svg></button>' +
+      '<button class="tbtn" id="t-seal" aria-label="Sellar"><svg><use href="#i-stamp"/></svg></button>' +
+      '<span class="tstate" id="t-state">EN REPOSO</span>';
+    $('#bench').appendChild(bar);
+    $('#t-play').addEventListener('click', function () { if (guard('iniciar')) setRunning(true); });
+    $('#t-pause').addEventListener('click', function () { setRunning(false); setRecording(false); });
+    $('#t-rec').addEventListener('click', function () { setRecording(!state.recording); });
+    $('#t-seal').addEventListener('click', seal);
+  }
+
+  function updateTransportState() {
+    var el = $('#t-state');
+    if (!el) return;
+    el.textContent = state.recording ? 'REGISTRANDO' : state.running ? 'ACTIVO' : 'EN REPOSO';
+  }
+  setInterval(updateTransportState, 300);
+
+  /* ── navegación de módulos ── */
+  $$('.mod').forEach(function (m) {
+    m.addEventListener('click', function () {
+      $$('.mod').forEach(function (x) { x.classList.remove('active'); });
+      m.classList.add('active');
+      state.module = m.dataset.mod;
+      renderModule();
+      log('Módulo <b>' + m.querySelector('.lbl b').textContent + '</b> en primer plano.');
+    });
+  });
+
+  /* ── entrada / salida ── */
+  function enter(guest) {
+    state.guest = guest;
+    document.body.classList.add('in-lab');
+    $('#operator-role').textContent = guest ? 'INVITADO' : 'OPERADOR';
+    $('#operator-ava').textContent = guest ? 'INV' : 'B7';
+    $('#session-sub').textContent = guest ? 'modo observación' : 'operador: belentani7';
+    buildAtmo();
+    renderModule();
+    log(guest ? 'Invitado dentro. Solo observación.' : 'Sesión 07 abierta. Tubos encendidos.', '', true);
+    log('El reactor duerme. Enciende el primer pulso.');
+  }
+  $('#enter-btn').addEventListener('click', function () { enter(false); });
+  $('#guest-btn').addEventListener('click', function () { enter(true); });
+  $('#exit-btn').addEventListener('click', function () {
+    setRunning(false); setRecording(false);
+    document.body.classList.remove('in-lab');
+    log('Sellar sesión y apagar los tubos.', 'warn', true);
+  });
+
+  /* ── restaurar calibración ── */
+  document.documentElement.style.setProperty('--glow', state.glow);
+
+  buildTransport();
+  buildAtmo();
+  requestAnimationFrame(loop);
+  window.addEventListener('resize', sizeScope);
 })();
+</script>
+</div></main>
+<footer class="site"><div class="wrap">
+<p>berentani-studio-7 · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
+</div></footer>
+<script>
+(function(){
+  var canvas = document.createElement('canvas');
+  canvas.className = 'webgl-canvas';
+  var container = document.getElementById('contenido');
+  if(container){ container.appendChild(canvas); }
+  try{
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible en este navegador.</p>'; return; }
+    gl.clearColor(0.047,0.043,0.039,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    var vs = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}');
+    gl.compileShader(vs);
+    var fs = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fs, 'precision mediump float;uniform vec4 c;void main(){gl_FragColor=c;}');
+    gl.compileShader(fs);
+    var prog = gl.createProgram();
+    gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
+    gl.useProgram(prog);
+    var loc = gl.getUniformLocation(prog,'c');
+    gl.uniform4f(loc, 0.549, 0.659, 0.545, 1.0);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+    var attr = gl.getAttribLocation(prog,'p');
+    gl.enableVertexAttribArray(attr);
+    gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  }catch(e){ console.log('WebGL init:', e.message); }
+})();
+</script>
+</div></main>
+<footer class="site"><div class="wrap">
+<p>berentani-studio-7 · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
+</div></footer>
+<script>
+(function(){
+  var canvas = document.createElement('canvas');
+  canvas.className = 'webgl-canvas';
+  var container = document.getElementById('contenido');
+  if(container){ container.appendChild(canvas); }
+  try{
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible en este navegador.</p>'; return; }
+    gl.clearColor(0.047,0.043,0.039,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    var vs = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}');
+    gl.compileShader(vs);
+    var fs = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fs, 'precision mediump float;uniform vec4 c;void main(){gl_FragColor=c;}');
+    gl.compileShader(fs);
+    var prog = gl.createProgram();
+    gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
+    gl.useProgram(prog);
+    var loc = gl.getUniformLocation(prog,'c');
+    gl.uniform4f(loc, 0.549, 0.659, 0.545, 1.0);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+    var attr = gl.getAttribLocation(prog,'p');
+    gl.enableVertexAttribArray(attr);
+    gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  }catch(e){ console.log('WebGL init:', e.message); }
+})();
+</script>
+</div></main>
+<footer class="site"><div class="wrap">
+<p>berentani-studio-7 · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
+</div></footer>
+<script>
+(function(){
+  var canvas = document.createElement('canvas');
+  canvas.className = 'webgl-canvas';
+  var container = document.getElementById('contenido');
+  if(container){ container.appendChild(canvas); }
+  try{
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible en este navegador.</p>'; return; }
+    gl.clearColor(0.047,0.043,0.039,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    var vs = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}');
+    gl.compileShader(vs);
+    var fs = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fs, 'precision mediump float;uniform vec4 c;void main(){gl_FragColor=c;}');
+    gl.compileShader(fs);
+    var prog = gl.createProgram();
+    gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
+    gl.useProgram(prog);
+    var loc = gl.getUniformLocation(prog,'c');
+    gl.uniform4f(loc, 0.549, 0.659, 0.545, 1.0);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+    var attr = gl.getAttribLocation(prog,'p');
+    gl.enableVertexAttribArray(attr);
+    gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  }catch(e){ console.log('WebGL init:', e.message); }
+})();
+</script>
+</div></main>
+<footer class="site"><div class="wrap">
+<p>berentani-studio-7 · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
+</div></footer>
+<script>
+(function(){
+  var canvas = document.createElement('canvas');
+  canvas.className = 'webgl-canvas';
+  var container = document.getElementById('contenido');
+  if(container){ container.appendChild(canvas); }
+  try{
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible en este navegador.</p>'; return; }
+    gl.clearColor(0.047,0.043,0.039,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    var vs = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}');
+    gl.compileShader(vs);
+    var fs = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fs, 'precision mediump float;uniform vec4 c;void main(){gl_FragColor=c;}');
+    gl.compileShader(fs);
+    var prog = gl.createProgram();
+    gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
+    gl.useProgram(prog);
+    var loc = gl.getUniformLocation(prog,'c');
+    gl.uniform4f(loc, 0.549, 0.659, 0.545, 1.0);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+    var attr = gl.getAttribLocation(prog,'p');
+    gl.enableVertexAttribArray(attr);
+    gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  }catch(e){ console.log('WebGL init:', e.message); }
+})();
+</script>
+</div></main>
+<footer class="site"><div class="wrap">
+<p>berentani-studio-7 · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
+</div></footer>
+<script>
+(function(){
+  var canvas = document.createElement('canvas');
+  canvas.className = 'webgl-canvas';
+  var container = document.getElementById('contenido');
+  if(container){ container.appendChild(canvas); }
+  try{
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible.</p>'; return; }
+    gl.clearColor(0.047,0.043,0.039,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+  }catch(e){ console.log('WebGL:', e.message); }
+})();
+</script>
 </body>
 </html>
