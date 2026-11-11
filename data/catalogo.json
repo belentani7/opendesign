@@ -1,32 +1,10 @@
 {
-  "nombre": "opendesign",
-  "remoto": "https://github.com/belentani7/opendesign",
-  "tipo": "web-static",
-  "modelo": "galería estática de mockups y sistemas de diseño",
-  "publico": "diseñadores y equipos que necesitan previsualizar artefactos sin cuenta",
-  "licencia": "MIT",
-  "medido": {
-    "archivos": 47,
-    "lineas": 8851,
-    "bytes": 477677,
-    "html": 6,
-    "tests": 7
-  },
-  "modulos": [
-    "Galería con marcos de dispositivo",
-    "Deep links",
-    "Paleta de comandos",
-    "Tokens descargables",
-    "Comparador de sistemas"
-  ],
-  "paleta": {
-    "bg": "#0b0a12",
-    "ink": "#f2eefc",
-    "accent": "#a98dfc"
-  },
-  "fuente": {
-    "ruta": "repos\\opendesign",
-    "fecha": "2026-11-10"
-  },
-  "generado_por": "repo-forge"
+  "repo": "opendesign",
+  "familia": "educación",
+  "ajustes_aplicados": 50,
+  "reglas_oficiales_ok": 40,
+  "estado": "estructurado",
+  "producto_completo": false,
+  "generado": "2026-11-10T19:10:41.076396+00:00",
+  "motor": "repo_forge.py"
 }
