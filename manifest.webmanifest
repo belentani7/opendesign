@@ -1,0 +1,17 @@
+{
+  "name": "OpenDesign",
+  "short_name": "OpenDesign",
+  "description": "galería estática de mockups y sistemas de diseño",
+  "lang": "es",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0a12",
+  "theme_color": "#a98dfc",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# repo-forge
+title = "opendesign"
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Plantillas y ejemplos sin secreto real"
+paths = ['''\.env\.example$''', '''docs/.*\.md$''']

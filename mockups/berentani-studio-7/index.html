@@ -70,6 +70,11 @@ border-radius:var(--radius);margin:24px 0;display:block}
 letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--accent2);
 color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
 </style>
+<meta property="og:type" content="website">
+<meta property="og:title" content="BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo">
+<meta property="og:description" content="Berentani Studio 7: laboratorio creativo de precisión. Vidrio esmerilado y neón rojo. 100% offline, sin APIs, sin coste.">
+<meta property="og:image" content="brand/og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -172,7 +177,7 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
     <main class="bench glass wave" id="bench">
       <div class="waveline"></div>
       <div class="bench-head">
-        <h1 class="h-display" id="bench-title">Mezclador</h1>
+        <h2 class="h-display" id="bench-title">Mezclador</h2>
         <span class="hint" id="bench-hint">El reactor duerme. Enciende el primer pulso.</span>
       </div>
       <div class="bench-body" id="bench-body"><!-- lo pinta JS --></div>
@@ -339,7 +344,7 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
   }
   function row(label, id, val, unit) {
     return '<div class="row"><header><span>' + label + '</span><span class="mono" id="' + id + '-out">' + val + unit + '</span></header>' +
-      '<input type="range" min="0" max="' + (id === 'r-glow' ? 200 : 60) + '" value="' + val + '" id="' + id + '"></div>';
+      '<input type="range" min="0" max="' + (id === 'r-glow' ? 200 : 60) + '" value="' + val + '" id="' + id + '" aria-label="range"></div>';
   }
 
   function renderModule() {

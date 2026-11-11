@@ -4,3 +4,13 @@ dist/
 *.log
 .DS_Store
 .cache/
+
+# repo-forge
+build/
+.next/
+out/
+coverage/
+__pycache__/
+*.pyc
+.venv/
+Thumbs.db
