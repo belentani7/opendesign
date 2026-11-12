@@ -24,7 +24,7 @@ window.OpenDesignManifest = {
               "label": "index.html",
               "path": "mockups/berentani-studio-7/index.html",
               "kind": "html",
-              "bytes": 46041,
+              "bytes": 37847,
               "title": "BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo"
             },
             {
@@ -44,7 +44,7 @@ window.OpenDesignManifest = {
               "label": "index.html",
               "path": "mockups/historia-que-recuerda/index.html",
               "kind": "html",
-              "bytes": 19929,
+              "bytes": 21973,
               "title": "NOIACORE — HISTORIA QUE RECUERDA"
             },
             {
@@ -93,5 +93,5 @@ window.OpenDesignManifest = {
       ]
     }
   ],
-  "generated": "2026-11-11T12:50:40.214Z"
+  "generated": "2026-11-12T03:48:55.122Z"
 };

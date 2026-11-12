@@ -28,5 +28,14 @@
     "ruta": "repos\\opendesign",
     "fecha": "2026-11-10"
   },
-  "generado_por": "repo-forge"
+  "generado_por": "repo-forge",
+  "repo": "opendesign",
+  "familia": "educación",
+  "ajustes_aplicados": 50,
+  "reglas_oficiales_ok": 40,
+  "estado": "estructurado",
+  "producto_completo": false,
+  "generado": "2026-11-10T19:10:41.076396+00:00",
+  "motor": "repo_forge.py",
+  "medicion_es_historica": true
 }
