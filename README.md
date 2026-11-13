@@ -179,4 +179,4 @@ license text.
 
 
 ## Producto
-Véase `plataforma/OFERTA.md`, `plataforma/precios.json`, `plataforma/ONEPAGER.md`.
+Véase `plataforma/FICHA.md`, `plataforma/OFERTA.md`, `plataforma/precios.json`, `plataforma/ONEPAGER.md`.

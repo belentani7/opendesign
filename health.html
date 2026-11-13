@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenDesign — Health Check</title>
+  <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+  <h1>OpenDesign — Health Check</h1>
+  <pre id="status">checking...</pre>
+  <script>
+    (async () => {
+      const el = document.getElementById('status');
+      const checks = {
+        service: 'opendesign',
+        version: '2.0.0',
+        status: 'healthy',
+        checked_at: new Date().toISOString(),
+        checks: {
+          manifest: false,
+          index: false,
+          tokens: false
+        }
+      };
+      try {
+        const manifest = await fetch('manifest.json').then(r => r.ok ? r.json() : null);
+        checks.checks.manifest = Boolean(manifest?.sections?.length);
+      } catch {}
+      try {
+        const idx = await fetch('index.html');
+        checks.checks.index = idx.ok;
+      } catch {}
+      try {
+        const tokens = await fetch('brand/tokens.json');
+        checks.checks.tokens = tokens.ok;
+      } catch {}
+      checks.status = Object.values(checks.checks).every(Boolean) ? 'healthy' : 'degraded';
+      el.textContent = JSON.stringify(checks, null, 2);
+      el.style.color = checks.status === 'healthy' ? '#16a34a' : '#dc2626';
+    })();
+  </script>
+</body>
+</html>

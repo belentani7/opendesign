@@ -2,6 +2,11 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OpenDesign — free, open-source design gallery</title>
 <meta name="description" content="OpenDesign is a free, MIT-licensed, zero-dependency static gallery for design mockups and design systems. Every artifact in the repo, previewable in the browser with device frames, deep links and a command palette.">
@@ -70,6 +75,10 @@ border-radius:var(--radius);margin:24px 0;display:block}
 letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--accent2);
 color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
 </style>
+<meta name="theme-color" content="#0b0a09">
+<meta property="og:image" content="https://opendesign-gules.vercel.app/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script src="manifest.js"></script>
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>

@@ -1,5 +1,7 @@
 {
   "repo": "opendesign",
+  "nombre": "OpenDesign",
+  "medido": true,
   "familia": "educación",
   "ajustes_aplicados": 50,
   "reglas_oficiales_ok": 40,
