@@ -61,11 +61,11 @@ test('the committed shell is offline-safe', async () => {
   assert.deepEqual(findRemoteResources(shell), []);
 });
 
-test('the mockup is offline-safe (its CDN script tag is the documented exception)', async () => {
+test('the mockup remains fully offline-safe with embedded resources', async () => {
   const mockup = await readFile(path.join(root, 'mockups/historia-que-recuerda/index.html'), 'utf8');
   const hits = findRemoteResources(mockup);
-  // three.js + Google Fonts are the only remote loads, and the page degrades without them.
-  assert.equal(hits.length, 2, `unexpected remote loads: ${hits.join(' | ')}`);
+  // The newer artifact embeds its resources; no remote load is required.
+  assert.deepEqual(hits, [], `unexpected remote loads: ${hits.join(' | ')}`);
   assert.match(mockup, /typeof THREE==='undefined'/, 'must degrade when the CDN is blocked');
 });
 

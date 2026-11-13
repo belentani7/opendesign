@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="en" data-theme="dark" data-theme-mode="system">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';">
@@ -81,37 +81,7 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
 <script src="manifest.js"></script>
 </head>
 <body>
-<a class="skip" href="#contenido">Saltar al contenido</a>
-<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
-<div class="brand">opendesign_lf <span>· ecosistema Belentani · WebGL online</span></div>
-<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
-</div></header>
-<main id="contenido"><div class="wrap">
-<a class="skip" href="#contenido">Saltar al contenido</a>
-<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
-<div class="brand">opendesign_lf <span>· ecosistema Belentani · WebGL online</span></div>
-<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
-</div></header>
-<main id="contenido"><div class="wrap">
-<a class="skip" href="#contenido">Saltar al contenido</a>
-<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
-<div class="brand">opendesign_lf <span>· ecosistema Belentani · WebGL online</span></div>
-<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
-</div></header>
-<main id="contenido"><div class="wrap">
-<a class="skip" href="#contenido">Saltar al contenido</a>
-<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
-<div class="brand">opendesign_lf <span>· ecosistema Belentani · WebGL online</span></div>
-<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
-</div></header>
-<main id="contenido"><div class="wrap">
-<a class="skip" href="#contenido">Saltar al contenido</a>
-<header class="site"><div class="wrap" style="display:flex;justify-content:space-between;align-items:baseline;gap:18px;flex-wrap:wrap">
-<div class="brand">opendesign_lf <span>· ecosistema Belentani · WebGL online</span></div>
-<nav class="site" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="docs.html">Documentación</a><a href="accesibilidad.html">Accesibilidad</a><a href="privacidad.html">Privacidad</a><a href="404.html">404</a></nav>
-</div></header>
-<main id="contenido"><div class="wrap">
-<a class="skip" href="#stage">Skip to preview</a>
+  <a class="skip" href="#stage">Skip to preview</a>
 
   <!-- ── icon sprite ── -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -235,7 +205,7 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
           <svg aria-hidden="true"><use href="#i-keyboard" /></svg>
         </button>
 
-        <a class="icon-btn" id="repo-link"  target="_blank" rel="noopener noreferrer" aria-label="Source code on GitHub">
+        <a class="icon-btn" id="repo-link" href="https://github.com/belentani7/opendesign" target="_blank" rel="noopener noreferrer" aria-label="Source code on GitHub">
           <svg aria-hidden="true"><use href="#i-github" /></svg>
         </a>
       </div>
@@ -320,7 +290,7 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
         <div class="placeholder" id="placeholder">
           <div id="placeholder-body" style="display:contents">
             <svg class="placeholder-mark" aria-hidden="true"><use href="#i-aperture" /></svg>
-            <h2>Pick an artifact</h2>
+            <h1>Pick an artifact</h1>
             <p>Everything in <code>mockups/</code> and <code>design-systems/</code> is listed on the left — free to read, fork and ship.</p>
             <div class="hints">
               <span class="hint-chip"><kbd>⌘K</kbd> search</span>
@@ -353,8 +323,118 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
         <span class="grow"></span>
         <span class="kbd-hint optional"><kbd>?</kbd> shortcuts</span>
         <span id="status-view">fluid</span>
-      </footer>
-    </main>
+      <p><a href="overview.html">Présentation du projet</a></p>
+</footer>
+    
+<section class="webgl-lab" data-webgl-lab>
+  <h2>Laboratorio WebGL</h2>
+  <p class="webgl-lab__lead">Una malla animada calculada en tu tarjeta gráfica. Sin imágenes, sin dependencias y sin enviar nada a ningún servidor.</p>
+  <div class="webgl-lab__stage">
+    <canvas class="webgl-lab__canvas" width="640" height="320" aria-label="Malla animada generada con WebGL" role="img"></canvas>
+    <noscript><p class="webgl-lab__fallback">Este laboratorio necesita JavaScript. El resto de la página funciona sin él.</p></noscript>
+  </div>
+  <p class="webgl-lab__actions"><button type="button" class="webgl-lab__toggle" data-webgl-toggle aria-pressed="false">Pausar animación</button></p>
+</section>
+<style>
+  .webgl-lab { margin: 2.5rem 0; padding: 1.25rem; border: 1px solid rgba(128,128,128,.28); border-radius: 14px; }
+  .webgl-lab h2 { margin: 0 0 .35rem; font-size: 1.15rem; }
+  .webgl-lab__lead { margin: 0 0 1rem; opacity: .82; max-width: 62ch; }
+  .webgl-lab__stage { position: relative; background: #0b0a12; border-radius: 10px; overflow: hidden; }
+  .webgl-lab__canvas { display: block; width: 100%; height: 220px; }
+  .webgl-lab__fallback { margin: 0; padding: 1rem; color: #f2eefc; }
+  .webgl-lab__actions { margin: .8rem 0 0; }
+  .webgl-lab__toggle { font: inherit; padding: .45rem .9rem; border-radius: 999px; border: 1px solid currentColor; background: transparent; color: inherit; cursor: pointer; }
+  .webgl-lab__toggle[aria-pressed="true"] { opacity: .65; }
+  @media (prefers-reduced-motion: reduce) { .webgl-lab__canvas { display: none; } .webgl-lab__stage::after { content: "Animación desactivada por tu preferencia de movimiento reducido."; display: block; padding: 1rem; color: #f2eefc; } }
+</style>
+<script>
+(() => {
+  "use strict";
+  const raiz = document.querySelector("[data-webgl-lab]");
+  if (!raiz || raiz.dataset.ready === "1") return;
+  raiz.dataset.ready = "1";
+
+  const canvas = raiz.querySelector("canvas");
+  const boton = raiz.querySelector("[data-webgl-toggle]");
+  const reducir = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+  if (!gl || reducir) { canvas.hidden = true; return; }
+
+  const vs = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
+  const fs = `
+    precision mediump float;
+    uniform vec2 u_res;
+    uniform float u_t;
+    void main() {
+      vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / min(u_res.x, u_res.y);
+      float d = length(uv);
+      float ondas = sin(d * 14.0 - u_t * 1.6) * 0.5 + 0.5;
+      float halo = smoothstep(0.75, 0.05, d);
+      vec3 base = vec3(0.043, 0.039, 0.07);
+      vec3 acento = vec3(0.66, 0.55, 0.98);
+      vec3 color = base + acento * (ondas * 0.35 + halo * 0.45);
+      gl_FragColor = vec4(color, 1.0);
+    }`;
+
+  const compilar = (tipo, fuente) => {
+    const s = gl.createShader(tipo);
+    gl.shaderSource(s, fuente); gl.compileShader(s);
+    return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+  };
+  const v = compilar(gl.VERTEX_SHADER, vs);
+  const f = compilar(gl.FRAGMENT_SHADER, fs);
+  if (!v || !f) { canvas.hidden = true; return; }
+
+  const prog = gl.createProgram();
+  gl.attachShader(prog, v); gl.attachShader(prog, f); gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { canvas.hidden = true; return; }
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, "p");
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+
+  const uRes = gl.getUniformLocation(prog, "u_res");
+  const uT = gl.getUniformLocation(prog, "u_t");
+
+  const ajustar = () => {
+    const r = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.max(1, Math.round(r.width * dpr));
+    canvas.height = Math.max(1, Math.round(r.height * dpr));
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+  };
+  ajustar();
+  window.addEventListener("resize", ajustar, { passive: true });
+
+  let t = 0, pausado = false, raf = 0;
+  const pintar = () => {
+    if (!pausado) t += 0.016;
+    gl.uniform1f(uT, t);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    raf = requestAnimationFrame(pintar);
+  };
+  pintar();
+
+  if (boton) {
+    boton.addEventListener("click", () => {
+      pausado = !pausado;
+      boton.setAttribute("aria-pressed", String(pausado));
+      boton.textContent = pausado ? "Reanudar animación" : "Pausar animación";
+      if (pausado) { cancelAnimationFrame(raf); raf = 0; } else if (!raf) { pintar(); }
+    });
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
+    else if (!pausado && !raf) { pintar(); }
+  });
+})();
+</script>
+</main>
   </div>
 
   <!-- ── command palette ── -->
@@ -419,170 +499,6 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
   </div>
 
   <p class="sr-only" id="live" aria-live="polite"></p>
-<!-- belentani-ampliacion:start -->
-<a href="ampliacion.html" data-belentani-ampliacion="1" aria-label="Abrir la ampliación de opendesign_lf" style="position:fixed;right:16px;bottom:16px;z-index:2147483647;display:inline-flex;align-items:center;gap:.45rem;padding:.62rem .85rem;border-radius:999px;background:#0f172a;color:#f8fafc;font:600 13px/1.2 system-ui,-apple-system,Segoe UI,sans-serif;text-decoration:none;border:1px solid rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(0,0,0,.28);white-space:nowrap;">Ampliación <span aria-hidden="true">&#8599;</span></a>
-<!-- belentani-ampliacion:end -->
-</div></main>
-<footer class="site"><div class="wrap">
-<p>opendesign_lf · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
-</div></footer>
-<script>
-(function(){
-  var canvas = document.createElement('canvas');
-  canvas.className = 'webgl-canvas';
-  var container = document.getElementById('contenido');
-  if(container){ container.appendChild(canvas); }
-  try{
-    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible en este navegador.</p>'; return; }
-    gl.clearColor(0.047,0.043,0.039,1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    var vs = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}');
-    gl.compileShader(vs);
-    var fs = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fs, 'precision mediump float;uniform vec4 c;void main(){gl_FragColor=c;}');
-    gl.compileShader(fs);
-    var prog = gl.createProgram();
-    gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
-    gl.useProgram(prog);
-    var loc = gl.getUniformLocation(prog,'c');
-    gl.uniform4f(loc, 0.549, 0.659, 0.545, 1.0);
-    var buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-    var attr = gl.getAttribLocation(prog,'p');
-    gl.enableVertexAttribArray(attr);
-    gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
-    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  }catch(e){ console.log('WebGL init:', e.message); }
-})();
-</script>
-</div></main>
-<footer class="site"><div class="wrap">
-<p>opendesign_lf · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
-</div></footer>
-<script>
-(function(){
-  var canvas = document.createElement('canvas');
-  canvas.className = 'webgl-canvas';
-  var container = document.getElementById('contenido');
-  if(container){ container.appendChild(canvas); }
-  try{
-    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible en este navegador.</p>'; return; }
-    gl.clearColor(0.047,0.043,0.039,1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    var vs = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}');
-    gl.compileShader(vs);
-    var fs = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fs, 'precision mediump float;uniform vec4 c;void main(){gl_FragColor=c;}');
-    gl.compileShader(fs);
-    var prog = gl.createProgram();
-    gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
-    gl.useProgram(prog);
-    var loc = gl.getUniformLocation(prog,'c');
-    gl.uniform4f(loc, 0.549, 0.659, 0.545, 1.0);
-    var buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-    var attr = gl.getAttribLocation(prog,'p');
-    gl.enableVertexAttribArray(attr);
-    gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
-    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  }catch(e){ console.log('WebGL init:', e.message); }
-})();
-</script>
-</div></main>
-<footer class="site"><div class="wrap">
-<p>opendesign_lf · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
-</div></footer>
-<script>
-(function(){
-  var canvas = document.createElement('canvas');
-  canvas.className = 'webgl-canvas';
-  var container = document.getElementById('contenido');
-  if(container){ container.appendChild(canvas); }
-  try{
-    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible en este navegador.</p>'; return; }
-    gl.clearColor(0.047,0.043,0.039,1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    var vs = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}');
-    gl.compileShader(vs);
-    var fs = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fs, 'precision mediump float;uniform vec4 c;void main(){gl_FragColor=c;}');
-    gl.compileShader(fs);
-    var prog = gl.createProgram();
-    gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
-    gl.useProgram(prog);
-    var loc = gl.getUniformLocation(prog,'c');
-    gl.uniform4f(loc, 0.549, 0.659, 0.545, 1.0);
-    var buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-    var attr = gl.getAttribLocation(prog,'p');
-    gl.enableVertexAttribArray(attr);
-    gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
-    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  }catch(e){ console.log('WebGL init:', e.message); }
-})();
-</script>
-</div></main>
-<footer class="site"><div class="wrap">
-<p>opendesign_lf · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
-</div></footer>
-<script>
-(function(){
-  var canvas = document.createElement('canvas');
-  canvas.className = 'webgl-canvas';
-  var container = document.getElementById('contenido');
-  if(container){ container.appendChild(canvas); }
-  try{
-    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible en este navegador.</p>'; return; }
-    gl.clearColor(0.047,0.043,0.039,1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    var vs = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vs, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}');
-    gl.compileShader(vs);
-    var fs = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fs, 'precision mediump float;uniform vec4 c;void main(){gl_FragColor=c;}');
-    gl.compileShader(fs);
-    var prog = gl.createProgram();
-    gl.attachShader(prog,vs); gl.attachShader(prog,fs); gl.linkProgram(prog);
-    gl.useProgram(prog);
-    var loc = gl.getUniformLocation(prog,'c');
-    gl.uniform4f(loc, 0.549, 0.659, 0.545, 1.0);
-    var buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-    var attr = gl.getAttribLocation(prog,'p');
-    gl.enableVertexAttribArray(attr);
-    gl.vertexAttribPointer(attr,2,gl.FLOAT,false,0,0);
-    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-  }catch(e){ console.log('WebGL init:', e.message); }
-})();
-</script>
-</div></main>
-<footer class="site"><div class="wrap">
-<p>opendesign_lf · WebGL listo para servir online · <a href="index.html">Inicio</a> · <a href="accesibilidad.html">Accesibilidad</a> · <a href="privacidad.html">Privacidad</a></p>
-</div></footer>
-<script>
-(function(){
-  var canvas = document.createElement('canvas');
-  canvas.className = 'webgl-canvas';
-  var container = document.getElementById('contenido');
-  if(container){ container.appendChild(canvas); }
-  try{
-    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if(!gl){ canvas.innerHTML = '<p style="color:var(--dim);font-family:var(--mono);padding:12px">WebGL no disponible.</p>'; return; }
-    gl.clearColor(0.047,0.043,0.039,1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-  }catch(e){ console.log('WebGL:', e.message); }
-})();
-</script>
+<!-- page-fix:1 -->
 </body>
 </html>
