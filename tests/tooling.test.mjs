@@ -61,10 +61,10 @@ test('the committed shell is offline-safe', async () => {
   assert.deepEqual(findRemoteResources(shell), []);
 });
 
-test('the mockup remains fully offline-safe with embedded resources', async () => {
+test('the mockup is offline-safe (no remote loads at all)', async () => {
   const mockup = await readFile(path.join(root, 'mockups/historia-que-recuerda/index.html'), 'utf8');
   const hits = findRemoteResources(mockup);
-  // The newer artifact embeds its resources; no remote load is required.
+  // three.js is vendored locally now, so the page must not fetch anything remotely.
   assert.deepEqual(hits, [], `unexpected remote loads: ${hits.join(' | ')}`);
   assert.match(mockup, /typeof THREE==='undefined'/, 'must degrade when the CDN is blocked');
 });
