@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html dir="ltr" lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,6 +78,11 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
 <meta name="theme-color" content="#0b0b0f">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="index,follow">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:title" content="BERENTANI STUDIO 7 — Laboratorio de vidrio y neón rojo">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -141,8 +146,8 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
       <p class="cover-sub">Laboratorio creativo de precisión.</p>
       <p class="cover-tag">Donde la luz se dobla, nace la idea.</p>
       <div class="cover-actions">
-        <button class="btn" id="enter-btn"><span class="sheen"></span>Entrar al laboratorio</button>
-        <button class="btn ghost" id="guest-btn"><span class="sheen"></span>Observar como invitado</button>
+        <button class="btn" id="enter-btn" type="button"><span class="sheen"></span>Entrar al laboratorio</button>
+        <button class="btn ghost" id="guest-btn" type="button"><span class="sheen"></span>Observar como invitado</button>
       </div>
       <p class="mono" style="margin-top:26px;font-size:10px;color:var(--off);letter-spacing:0.12em">100% OFFLINE · SIN APIS · SIN COSTE</p>
     </div>
@@ -167,13 +172,13 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
 
     <nav class="rack glass" id="rack" aria-label="Módulos">
       <h2>Módulos</h2>
-      <button class="mod active" data-mod="mix"><span class="bar"></span><svg><use href="#i-mix"/></svg><span class="lbl"><b>Mezclador</b><span>tubos 1–4</span></span><span class="refl"></span></button>
-      <button class="mod" data-mod="scope"><span class="bar"></span><svg><use href="#i-wave"/></svg><span class="lbl"><b>Espectro</b><span>osciloscopio</span></span><span class="refl"></span></button>
-      <button class="mod" data-mod="cam"><span class="bar"></span><svg><use href="#i-cam"/></svg><span class="lbl"><b>Cámara de Pruebas</b><span>ecos</span></span><span class="refl"></span></button>
-      <button class="mod" data-mod="arch"><span class="bar"></span><svg><use href="#i-arch"/></svg><span class="lbl"><b>Archivo 7</b><span>sellos</span></span><span class="refl"></span></button>
-      <button class="mod" data-mod="cfg"><span class="bar"></span><svg><use href="#i-seal"/></svg><span class="lbl"><b>Config. del Sello</b><span>calibración</span></span><span class="refl"></span></button>
+      <button class="mod active" data-mod="mix" type="button"><span class="bar"></span><svg><use href="#i-mix"/></svg><span class="lbl"><b>Mezclador</b><span>tubos 1–4</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="scope" type="button"><span class="bar"></span><svg><use href="#i-wave"/></svg><span class="lbl"><b>Espectro</b><span>osciloscopio</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="cam" type="button"><span class="bar"></span><svg><use href="#i-cam"/></svg><span class="lbl"><b>Cámara de Pruebas</b><span>ecos</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="arch" type="button"><span class="bar"></span><svg><use href="#i-arch"/></svg><span class="lbl"><b>Archivo 7</b><span>sellos</span></span><span class="refl"></span></button>
+      <button class="mod" data-mod="cfg" type="button"><span class="bar"></span><svg><use href="#i-seal"/></svg><span class="lbl"><b>Config. del Sello</b><span>calibración</span></span><span class="refl"></span></button>
       <div class="rack-foot">
-        <button class="btn ghost" id="exit-btn" style="width:100%;justify-content:center">Sellar sesión y apagar los tubos</button>
+        <button class="btn ghost" id="exit-btn" style="width:100%;justify-content:center" type="button">Sellar sesión y apagar los tubos</button>
       </div>
     </nav>
 
@@ -341,8 +346,8 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
       row('Intensidad del neón', 'r-glow', Math.round(state.glow * 100), '%') +
       row('Densidad de partículas', 'r-motes', state.motes, '') +
       '<div class="row"><header><span>Parpadeo de tubos</span></header>' +
-      '<button class="switch' + (state.flick ? ' on' : '') + '" id="sw-flick" role="switch" aria-checked="' + state.flick + '"><span class="track"><span class="knob"></span></span><span class="mono" style="font-size:10px;color:var(--data)">tubos que titilan</span></button></div>' +
-      '<div class="row"><header><span>Restablecer sello</span></header><button class="btn ghost" id="cfg-reset"><span class="sheen"></span>Borrar memoria local</button></div>' +
+      '<button class="switch' + (state.flick ? ' on' : '') + '" id="sw-flick" role="switch" aria-checked="' + state.flick + '" type="button"><span class="track"><span class="knob"></span></span><span class="mono" style="font-size:10px;color:var(--data)">tubos que titilan</span></button></div>' +
+      '<div class="row"><header><span>Restablecer sello</span></header><button class="btn ghost" id="cfg-reset" type="button"><span class="sheen"></span>Borrar memoria local</button></div>' +
       '</div>';
   }
   function row(label, id, val, unit) {
@@ -509,10 +514,10 @@ color:var(--accent2);padding:4px 10px;border-radius:999px;margin:10px 0}
     var bar = document.createElement('div');
     bar.className = 'transport glass';
     bar.innerHTML =
-      '<button class="tbtn" id="t-play" aria-label="Iniciar"><svg><use href="#i-play"/></svg></button>' +
-      '<button class="tbtn" id="t-pause" aria-label="Pausar"><svg><use href="#i-pause"/></svg></button>' +
-      '<button class="tbtn rec" id="t-rec" aria-label="Registrar"><svg><use href="#i-rec"/></svg></button>' +
-      '<button class="tbtn" id="t-seal" aria-label="Sellar"><svg><use href="#i-stamp"/></svg></button>' +
+      '<button class="tbtn" id="t-play" aria-label="Iniciar" type="button"><svg><use href="#i-play"/></svg></button>' +
+      '<button class="tbtn" id="t-pause" aria-label="Pausar" type="button"><svg><use href="#i-pause"/></svg></button>' +
+      '<button class="tbtn rec" id="t-rec" aria-label="Registrar" type="button"><svg><use href="#i-rec"/></svg></button>' +
+      '<button class="tbtn" id="t-seal" aria-label="Sellar" type="button"><svg><use href="#i-stamp"/></svg></button>' +
       '<span class="tstate" id="t-state">EN REPOSO</span>';
     $('#bench').appendChild(bar);
     $('#t-play').addEventListener('click', function () { if (guard('iniciar')) setRunning(true); });
