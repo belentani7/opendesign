@@ -1,3 +1,10 @@
+# Generated OS metadata, Python bytecode, and HTML reports
+._*
+__MACOSX/
+Desktop.ini
+desktop.ini
+playwright-report/
+
 
 # metadatos de desarrollo: locales, no versionados
 .cursor/
